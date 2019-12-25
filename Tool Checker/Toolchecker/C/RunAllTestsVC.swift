@@ -109,7 +109,7 @@ extension RunAllTestsVC: UITableViewDelegate, UITableViewDataSource {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "SpecificTestCell", for: indexPath) as? SpecificTestCell else {return UITableViewCell()}
             cell.setupCell(name: "Flash", icon: icon)
             return cell
-        default:
+        case .none:
             return UITableViewCell()
         }
     }
