@@ -24,7 +24,6 @@ class SingleTestListVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.viewModel = SingleTestListVM()
-        self.tableView.allowsSelection = false
         self.tableView.estimatedRowHeight = 80
         self.tableView.rowHeight = UITableView.automaticDimension
     }
@@ -36,6 +35,10 @@ class SingleTestListVC: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: animated)
+    }
+    
+    @IBAction func backButtonTapped(_ sender: Any) {
+        self.navigationController?.popViewController(animated: true)
     }
 
 }
