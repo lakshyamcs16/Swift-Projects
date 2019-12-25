@@ -22,8 +22,10 @@ class InitialTestScreenVC: UIViewController {
         UIDevice.current.isBatteryMonitoringEnabled = true
         print(UIDevice.current.batteryLevel)
         print(UIDevice.current.batteryState)
-        NotificationCenter.default.addObserver(self, selector: #selector(batteryStateDidChange), name: UIDevice.batteryLevelDidChangeNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(batteryStateDidChange), name: UIDevice.batteryStateDidChangeNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(batteryLevelDidChange), name: NSNotification.Name.UIDeviceBatteryLevelDidChange, object: nil)
+        
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(batteryStateDidChange), name: NSNotification.Name.UIDeviceBatteryStateDidChange, object: nil)
         
     }
     override func viewWillAppear(_ animated: Bool) {
@@ -40,7 +42,7 @@ class InitialTestScreenVC: UIViewController {
         return UIDevice.current.batteryLevel
     }
     
-    var batteryState: UIDevice.BatteryState {
+    var batteryState: UIDeviceBatteryState {
         return UIDevice.current.batteryState
     }
     
