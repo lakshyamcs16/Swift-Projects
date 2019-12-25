@@ -21,12 +21,17 @@ enum testNames {
     case speaker
     case microphone
     case headphones
+    case charging
+    case flash
+    case none
 }
 
 class RunAllTestsVM {
     var array: [testNames] = []
+    var imagesArray:[String] = []
     
     init() {
-        self.array = [.simCard, .mobileCarrier, .wifi,.display,.rearCamera,.frontCamera,.vibration,.touchScreen,.earpiece,.speaker,.microphone,.headphones]
+        self.array = [.simCard, .mobileCarrier, .wifi,.charging, .display,.rearCamera,.frontCamera,.vibration,.touchScreen,.earpiece,.speaker,.microphone,.headphones, .flash]
+        self.imagesArray = ["sim", "carrier", "wifi", "battery", "display", "rear", "front", "vibrate", "touch", "earpiece", "speaker", "microphone", "headphone", "headphone"]
     }
 }

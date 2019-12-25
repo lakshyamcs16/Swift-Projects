@@ -12,7 +12,6 @@ class SingleTestListVC: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
     var viewModel: SingleTestListVM!
-    
     class func newInstance() -> UIViewController {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         guard let vc = storyboard.instantiateViewController(withIdentifier: "SingleTestListVC") as? SingleTestListVC else {
@@ -25,7 +24,7 @@ class SingleTestListVC: UIViewController {
         super.viewDidLoad()
         self.viewModel = SingleTestListVM()
         self.tableView.estimatedRowHeight = 80
-        self.tableView.rowHeight = UITableView.automaticDimension
+        //self.tableView.rowHeight = UITableView.automaticDimension
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -48,61 +47,76 @@ extension SingleTestListVC: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let icon = UIImage(named: self.viewModel.imagesArray[indexPath.row]) else {
+            return UITableViewCell()
+        }
         switch self.viewModel.array[indexPath.row] {
         case .simCard:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "SingleTestCell", for: indexPath) as? SingleTestCell else {return UITableViewCell()}
-            cell.setupCell(name: "Sim Card")
+            cell.setupCell(name: "Sim Card", icon: icon)
             return cell
         case .mobileCarrier:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "SingleTestCell", for: indexPath) as? SingleTestCell else {return UITableViewCell()}
-            cell.setupCell(name: "Mobile Carrier")
+            cell.setupCell(name: "Mobile Carrier", icon: icon)
             return cell
         case .wifi:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "SingleTestCell", for: indexPath) as? SingleTestCell else {return UITableViewCell()}
-            cell.setupCell(name: "Wifi")
+            cell.setupCell(name: "Wifi", icon: icon)
             return cell
         case .display:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "SingleTestCell", for: indexPath) as? SingleTestCell else {return UITableViewCell()}
-            cell.setupCell(name: "Display")
+            cell.setupCell(name: "Display", icon: icon)
             return cell
         case .rearCamera:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "SingleTestCell", for: indexPath) as? SingleTestCell else {return UITableViewCell()}
-            cell.setupCell(name: "Rear Camera")
+            cell.setupCell(name: "Rear Camera", icon: icon)
             return cell
         case .frontCamera:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "SingleTestCell", for: indexPath) as? SingleTestCell else {return UITableViewCell()}
-            cell.setupCell(name: "Front Camera")
+            cell.setupCell(name: "Front Camera", icon: icon)
             return cell
         case .vibration:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "SingleTestCell", for: indexPath) as? SingleTestCell else {return UITableViewCell()}
-            cell.setupCell(name: "Vibration")
+            cell.setupCell(name: "Vibration", icon: icon)
             return cell
         case .touchScreen:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "SingleTestCell", for: indexPath) as? SingleTestCell else {return UITableViewCell()}
-            cell.setupCell(name: "Touch Screen")
+            cell.setupCell(name: "Touch Screen", icon: icon)
             return cell
         case .earpiece:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "SingleTestCell", for: indexPath) as? SingleTestCell else {return UITableViewCell()}
-            cell.setupCell(name: "Earpiece")
+            cell.setupCell(name: "Earpiece", icon: icon)
             return cell
         case .speaker:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "SingleTestCell", for: indexPath) as? SingleTestCell else {return UITableViewCell()}
-            cell.setupCell(name: "Speaker")
+            cell.setupCell(name: "Speaker", icon: icon)
             return cell
         case .microphone:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "SingleTestCell", for: indexPath) as? SingleTestCell else {return UITableViewCell()}
-            cell.setupCell(name: "Microphone")
+            cell.setupCell(name: "Microphone", icon: icon)
             return cell
         case .headphones:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "SingleTestCell", for: indexPath) as? SingleTestCell else {return UITableViewCell()}
-            cell.setupCell(name: "Headphones")
+            cell.setupCell(name: "Headphones", icon: icon)
             return cell
+        case .charging:
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "SingleTestCell", for: indexPath) as? SingleTestCell else {return UITableViewCell()}
+            cell.setupCell(name: "Charging", icon: icon)
+            return cell
+        case .flash:
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "SingleTestCell", for: indexPath) as? SingleTestCell else {return UITableViewCell()}
+            cell.setupCell(name: "Flash", icon: icon)
+            return cell
+        default:
+            return UITableViewCell()
         }
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        self.tableView.deselectRow(at: indexPath, animated: true)
         switch self.viewModel.array[indexPath.row] {
         case .simCard:
-            break
+            let vc = BatteryCheckVC.newInstance(sourceTest: .simCard)
+            self.navigationController?.pushViewController(vc, animated: true)
         case .mobileCarrier:
             break
         case .wifi:
@@ -110,11 +124,14 @@ extension SingleTestListVC: UITableViewDelegate, UITableViewDataSource {
         case .display:
             break
         case .rearCamera:
-            break
+            let vc = BatteryCheckVC.newInstance(sourceTest: .rearCamera)
+            self.navigationController?.pushViewController(vc, animated: true)
         case .frontCamera:
-            break
+            let vc = BatteryCheckVC.newInstance(sourceTest: .frontCamera)
+            self.navigationController?.pushViewController(vc, animated: true)
         case .vibration:
-            break
+            let vc = BatteryCheckVC.newInstance(sourceTest: .vibration)
+            self.navigationController?.pushViewController(vc, animated: true)
         case .touchScreen:
             break
         case .earpiece:
@@ -124,6 +141,14 @@ extension SingleTestListVC: UITableViewDelegate, UITableViewDataSource {
         case .microphone:
             break
         case .headphones:
+            break
+        case .charging:
+            let vc = BatteryCheckVC.newInstance(sourceTest: .charging)
+            self.navigationController?.pushViewController(vc, animated: true)
+        case .flash:
+            let vc = BatteryCheckVC.newInstance(sourceTest: .flash)
+            self.navigationController?.pushViewController(vc, animated: true)
+        default:
             break
         }
     }

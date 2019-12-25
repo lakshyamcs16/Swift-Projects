@@ -19,12 +19,6 @@ class InitialTestScreenVC: UIViewController {
         super.viewDidLoad()
         self.viewModel = InitialTestScreenVM()
         
-        UIDevice.current.isBatteryMonitoringEnabled = true
-        print(UIDevice.current.batteryLevel)
-        print(UIDevice.current.batteryState)
-        NotificationCenter.default.addObserver(self, selector: #selector(batteryStateDidChange), name: UIDevice.batteryLevelDidChangeNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(batteryStateDidChange), name: UIDevice.batteryStateDidChangeNotification, object: nil)
-        
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -35,28 +29,6 @@ class InitialTestScreenVC: UIViewController {
         super.viewWillDisappear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: animated)
     }
-    
-    var batteryLevel: Float {
-        return UIDevice.current.batteryLevel
-    }
-    
-    var batteryState: UIDevice.BatteryState {
-        return UIDevice.current.batteryState
-    }
-    
-    @objc func batteryLevelDidChange(_ notification: Notification) {
-        print(batteryLevel)
-    }
-    
-    @objc func batteryStateDidChange(_ notification: Notification) {
-        switch batteryState {
-        case .unplugged, .unknown:
-            print("not charging")
-        case .charging, .full:
-            print("charging or full")
-        }
-    }
-
 
 }
 extension InitialTestScreenVC: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
@@ -96,7 +68,6 @@ extension InitialTestScreenVC: UICollectionViewDataSource, UICollectionViewDeleg
             cell.layer.borderColor = UIColor(red: 243/255, green: 247/255, blue: 248/255, alpha: 1.0).cgColor
             cell.setupCell(name: "Phone Cleaner")
             return cell
-        
         }
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
