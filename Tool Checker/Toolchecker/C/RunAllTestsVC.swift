@@ -26,7 +26,7 @@ class RunAllTestsVC: UIViewController {
         self.viewModel = RunAllTestsVM()
         self.tableView.allowsSelection = false
         self.tableView.estimatedRowHeight = 80
-        self.tableView.rowHeight = UITableView.automaticDimension
+        //self.tableView.rowHeight = UITableView.automaticDimension
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
