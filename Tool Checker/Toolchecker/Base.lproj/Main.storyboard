@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="8ZG-fj-hPO">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="8ZG-fj-hPO">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -41,6 +43,7 @@
                                             <constraint firstAttribute="width" secondItem="4cp-j5-BM4" secondAttribute="height" multiplier="1:1" id="zFj-H9-EQs"/>
                                         </constraints>
                                         <connections>
+                                            <action selector="backButtonAction:" destination="hUR-c2-Mn4" eventType="touchUpInside" id="Aeb-ck-M7R"/>
                                             <action selector="backButtonTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="cNU-Ue-1y5"/>
                                         </connections>
                                     </button>
@@ -149,6 +152,7 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <exit id="hUR-c2-Mn4" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="136.80000000000001" y="133.5832083958021"/>
         </scene>
@@ -321,6 +325,7 @@
                                             <constraint firstAttribute="width" secondItem="xjT-bg-mTe" secondAttribute="height" multiplier="1:1" id="Rqi-yE-D9U"/>
                                         </constraints>
                                         <connections>
+                                            <action selector="backButtonPressed:" destination="iG4-HS-W1g" eventType="touchUpInside" id="XtP-rx-voL"/>
                                             <action selector="backButtonTapped:" destination="iG4-HS-W1g" eventType="touchUpInside" id="JTe-RX-ExY"/>
                                         </connections>
                                     </button>

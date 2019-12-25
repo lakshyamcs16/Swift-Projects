@@ -10,6 +10,10 @@ import UIKit
 
 class SingleTestListVC: UIViewController {
 
+    @IBAction func backButtonPressed(_ sender: Any) {
+        self.navigationController?.popViewController(animated: true)
+    }
+    
     @IBOutlet weak var tableView: UITableView!
     var viewModel: SingleTestListVM!
     var imagesArray = ["sim", "carrier", "wifi", "display", "rear", "front", "vibrate", "touch", "earpiece", "speaker", "microphone", "headphones"]
@@ -21,6 +25,8 @@ class SingleTestListVC: UIViewController {
         return vc
     }
     
+    
+    @IBOutlet weak var backButtonPressed: UIButton!
     override func viewDidLoad() {
         super.viewDidLoad()
         self.viewModel = SingleTestListVM()
