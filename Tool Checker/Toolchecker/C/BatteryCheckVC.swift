@@ -64,6 +64,8 @@ class BatteryCheckVC: UIViewController {
             AVCaptureDevice.default(.builtInWideAngleCamera, for: AVMediaType.video, position: .back)
         case .motionSensor:
             self.setMotionSensorScreen()
+        case .display:
+            self.checkDisplay()
         case .touchScreen:
             break
         case .wifi:
@@ -98,11 +100,30 @@ extension BatteryCheckVC {
             self.setMotionSensorScreen()
         case .touchScreen:
             self.setTouchScreenVC()
+        case .display:
+            self.setDisplayScreenVC()
         case .wifi:
             self.setWifiVC()
         default:
             break
         }
+    }
+    
+    func checkDisplay() {
+        self.navigationController?.pushViewController(DisplayCheckViewController.newInstance(), animated: true)
+    }
+    
+    func setDisplayScreenVC() {
+        self.nameLabel.text = "Display"
+        self.subtitle.text = """
+                                The next screens will display a series of color
+                                (black, white, green, red, and blue). Look carefully for dead or
+                                stuck pixels or any discoloration.
+                                \n
+                                Tap the screen when you're ready for the next color.
+                                """
+        self.iconImage.image = UIImage(named: "display")
+        self.checkButton.setTitle("Check Display", for: .normal)
     }
     
     func setBatteryVC() {
@@ -125,7 +146,7 @@ extension BatteryCheckVC {
             return UIDevice.current.batteryLevel
         }
         
-        var batteryState: UIDevice.BatteryState {
+        var batteryState: UIDeviceBatteryState{
             return UIDevice.current.batteryState
         }
         

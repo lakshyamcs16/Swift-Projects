@@ -125,6 +125,8 @@ extension SingleTestListVC: UITableViewDelegate, UITableViewDataSource {
             let vc = BatteryCheckVC.newInstance(sourceTest: .wifi)
             self.navigationController?.pushViewController(vc, animated: true)
         case .display:
+            let vc = BatteryCheckVC.newInstance(sourceTest: .display)
+            self.navigationController?.pushViewController(vc, animated: true)
             break
         case .rearCamera:
             let vc = BatteryCheckVC.newInstance(sourceTest: .rearCamera)
