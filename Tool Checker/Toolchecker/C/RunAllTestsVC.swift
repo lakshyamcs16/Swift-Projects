@@ -55,10 +55,6 @@ extension RunAllTestsVC: UITableViewDelegate, UITableViewDataSource {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "SpecificTestCell", for: indexPath) as? SpecificTestCell else {return UITableViewCell()}
             cell.setupCell(name: "Sim Card", icon: icon)
             return cell
-        case .mobileCarrier:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "SpecificTestCell", for: indexPath) as? SpecificTestCell else {return UITableViewCell()}
-            cell.setupCell(name: "Mobile Carrier", icon: icon)
-            return cell
         case .wifi:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "SpecificTestCell", for: indexPath) as? SpecificTestCell else {return UITableViewCell()}
             cell.setupCell(name: "Wifi", icon: icon)

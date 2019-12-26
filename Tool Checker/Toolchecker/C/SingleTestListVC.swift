@@ -59,10 +59,6 @@ extension SingleTestListVC: UITableViewDelegate, UITableViewDataSource {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "SingleTestCell", for: indexPath) as? SingleTestCell else {return UITableViewCell()}
             cell.setupCell(name: "Sim Card", icon: icon)
             return cell
-        case .mobileCarrier:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "SingleTestCell", for: indexPath) as? SingleTestCell else {return UITableViewCell()}
-            cell.setupCell(name: "Mobile Carrier", icon: icon)
-            return cell
         case .wifi:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "SingleTestCell", for: indexPath) as? SingleTestCell else {return UITableViewCell()}
             cell.setupCell(name: "Wifi", icon: icon)
@@ -125,8 +121,6 @@ extension SingleTestListVC: UITableViewDelegate, UITableViewDataSource {
         case .simCard:
             let vc = BatteryCheckVC.newInstance(sourceTest: .simCard)
             self.navigationController?.pushViewController(vc, animated: true)
-        case .mobileCarrier:
-            break
         case .wifi:
             let vc = BatteryCheckVC.newInstance(sourceTest: .wifi)
             self.navigationController?.pushViewController(vc, animated: true)

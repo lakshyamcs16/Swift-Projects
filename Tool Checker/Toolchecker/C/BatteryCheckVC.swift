@@ -7,6 +7,10 @@
 //
 
 import UIKit
+import CoreTelephony
+import SystemConfiguration
+import AVFoundation
+import AudioToolbox
 
 class BatteryCheckVC: UIViewController {
     var sourceTest: testNames = .none
@@ -42,7 +46,37 @@ class BatteryCheckVC: UIViewController {
         super.viewWillDisappear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: animated)
     }
-
+    
+    
+    @IBAction func checkConnectionButtonTapped(_ sender: Any) {
+        switch self.sourceTest {
+        case .charging:
+            self.checkBatteryStatus()
+        case .flash:
+            self.switchOnFlashLight()
+        case .vibration:
+            self.switchOnVibration()
+        case .simCard:
+            self.checkSimCardAvailability()
+        case .frontCamera:
+            AVCaptureDevice.default(.builtInWideAngleCamera, for: AVMediaType.video, position: .front)
+        case .rearCamera:
+            AVCaptureDevice.default(.builtInWideAngleCamera, for: AVMediaType.video, position: .back)
+        case .motionSensor:
+            self.setMotionSensorScreen()
+        case .touchScreen:
+            break
+        case .wifi:
+            if Reachability.isConnectedToNetwork(){
+                print("Internet Connection Available!")
+            }else{
+                print("Internet Connection not Available!")
+            }
+        default:
+            break
+        }
+    }
+    
 }
 
 extension BatteryCheckVC {
@@ -76,7 +110,9 @@ extension BatteryCheckVC {
         self.subtitle.text = "Plugin the charger to test your charging point"
         self.iconImage.image = UIImage(named: "battery")
         self.checkButton.setTitle("Check Connection", for: .normal)
-        
+    }
+    
+    func checkBatteryStatus() {
         UIDevice.current.isBatteryMonitoringEnabled = true
         print(UIDevice.current.batteryLevel)
         print(UIDevice.current.batteryState)
@@ -126,6 +162,17 @@ extension BatteryCheckVC {
         self.subtitle.text = "Tap to check whether Sim Card is inserted or not"
         self.iconImage.image = UIImage(named: "sim")
         self.checkButton.setTitle("Check Sim Card", for: .normal)
+        self.checkSimCardAvailability()
+    }
+    
+    func checkSimCardAvailability() {
+        let networkInfo = CTTelephonyNetworkInfo()
+        guard let info = networkInfo.subscriberCellularProvider else {return}
+        if let carrier = info.isoCountryCode {
+            print("sim present \(carrier)")
+        } else {
+            print("No sim present Or No cellular coverage or phone is on airplane mode. Carrier")
+        }
     }
     
     func setFrontCameraVC() {
@@ -150,12 +197,64 @@ extension BatteryCheckVC {
         self.nameLabel.text = "MotionSensor"
         self.subtitle.text = "Tap to check whether Motion Sensor is working or not"
         self.iconImage.image = UIImage(named: "touch")
-        self.checkButton.setTitle("Check Sensore", for: .normal)
+        self.checkButton.setTitle("Check Sensor", for: .normal)
     }
     func setWifiVC() {
         self.nameLabel.text = "WiFi"
         self.subtitle.text = "Tap to check whether phone is connected to WiFi or not"
         self.iconImage.image = UIImage(named: "wifi")
         self.checkButton.setTitle("Check WiFi Connection", for: .normal)
+    }
+    
+    func switchOnFlashLight() {
+        guard let device = AVCaptureDevice.default(for: AVMediaType.video) else { return }
+        guard device.hasTorch else { return }
+        
+        do {
+            try device.lockForConfiguration()
+            
+            if (device.torchMode == AVCaptureDevice.TorchMode.on) {
+                device.torchMode = AVCaptureDevice.TorchMode.off
+            } else {
+                do {
+                    try device.setTorchModeOn(level: 1.0)
+                } catch {
+                    print(error)
+                }
+            }
+            
+            device.unlockForConfiguration()
+        } catch {
+            print(error)
+        }
+    }
+    
+    func switchOnVibration() {
+        let generator = UIImpactFeedbackGenerator(style: .heavy)
+        generator.impactOccurred()
+    }
+}
+
+public class Reachability {
+    
+    class func isConnectedToNetwork() -> Bool {
+        
+        var zeroAddress = sockaddr_in(sin_len: 0, sin_family: 0, sin_port: 0, sin_addr: in_addr(s_addr: 0), sin_zero: (0, 0, 0, 0, 0, 0, 0, 0))
+        zeroAddress.sin_len = UInt8(MemoryLayout.size(ofValue: zeroAddress))
+        zeroAddress.sin_family = sa_family_t(AF_INET)
+        
+        let defaultRouteReachability = withUnsafePointer(to: &zeroAddress) {
+            $0.withMemoryRebound(to: sockaddr.self, capacity: 1) {zeroSockAddress in
+                SCNetworkReachabilityCreateWithAddress(nil, zeroSockAddress)
+            }
+        }
+        var flags: SCNetworkReachabilityFlags = SCNetworkReachabilityFlags(rawValue: 0)
+        if SCNetworkReachabilityGetFlags(defaultRouteReachability!, &flags) == false {
+            return false
+        }
+        
+        let isReachable = flags == .reachable
+        let needsConnection = flags == .connectionRequired
+        return isReachable && !needsConnection
     }
 }
