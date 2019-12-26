@@ -25,8 +25,6 @@ class RunAllTestsVC: UIViewController {
         super.viewDidLoad()
         self.viewModel = RunAllTestsVM()
         self.tableView.allowsSelection = false
-        self.tableView.estimatedRowHeight = 80
-        //self.tableView.rowHeight = UITableView.automaticDimension
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -109,7 +107,7 @@ extension RunAllTestsVC: UITableViewDelegate, UITableViewDataSource {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "SpecificTestCell", for: indexPath) as? SpecificTestCell else {return UITableViewCell()}
             cell.setupCell(name: "Flash", icon: icon)
             return cell
-        case .none:
+        default:
             return UITableViewCell()
         }
     }

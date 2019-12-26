@@ -60,6 +60,12 @@ extension BatteryCheckVC {
             self.setFrontCameraVC()
         case .rearCamera:
             self.setRearCameraVC()
+        case .motionSensor:
+            self.setMotionSensorScreen()
+        case .touchScreen:
+            self.setTouchScreenVC()
+        case .wifi:
+            self.setWifiVC()
         default:
             break
         }
@@ -133,5 +139,23 @@ extension BatteryCheckVC {
         self.subtitle.text = "Tap to check whether Rear Camera is working or not"
         self.iconImage.image = UIImage(named: "rear")
         self.checkButton.setTitle("Check Rear Camera", for: .normal)
+    }
+    func setTouchScreenVC() {
+        self.nameLabel.text = "Touch Screen"
+        self.subtitle.text = "Tap to check whether Touch Screen is working or not"
+        self.iconImage.image = UIImage(named: "touch")
+        self.checkButton.setTitle("Run Test", for: .normal)
+    }
+    func setMotionSensorScreen() {
+        self.nameLabel.text = "MotionSensor"
+        self.subtitle.text = "Tap to check whether Motion Sensor is working or not"
+        self.iconImage.image = UIImage(named: "touch")
+        self.checkButton.setTitle("Check Sensore", for: .normal)
+    }
+    func setWifiVC() {
+        self.nameLabel.text = "WiFi"
+        self.subtitle.text = "Tap to check whether phone is connected to WiFi or not"
+        self.iconImage.image = UIImage(named: "wifi")
+        self.checkButton.setTitle("Check WiFi Connection", for: .normal)
     }
 }

@@ -29,8 +29,6 @@ class SingleTestListVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.viewModel = SingleTestListVM()
-        self.tableView.estimatedRowHeight = 80
-        //self.tableView.rowHeight = UITableView.automaticDimension
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -113,6 +111,10 @@ extension SingleTestListVC: UITableViewDelegate, UITableViewDataSource {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "SingleTestCell", for: indexPath) as? SingleTestCell else {return UITableViewCell()}
             cell.setupCell(name: "Flash", icon: icon)
             return cell
+        case .motionSensor:
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "SingleTestCell", for: indexPath) as? SingleTestCell else {return UITableViewCell()}
+            cell.setupCell(name: "Motion Sensor", icon: icon)
+            return cell
         default:
             return UITableViewCell()
         }
@@ -126,7 +128,8 @@ extension SingleTestListVC: UITableViewDelegate, UITableViewDataSource {
         case .mobileCarrier:
             break
         case .wifi:
-            break
+            let vc = BatteryCheckVC.newInstance(sourceTest: .wifi)
+            self.navigationController?.pushViewController(vc, animated: true)
         case .display:
             break
         case .rearCamera:
@@ -139,7 +142,8 @@ extension SingleTestListVC: UITableViewDelegate, UITableViewDataSource {
             let vc = BatteryCheckVC.newInstance(sourceTest: .vibration)
             self.navigationController?.pushViewController(vc, animated: true)
         case .touchScreen:
-            break
+            let vc = BatteryCheckVC.newInstance(sourceTest: .touchScreen)
+            self.navigationController?.pushViewController(vc, animated: true)
         case .earpiece:
             break
         case .speaker:
@@ -153,6 +157,9 @@ extension SingleTestListVC: UITableViewDelegate, UITableViewDataSource {
             self.navigationController?.pushViewController(vc, animated: true)
         case .flash:
             let vc = BatteryCheckVC.newInstance(sourceTest: .flash)
+            self.navigationController?.pushViewController(vc, animated: true)
+        case .motionSensor:
+            let vc = BatteryCheckVC.newInstance(sourceTest: .motionSensor)
             self.navigationController?.pushViewController(vc, animated: true)
         default:
             break

@@ -23,6 +23,7 @@ enum testNames {
     case headphones
     case charging
     case flash
+    case motionSensor
     case none
 }
 

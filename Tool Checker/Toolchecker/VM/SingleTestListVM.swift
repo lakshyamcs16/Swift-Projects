@@ -13,7 +13,7 @@ class SingleTestListVM {
     var imagesArray:[String] = []
     
     init() {
-        self.array = [.simCard, .mobileCarrier, .wifi,.charging, .display,.rearCamera,.frontCamera,.vibration,.touchScreen,.earpiece,.speaker,.microphone,.headphones, .flash]
-        self.imagesArray = ["sim", "carrier", "wifi", "battery", "display", "rear", "front", "vibrate", "touch", "earpiece", "speaker", "microphone", "headphone", "headphone"]
+        self.array = [.simCard, .mobileCarrier, .wifi,.charging, .display,.rearCamera,.frontCamera,.vibration,.touchScreen,.earpiece,.speaker,.microphone,.headphones, .flash,.motionSensor]
+        self.imagesArray = ["sim", "carrier", "wifi", "battery", "display", "rear", "front", "vibrate", "touch", "earpiece", "speaker", "microphone", "headphone", "headphone", "headphone"]
     }
 }
