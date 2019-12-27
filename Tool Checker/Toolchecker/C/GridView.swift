@@ -61,12 +61,12 @@ class GridView: UIView {
         
         if checkIfComplete(layers: allLayersTouched){
             let alert = UIAlertController(title: "Touch Check", message: "Touch test passed", preferredStyle: .alert)
-            let yesAction = UIAlertAction(title: "Yes", style: UIAlertActionStyle.default) {
+            let yesAction = UIAlertAction(title: "Yes", style: UIAlertAction.Style.default) {
                 UIAlertAction in
                 self.goToTestView()
                 print("Passed")
             }
-            let noAction = UIAlertAction(title: "No", style: UIAlertActionStyle.default) {
+            let noAction = UIAlertAction(title: "No", style: UIAlertAction.Style.default) {
                 UIAlertAction in
                 self.goToTestView()
                 print("Failed")
