@@ -369,6 +369,36 @@
             </objects>
             <point key="canvasLocation" x="1924" y="121.88905547226388"/>
         </scene>
+        <!--Access CameraVC-->
+        <scene sceneID="1vw-7n-y0z">
+            <objects>
+                <viewController storyboardIdentifier="AccessCameraVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="6ii-rO-i81" customClass="AccessCameraVC" customModule="Toolchecker" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="0ZC-OS-RHJ">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fU1-sK-1gq">
+                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="fU1-sK-1gq" firstAttribute="bottom" secondItem="n4y-bw-Okx" secondAttribute="bottom" id="acb-6m-Ppc"/>
+                            <constraint firstItem="fU1-sK-1gq" firstAttribute="trailing" secondItem="n4y-bw-Okx" secondAttribute="trailing" id="ihU-tp-bvh"/>
+                            <constraint firstItem="fU1-sK-1gq" firstAttribute="top" secondItem="n4y-bw-Okx" secondAttribute="top" id="nS9-4a-LiT"/>
+                            <constraint firstItem="fU1-sK-1gq" firstAttribute="leading" secondItem="n4y-bw-Okx" secondAttribute="leading" id="xZV-cu-Omo"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="n4y-bw-Okx"/>
+                    </view>
+                    <connections>
+                        <outlet property="cameraView" destination="fU1-sK-1gq" id="Vby-S1-jOe"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="bFL-1s-dkU" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2703.1999999999998" y="104.7976011994003"/>
+        </scene>
         <!--Navigation Controller-->
         <scene sceneID="sQk-KY-uQO">
             <objects>
