@@ -14,7 +14,7 @@ import AudioToolbox
 
 class BatteryCheckVC: UIViewController {
     var sourceTest: testNames = .none
-    
+    var result:Bool = false
     @IBOutlet weak var subtitle: UILabel!
     @IBOutlet weak var checkButton: UIButton!
     @IBOutlet weak var nameLabel: UILabel!
@@ -59,9 +59,21 @@ class BatteryCheckVC: UIViewController {
         case .simCard:
             self.checkSimCardAvailability()
         case .frontCamera:
-            AVCaptureDevice.default(.builtInWideAngleCamera, for: AVMediaType.video, position: .front)
+            guard (AVCaptureDevice.DiscoverySession(deviceTypes: [AVCaptureDevice.DeviceType.builtInWideAngleCamera], mediaType: AVMediaType.video, position: AVCaptureDevice.Position.front).devices.filter({ $0.position == .front }).first) != nil else {
+                    print("No front facing camera found")
+                return
+            }
+            let alert = UIAlertController(title: "Alert", message: "Front camera working", preferredStyle: UIAlertController.Style.alert)
+            alert.addAction(UIAlertAction(title: "Click", style: UIAlertAction.Style.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
         case .rearCamera:
-            AVCaptureDevice.default(.builtInWideAngleCamera, for: AVMediaType.video, position: .back)
+            guard (AVCaptureDevice.DiscoverySession(deviceTypes: [AVCaptureDevice.DeviceType.builtInWideAngleCamera], mediaType: AVMediaType.video, position: AVCaptureDevice.Position.back).devices.filter({ $0.position == .back }).first) != nil else {
+                print("No back facing camera found")
+                return
+            }
+            let alert = UIAlertController(title: "Alert", message: "Back camera working", preferredStyle: UIAlertController.Style.alert)
+            alert.addAction(UIAlertAction(title: "Click", style: UIAlertAction.Style.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
         case .motionSensor:
             self.setMotionSensorScreen()
         case .display:
@@ -70,9 +82,13 @@ class BatteryCheckVC: UIViewController {
             self.checkTouch()
         case .wifi:
             if Reachability.isConnectedToNetwork(){
-                print("Internet Connection Available!")
+                let alert = UIAlertController(title: "Alert", message: "Wifi connected", preferredStyle: UIAlertController.Style.alert)
+                alert.addAction(UIAlertAction(title: "Click", style: UIAlertAction.Style.default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
             }else{
-                print("Internet Connection not Available!")
+                let alert = UIAlertController(title: "Alert", message: "Wifi not connected", preferredStyle: UIAlertController.Style.alert)
+                alert.addAction(UIAlertAction(title: "Click", style: UIAlertAction.Style.default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
             }
         default:
             break
@@ -110,7 +126,7 @@ extension BatteryCheckVC {
     }
     
     func checkDisplay() {
-        self.navigationController?.pushViewController(DisplayCheckViewController.newInstance(), animated: true)
+//        self.navigationController?.pushViewController(DisplayCheckViewController.newInstance(), animated: true)
     }
     
     func checkTouch() {
@@ -150,7 +166,7 @@ extension BatteryCheckVC {
             return UIDevice.current.batteryLevel
         }
         
-        var batteryState: UIDeviceBatteryState{
+        var batteryState: UIDevice.BatteryState{
             return UIDevice.current.batteryState
         }
         
@@ -187,16 +203,19 @@ extension BatteryCheckVC {
         self.subtitle.text = "Tap to check whether Sim Card is inserted or not"
         self.iconImage.image = UIImage(named: "sim")
         self.checkButton.setTitle("Check Sim Card", for: .normal)
-        self.checkSimCardAvailability()
     }
     
     func checkSimCardAvailability() {
         let networkInfo = CTTelephonyNetworkInfo()
         guard let info = networkInfo.subscriberCellularProvider else {return}
         if let carrier = info.isoCountryCode {
-            print("sim present \(carrier)")
+            let alert = UIAlertController(title: "Alert", message: "Sim present", preferredStyle: UIAlertController.Style.alert)
+            alert.addAction(UIAlertAction(title: "Click", style: UIAlertAction.Style.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
         } else {
-            print("No sim present Or No cellular coverage or phone is on airplane mode. Carrier")
+            let alert = UIAlertController(title: "Alert", message: "Sim not present", preferredStyle: UIAlertController.Style.alert)
+            alert.addAction(UIAlertAction(title: "Click", style: UIAlertAction.Style.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
         }
     }
     
