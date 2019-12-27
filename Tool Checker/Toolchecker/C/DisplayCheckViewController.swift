@@ -66,6 +66,7 @@ extension DisplayCheckViewController {
         self.navigationController?.popToViewController(controller!, animated: true)
     }
     @objc func didTouchDown(sender: UITapGestureRecognizer? = nil) {
+        
         colorIndex = colorIndex + 1
         if colorIndex < colors.count {
             view.backgroundColor = colors[colorIndex]
