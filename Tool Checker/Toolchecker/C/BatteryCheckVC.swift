@@ -79,7 +79,7 @@ class BatteryCheckVC: UIViewController {
         case .display:
             self.checkDisplay()
         case .touchScreen:
-            break
+            self.checkTouch()
         case .wifi:
             if Reachability.isConnectedToNetwork(){
                 let alert = UIAlertController(title: "Alert", message: "Wifi connected", preferredStyle: UIAlertController.Style.alert)
@@ -127,6 +127,10 @@ extension BatteryCheckVC {
     
     func checkDisplay() {
 //        self.navigationController?.pushViewController(DisplayCheckViewController.newInstance(), animated: true)
+    }
+    
+    func checkTouch() {
+        self.navigationController?.pushViewController(TouchViewController.newInstance(), animated: true)
     }
     
     func setDisplayScreenVC() {
@@ -229,9 +233,13 @@ extension BatteryCheckVC {
     }
     func setTouchScreenVC() {
         self.nameLabel.text = "Touch Screen"
-        self.subtitle.text = "Tap to check whether Touch Screen is working or not"
+        self.subtitle.text = """
+                                On the next screen, drag your finger over the screen until the whole
+                                content turns green. \n
+                                You have 20 seconds to complete the test
+                            """
         self.iconImage.image = UIImage(named: "touch")
-        self.checkButton.setTitle("Run Test", for: .normal)
+        self.checkButton.setTitle("Run Touch Test", for: .normal)
     }
     func setMotionSensorScreen() {
         self.nameLabel.text = "MotionSensor"
