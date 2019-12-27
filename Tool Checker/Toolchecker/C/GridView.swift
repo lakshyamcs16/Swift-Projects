@@ -37,9 +37,8 @@ class GridView: UIView {
         
         let someFrame = CGRect(x: x, y: y, width: w, height: h)
         let isPointInFrame = someFrame.contains(touchpoint)
-        //let pointColor = colorOfPoint(point: touchpoint)
-        if isPointInFrame
-            //&& !pointColor.isEqual(UIColor.red)
+        let pointColor = colorOfPoint(point: touchpoint)
+        if isPointInFrame && !pointColor.isEqual(UIColor.red)
         {
             let levelLayer = CAShapeLayer()
             levelLayer.path = UIBezierPath(roundedRect: someFrame,
@@ -57,12 +56,12 @@ class GridView: UIView {
         
         if checkIfComplete(layers: allLayersTouched){
             let alert = UIAlertController(title: "Touch Check", message: "Touch test passed", preferredStyle: .alert)
-            let yesAction = UIAlertAction(title: "Yes", style: UIAlertAction.Style.default) {
+            let yesAction = UIAlertAction(title: "Yes", style: .default) {
                 UIAlertAction in
                 self.goBack()
                 print("Passed")
             }
-            let noAction = UIAlertAction(title: "No", style: UIAlertAction.Style.default) {
+            let noAction = UIAlertAction(title: "No", style: .default) {
                 UIAlertAction in
                 print("Failed")
             }

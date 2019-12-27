@@ -147,6 +147,8 @@ extension SingleTestListVC: UITableViewDelegate, UITableViewDataSource {
         case .microphone:
             break
         case .headphones:
+            let vc = BatteryCheckVC.newInstance(sourceTest: .headphones)
+            self.navigationController?.pushViewController(vc, animated: true)
             break
         case .charging:
             let vc = BatteryCheckVC.newInstance(sourceTest: .charging)
