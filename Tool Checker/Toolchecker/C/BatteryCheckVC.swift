@@ -126,7 +126,7 @@ extension BatteryCheckVC {
     }
     
     func checkDisplay() {
-        self.navigationController?.pushViewController(DisplayCheckViewController.newInstance(), animated: true)
+//        self.navigationController?.pushViewController(DisplayCheckViewController.newInstance(), animated: true)
     }
     
     func setDisplayScreenVC() {
