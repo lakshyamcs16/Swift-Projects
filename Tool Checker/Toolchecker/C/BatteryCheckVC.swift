@@ -15,10 +15,13 @@ import AudioToolbox
 class BatteryCheckVC: UIViewController {
     var sourceTest: testNames = .none
     var result:Bool = false
+    
     @IBOutlet weak var subtitle: UILabel!
     @IBOutlet weak var checkButton: UIButton!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var iconImage: UIImageView!
+    var player: AVAudioPlayer?
+
     class func newInstance(sourceTest: testNames) -> UIViewController {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         guard let vc = storyboard.instantiateViewController(withIdentifier: "BatteryCheckVC") as? BatteryCheckVC else {
@@ -63,16 +66,16 @@ class BatteryCheckVC: UIViewController {
                     print("No front facing camera found")
                 return
             }
-            let alert = UIAlertController(title: "Alert", message: "Front camera working", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "Click", style: .default, handler: nil))
+            let alert = UIAlertController(title: "Alert", message: "Front camera working", preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "Click", style: UIAlertActionStyle.default, handler: nil))
             self.present(alert, animated: true, completion: nil)
         case .rearCamera:
             guard (AVCaptureDevice.DiscoverySession(deviceTypes: [AVCaptureDevice.DeviceType.builtInWideAngleCamera], mediaType: AVMediaType.video, position: AVCaptureDevice.Position.back).devices.filter({ $0.position == .back }).first) != nil else {
                 print("No back facing camera found")
                 return
             }
-            let alert = UIAlertController(title: "Alert", message: "Back camera working", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "Click", style: .default, handler: nil))
+            let alert = UIAlertController(title: "Alert", message: "Back camera working", preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "Click", style: UIAlertActionStyle.default, handler: nil))
             self.present(alert, animated: true, completion: nil)
         case .motionSensor:
             self.setMotionSensorScreen()
@@ -82,16 +85,16 @@ class BatteryCheckVC: UIViewController {
             self.checkTouch()
         case .wifi:
             if Reachability.isConnectedToNetwork(){
-                let alert = UIAlertController(title: "Alert", message: "Wifi connected", preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "Click", style: .default, handler: nil))
+                let alert = UIAlertController(title: "Alert", message: "Wifi connected", preferredStyle: UIAlertControllerStyle.alert)
+                alert.addAction(UIAlertAction(title: "Click", style: UIAlertActionStyle.default, handler: nil))
                 self.present(alert, animated: true, completion: nil)
             }else{
-                let alert = UIAlertController(title: "Alert", message: "Wifi not connected", preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "Click", style: .default, handler: nil))
+                let alert = UIAlertController(title: "Alert", message: "Wifi not connected", preferredStyle: UIAlertControllerStyle.alert)
+                alert.addAction(UIAlertAction(title: "Click", style: UIAlertActionStyle.default, handler: nil))
                 self.present(alert, animated: true, completion: nil)
             }
-        case .headphones:
-            self.checkHeadphones()
+        case .speaker:
+            self.playSound();            
         default:
             break
         }
@@ -122,60 +125,13 @@ extension BatteryCheckVC {
             self.setDisplayScreenVC()
         case .wifi:
             self.setWifiVC()
-        case .headphones:
-            self.setHeadphones()
+        case .speaker:
+            self.setSpeakerVC()
+        case .microphone:
+            self.setMicrophoneVC()
         default:
             break
         }
-    }
-    
-    func activateHeadPhonesStatus(){
-        
-        let notificationCenter = NotificationCenter.default
-        notificationCenter.addObserver(self,
-                                       selector: #selector(handleRouteChange),
-                                       name: .AVAudioSessionRouteChange,
-                                       object: nil)
-    }
-    
-    @objc func handleRouteChange(notification: Notification) {
-        guard let userInfo = notification.userInfo,
-            let reasonValue = userInfo[AVAudioSessionRouteChangeReasonKey] as? UInt,
-            let reason = AVAudioSessionRouteChangeReason(rawValue:reasonValue) else {
-                return
-        }
-        switch reason {
-        case .newDeviceAvailable:
-            let session = AVAudioSession.sharedInstance()
-            for output in session.currentRoute.outputs where output.portType == AVAudioSessionPortHeadphones {
-                print("Connection")
-                break
-            }
-        case .oldDeviceUnavailable:
-            if let previousRoute =
-                userInfo[AVAudioSessionRouteChangePreviousRouteKey] as? AVAudioSessionRouteDescription {
-                for output in previousRoute.outputs where output.portType == AVAudioSessionPortHeadphones {
-                    print("Not Connected")
-                    break
-                }
-            }
-        default: ()
-        }
-    }
-    
-    func checkHeadphones() {
-        activateHeadPhonesStatus()
-    }
-    
-    func setHeadphones() {
-        self.nameLabel.text = "Headphones"
-        self.subtitle.text = """
-                                Please connect headphones to device. Connection should be automatically
-                                detected. \n
-                                If pass result pop-up does not appear, tap the Check connection button.
-                             """
-        self.iconImage.image = UIImage(named: "headphones")
-        self.checkButton.setTitle("Headphones", for: .normal)
     }
     
     func checkDisplay() {
@@ -219,7 +175,7 @@ extension BatteryCheckVC {
             return UIDevice.current.batteryLevel
         }
         
-        var batteryState: UIDeviceBatteryState {
+        var batteryState: UIDeviceBatteryState{
             return UIDevice.current.batteryState
         }
         
@@ -230,9 +186,13 @@ extension BatteryCheckVC {
         func batteryStateDidChange(_ notification: Notification) {
             switch batteryState {
             case .unplugged, .unknown:
-                print("not charging")
+                let vc = PopUpVC.newInstance(state: .failed, source: .charging)
+                vc.modalPresentationStyle = .custom
+                self.present(vc, animated: true, completion:  nil)
             case .charging, .full:
-                print("charging or full")
+                let vc = PopUpVC.newInstance(state: .success, source: .charging)
+                vc.modalPresentationStyle = .custom
+                self.present(vc, animated: true, completion:  nil)
             }
         }
     }
@@ -262,13 +222,13 @@ extension BatteryCheckVC {
         let networkInfo = CTTelephonyNetworkInfo()
         guard let info = networkInfo.subscriberCellularProvider else {return}
         if info.isoCountryCode != nil {
-            let alert = UIAlertController(title: "Alert", message: "Sim present", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "Click", style: .default, handler: nil))
-            self.present(alert, animated: true, completion: nil)
+            let vc = PopUpVC.newInstance(state: .success, source: .simCard)
+            vc.modalPresentationStyle = .custom
+            self.present(vc, animated: true, completion:  nil)
         } else {
-            let alert = UIAlertController(title: "Alert", message: "Sim not present", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "Click", style: .default, handler: nil))
-            self.present(alert, animated: true, completion: nil)
+            let vc = PopUpVC.newInstance(state: .failed, source: .simCard)
+            vc.modalPresentationStyle = .custom
+            self.present(vc, animated: true, completion:  nil)
         }
     }
     
@@ -306,6 +266,54 @@ extension BatteryCheckVC {
         self.iconImage.image = UIImage(named: "wifi")
         self.checkButton.setTitle("Check WiFi Connection", for: .normal)
     }
+    
+    func setSpeakerVC() {
+        self.nameLabel.text = "Speaker Test"
+        self.subtitle.text = "Tap on Check Speakers button to hear the sound"
+        self.iconImage.image = UIImage(named: "speaker")
+        self.checkButton.setTitle("Check Speakers", for: .normal)
+    }
+    
+    func setMicrophoneVC() {
+        self.nameLabel.text = "Microphone Test"
+        self.subtitle.text = "Tap on Record button to record the audio"
+        self.iconImage.image = UIImage(named: "microphone")
+        self.checkButton.setTitle("Record", for: .normal)
+    }
+    
+    func playSound() {
+        guard let url = Bundle.main.url(forResource: "testtone", withExtension: "mp3") else { return }
+        
+        do {
+            try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
+            try AVAudioSession.sharedInstance().setActive(true)
+            
+            let player = try AVAudioPlayer(contentsOf: url)
+            
+            player.play()
+            
+            let alert = UIAlertController(title: "Speaker Test", message: "Did you hear the sound?", preferredStyle: .alert)
+            let yesAction = UIAlertAction(title: "Yes", style: .default) {
+                UIAlertAction in
+                self.navigationController?.popViewController(animated: true)
+                print("Passed")
+            }
+            let noAction = UIAlertAction(title: "No", style: .default) {
+                UIAlertAction in
+                self.navigationController?.popViewController(animated: true)
+                print("Failed")
+            }
+            alert.addAction(yesAction)
+            alert.addAction(noAction)
+            
+            self.present(alert, animated: true, completion: nil)
+            
+        } catch let error {
+            print(error.localizedDescription)
+        }
+    }
+    
+   
     
     func switchOnFlashLight() {
         guard let device = AVCaptureDevice.default(for: AVMediaType.video) else { return }
