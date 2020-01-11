@@ -261,7 +261,7 @@ extension BatteryCheckVC {
     func checkSimCardAvailability() {
         let networkInfo = CTTelephonyNetworkInfo()
         guard let info = networkInfo.subscriberCellularProvider else {return}
-        if let carrier = info.isoCountryCode {
+        if info.isoCountryCode != nil {
             let alert = UIAlertController(title: "Alert", message: "Sim present", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "Click", style: .default, handler: nil))
             self.present(alert, animated: true, completion: nil)
