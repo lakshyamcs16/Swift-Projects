@@ -26,6 +26,9 @@
 		4387440C23B367C3005C6072 /* SingleTestListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4387440B23B367C3005C6072 /* SingleTestListVC.swift */; };
 		4387440E23B36814005C6072 /* SingleTestCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4387440D23B36814005C6072 /* SingleTestCell.swift */; };
 		4387441023B368E8005C6072 /* SingleTestListVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4387440F23B368E8005C6072 /* SingleTestListVM.swift */; };
+		43875C7423C741D20052DB5B /* GyroscopeTestVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43875C7323C741D20052DB5B /* GyroscopeTestVC.swift */; };
+		43875C7623C742F50052DB5B /* GyroscopeHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43875C7523C742F50052DB5B /* GyroscopeHeaderCell.swift */; };
+		43875C7823C8569F0052DB5B /* PopUpVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43875C7723C8569F0052DB5B /* PopUpVC.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,6 +74,9 @@
 		4387440B23B367C3005C6072 /* SingleTestListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleTestListVC.swift; sourceTree = "<group>"; };
 		4387440D23B36814005C6072 /* SingleTestCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleTestCell.swift; sourceTree = "<group>"; };
 		4387440F23B368E8005C6072 /* SingleTestListVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleTestListVM.swift; sourceTree = "<group>"; };
+		43875C7323C741D20052DB5B /* GyroscopeTestVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GyroscopeTestVC.swift; sourceTree = "<group>"; };
+		43875C7523C742F50052DB5B /* GyroscopeHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GyroscopeHeaderCell.swift; sourceTree = "<group>"; };
+		43875C7723C8569F0052DB5B /* PopUpVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopUpVC.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -161,6 +167,8 @@
 				1B59738423B545A300F9790D /* DisplayCheckViewController.swift */,
 				1B59739023B5688300F9790D /* TouchViewController.swift */,
 				1B59738E23B5684F00F9790D /* GridView.swift */,
+				43875C7323C741D20052DB5B /* GyroscopeTestVC.swift */,
+				43875C7723C8569F0052DB5B /* PopUpVC.swift */,
 			);
 			path = C;
 			sourceTree = "<group>";
@@ -181,6 +189,7 @@
 				438743FE23B0906B005C6072 /* TestCellType.swift */,
 				4387440723B0B174005C6072 /* SpecificTestCell.swift */,
 				4387440D23B36814005C6072 /* SingleTestCell.swift */,
+				43875C7523C742F50052DB5B /* GyroscopeHeaderCell.swift */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -317,6 +326,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				438743D123B08225005C6072 /* RunAllTestsVC.swift in Sources */,
+				43875C7823C8569F0052DB5B /* PopUpVC.swift in Sources */,
 				4387440A23B1D429005C6072 /* BatteryCheckVC.swift in Sources */,
 				438743CF23B08225005C6072 /* AppDelegate.swift in Sources */,
 				4387440623B0B00E005C6072 /* RunAllTestsVM.swift in Sources */,
@@ -324,12 +334,14 @@
 				4387441023B368E8005C6072 /* SingleTestListVM.swift in Sources */,
 				1B59739123B5688300F9790D /* TouchViewController.swift in Sources */,
 				4387440823B0B174005C6072 /* SpecificTestCell.swift in Sources */,
+				43875C7623C742F50052DB5B /* GyroscopeHeaderCell.swift in Sources */,
 				4387440E23B36814005C6072 /* SingleTestCell.swift in Sources */,
 				4387440323B09155005C6072 /* InitialTestScreenVM.swift in Sources */,
 				438743FD23B08FF3005C6072 /* InitialTestScreenVC.swift in Sources */,
 				438743FF23B0906B005C6072 /* TestCellType.swift in Sources */,
 				1B59738F23B5684F00F9790D /* GridView.swift in Sources */,
 				4387440C23B367C3005C6072 /* SingleTestListVC.swift in Sources */,
+				43875C7423C741D20052DB5B /* GyroscopeTestVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

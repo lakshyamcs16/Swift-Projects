@@ -177,9 +177,13 @@ extension BatteryCheckVC {
         func batteryStateDidChange(_ notification: Notification) {
             switch batteryState {
             case .unplugged, .unknown:
-                print("not charging")
+                let vc = PopUpVC.newInstance(state: .failed, source: .charging)
+                vc.modalPresentationStyle = .custom
+                self.present(vc, animated: true, completion:  nil)
             case .charging, .full:
-                print("charging or full")
+                let vc = PopUpVC.newInstance(state: .success, source: .charging)
+                vc.modalPresentationStyle = .custom
+                self.present(vc, animated: true, completion:  nil)
             }
         }
     }
@@ -209,13 +213,13 @@ extension BatteryCheckVC {
         let networkInfo = CTTelephonyNetworkInfo()
         guard let info = networkInfo.subscriberCellularProvider else {return}
         if let carrier = info.isoCountryCode {
-            let alert = UIAlertController(title: "Alert", message: "Sim present", preferredStyle: UIAlertController.Style.alert)
-            alert.addAction(UIAlertAction(title: "Click", style: UIAlertAction.Style.default, handler: nil))
-            self.present(alert, animated: true, completion: nil)
+            let vc = PopUpVC.newInstance(state: .success, source: .simCard)
+            vc.modalPresentationStyle = .custom
+            self.present(vc, animated: true, completion:  nil)
         } else {
-            let alert = UIAlertController(title: "Alert", message: "Sim not present", preferredStyle: UIAlertController.Style.alert)
-            alert.addAction(UIAlertAction(title: "Click", style: UIAlertAction.Style.default, handler: nil))
-            self.present(alert, animated: true, completion: nil)
+            let vc = PopUpVC.newInstance(state: .failed, source: .simCard)
+            vc.modalPresentationStyle = .custom
+            self.present(vc, animated: true, completion:  nil)
         }
     }
     
