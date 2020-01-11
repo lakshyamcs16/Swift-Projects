@@ -17,12 +17,6 @@ class GridView: UIView {
     var columnWidth: Int = 0
     var rowHeight: Int = 0
     var allLayersTouched: [[Bool]] = [[]]
-    var touchVC = TouchViewController.newInstance()
-    
-    func goToTestView() {
-        let controller = touchVC.navigationController?.viewControllers[(touchVC.navigationController?.viewControllers.count)! - 3]
-        touchVC.navigationController?.popToViewController(controller!, animated: true)
-    }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         let touch:UITouch = touches.first!
@@ -44,7 +38,8 @@ class GridView: UIView {
         let someFrame = CGRect(x: x, y: y, width: w, height: h)
         let isPointInFrame = someFrame.contains(touchpoint)
         let pointColor = colorOfPoint(point: touchpoint)
-        if isPointInFrame && !pointColor.isEqual(UIColor.red){
+        if isPointInFrame && !pointColor.isEqual(UIColor.red)
+        {
             let levelLayer = CAShapeLayer()
             levelLayer.path = UIBezierPath(roundedRect: someFrame,
                                            cornerRadius: 0).cgPath
@@ -61,21 +56,18 @@ class GridView: UIView {
         
         if checkIfComplete(layers: allLayersTouched){
             let alert = UIAlertController(title: "Touch Check", message: "Touch test passed", preferredStyle: .alert)
-            let yesAction = UIAlertAction(title: "Yes", style: UIAlertAction.Style.default) {
+            let yesAction = UIAlertAction(title: "Yes", style: .default) {
                 UIAlertAction in
-                self.goToTestView()
+                self.goBack()
                 print("Passed")
             }
-            let noAction = UIAlertAction(title: "No", style: UIAlertAction.Style.default) {
+            let noAction = UIAlertAction(title: "No", style: .default) {
                 UIAlertAction in
-                self.goToTestView()
                 print("Failed")
             }
             alert.addAction(yesAction)
             alert.addAction(noAction)
             self.window?.rootViewController?.present(alert, animated: true, completion: nil)
-            
-            //touchVC.present(alert, animated: true, completion: nil)
         }
     }
     
@@ -124,6 +116,11 @@ class GridView: UIView {
             }
         }
     }
+    
+    func goBack() {
+        let controller = self.viewController?.navigationController?.viewControllers[(self.viewController?.navigationController?.viewControllers.count)! - 3]
+        self.viewController?.navigationController?.popToViewController(controller!, animated: true)
+    }
 }
 
 extension UIView {
@@ -147,5 +144,19 @@ extension UIView {
         let color: UIColor = UIColor(red: red, green: green, blue: blue, alpha: alpha)
         
         return color
+    }
+        
+    var viewController: UIViewController? {
+        
+        var responder: UIResponder? = self
+        
+        while responder != nil {
+            
+            if let responder = responder as? UIViewController {
+                return responder
+            }
+            responder = responder?.next
+        }
+        return nil
     }
 }

@@ -74,12 +74,12 @@ extension DisplayCheckViewController {
             print("Test completed")
             
             let alert = UIAlertController(title: "Display Check", message: "Was the screen free of dead or stuck pixels?", preferredStyle: .alert)
-            let yesAction = UIAlertAction(title: "Yes", style: UIAlertAction.Style.default) {
+            let yesAction = UIAlertAction(title: "Yes", style: .default) {
                 UIAlertAction in
                 self.goToTestView()
                 print("Passed")
             }
-            let noAction = UIAlertAction(title: "No", style: UIAlertAction.Style.default) {
+            let noAction = UIAlertAction(title: "No", style: .default) {
                 UIAlertAction in
                 self.goToTestView()
                 print("Failed")
