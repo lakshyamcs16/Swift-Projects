@@ -29,6 +29,7 @@
 		43875C7423C741D20052DB5B /* GyroscopeTestVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43875C7323C741D20052DB5B /* GyroscopeTestVC.swift */; };
 		43875C7623C742F50052DB5B /* GyroscopeHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43875C7523C742F50052DB5B /* GyroscopeHeaderCell.swift */; };
 		43875C7823C8569F0052DB5B /* PopUpVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43875C7723C8569F0052DB5B /* PopUpVC.swift */; };
+		43875C7F23CBAB060052DB5B /* Xcode.app in Frameworks */ = {isa = PBXBuildFile; fileRef = 43875C7E23CBAB060052DB5B /* Xcode.app */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -77,6 +78,7 @@
 		43875C7323C741D20052DB5B /* GyroscopeTestVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GyroscopeTestVC.swift; sourceTree = "<group>"; };
 		43875C7523C742F50052DB5B /* GyroscopeHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GyroscopeHeaderCell.swift; sourceTree = "<group>"; };
 		43875C7723C8569F0052DB5B /* PopUpVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopUpVC.swift; sourceTree = "<group>"; };
+		43875C7E23CBAB060052DB5B /* Xcode.app */ = {isa = PBXFileReference; lastKnownFileType = wrapper.application; name = Xcode.app; path = ../../../../../../Applications/Xcode.app; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,6 +86,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				43875C7F23CBAB060052DB5B /* Xcode.app in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -111,6 +114,7 @@
 				438743E223B08227005C6072 /* ToolcheckerTests */,
 				438743ED23B08227005C6072 /* ToolcheckerUITests */,
 				438743CC23B08225005C6072 /* Products */,
+				43875C7D23CBAB050052DB5B /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -192,6 +196,14 @@
 				43875C7523C742F50052DB5B /* GyroscopeHeaderCell.swift */,
 			);
 			path = Cell;
+			sourceTree = "<group>";
+		};
+		43875C7D23CBAB050052DB5B /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				43875C7E23CBAB060052DB5B /* Xcode.app */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
