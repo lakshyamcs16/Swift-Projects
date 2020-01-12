@@ -15,10 +15,13 @@ import AudioToolbox
 class BatteryCheckVC: UIViewController {
     var sourceTest: testNames = .none
     var result:Bool = false
+    
     @IBOutlet weak var subtitle: UILabel!
     @IBOutlet weak var checkButton: UIButton!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var iconImage: UIImageView!
+    var player: AVAudioPlayer?
+
     class func newInstance(sourceTest: testNames) -> UIViewController {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         guard let vc = storyboard.instantiateViewController(withIdentifier: "BatteryCheckVC") as? BatteryCheckVC else {
@@ -63,16 +66,16 @@ class BatteryCheckVC: UIViewController {
                     print("No front facing camera found")
                 return
             }
-            let alert = UIAlertController(title: "Alert", message: "Front camera working", preferredStyle: UIAlertController.Style.alert)
-            alert.addAction(UIAlertAction(title: "Click", style: UIAlertAction.Style.default, handler: nil))
+            let alert = UIAlertController(title: "Alert", message: "Front camera working", preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "Click", style: UIAlertActionStyle.default, handler: nil))
             self.present(alert, animated: true, completion: nil)
         case .rearCamera:
             guard (AVCaptureDevice.DiscoverySession(deviceTypes: [AVCaptureDevice.DeviceType.builtInWideAngleCamera], mediaType: AVMediaType.video, position: AVCaptureDevice.Position.back).devices.filter({ $0.position == .back }).first) != nil else {
                 print("No back facing camera found")
                 return
             }
-            let alert = UIAlertController(title: "Alert", message: "Back camera working", preferredStyle: UIAlertController.Style.alert)
-            alert.addAction(UIAlertAction(title: "Click", style: UIAlertAction.Style.default, handler: nil))
+            let alert = UIAlertController(title: "Alert", message: "Back camera working", preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "Click", style: UIAlertActionStyle.default, handler: nil))
             self.present(alert, animated: true, completion: nil)
         case .motionSensor:
             self.setMotionSensorScreen()
@@ -82,14 +85,16 @@ class BatteryCheckVC: UIViewController {
             self.checkTouch()
         case .wifi:
             if Reachability.isConnectedToNetwork(){
-                let alert = UIAlertController(title: "Alert", message: "Wifi connected", preferredStyle: UIAlertController.Style.alert)
-                alert.addAction(UIAlertAction(title: "Click", style: UIAlertAction.Style.default, handler: nil))
+                let alert = UIAlertController(title: "Alert", message: "Wifi connected", preferredStyle: UIAlertControllerStyle.alert)
+                alert.addAction(UIAlertAction(title: "Click", style: UIAlertActionStyle.default, handler: nil))
                 self.present(alert, animated: true, completion: nil)
             }else{
-                let alert = UIAlertController(title: "Alert", message: "Wifi not connected", preferredStyle: UIAlertController.Style.alert)
-                alert.addAction(UIAlertAction(title: "Click", style: UIAlertAction.Style.default, handler: nil))
+                let alert = UIAlertController(title: "Alert", message: "Wifi not connected", preferredStyle: UIAlertControllerStyle.alert)
+                alert.addAction(UIAlertAction(title: "Click", style: UIAlertActionStyle.default, handler: nil))
                 self.present(alert, animated: true, completion: nil)
             }
+        case .speaker:
+            self.playSound();            
         default:
             break
         }
@@ -120,13 +125,17 @@ extension BatteryCheckVC {
             self.setDisplayScreenVC()
         case .wifi:
             self.setWifiVC()
+        case .speaker:
+            self.setSpeakerVC()
+        case .microphone:
+            self.setMicrophoneVC()
         default:
             break
         }
     }
     
     func checkDisplay() {
-//        self.navigationController?.pushViewController(DisplayCheckViewController.newInstance(), animated: true)
+        self.navigationController?.pushViewController(DisplayCheckViewController.newInstance(), animated: true)
     }
     
     func checkTouch() {
@@ -166,7 +175,7 @@ extension BatteryCheckVC {
             return UIDevice.current.batteryLevel
         }
         
-        var batteryState: UIDevice.BatteryState{
+        var batteryState: UIDeviceBatteryState{
             return UIDevice.current.batteryState
         }
         
@@ -212,7 +221,7 @@ extension BatteryCheckVC {
     func checkSimCardAvailability() {
         let networkInfo = CTTelephonyNetworkInfo()
         guard let info = networkInfo.subscriberCellularProvider else {return}
-        if let carrier = info.isoCountryCode {
+        if info.isoCountryCode != nil {
             let vc = PopUpVC.newInstance(state: .success, source: .simCard)
             vc.modalPresentationStyle = .custom
             self.present(vc, animated: true, completion:  nil)
@@ -257,6 +266,54 @@ extension BatteryCheckVC {
         self.iconImage.image = UIImage(named: "wifi")
         self.checkButton.setTitle("Check WiFi Connection", for: .normal)
     }
+    
+    func setSpeakerVC() {
+        self.nameLabel.text = "Speaker Test"
+        self.subtitle.text = "Tap on Check Speakers button to hear the sound"
+        self.iconImage.image = UIImage(named: "speaker")
+        self.checkButton.setTitle("Check Speakers", for: .normal)
+    }
+    
+    func setMicrophoneVC() {
+        self.nameLabel.text = "Microphone Test"
+        self.subtitle.text = "Tap on Record button to record the audio"
+        self.iconImage.image = UIImage(named: "microphone")
+        self.checkButton.setTitle("Record", for: .normal)
+    }
+    
+    func playSound() {
+        guard let url = Bundle.main.url(forResource: "testtone", withExtension: "mp3") else { return }
+        
+        do {
+            try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
+            try AVAudioSession.sharedInstance().setActive(true)
+            
+            let player = try AVAudioPlayer(contentsOf: url)
+            
+            player.play()
+            
+            let alert = UIAlertController(title: "Speaker Test", message: "Did you hear the sound?", preferredStyle: .alert)
+            let yesAction = UIAlertAction(title: "Yes", style: .default) {
+                UIAlertAction in
+                self.navigationController?.popViewController(animated: true)
+                print("Passed")
+            }
+            let noAction = UIAlertAction(title: "No", style: .default) {
+                UIAlertAction in
+                self.navigationController?.popViewController(animated: true)
+                print("Failed")
+            }
+            alert.addAction(yesAction)
+            alert.addAction(noAction)
+            
+            self.present(alert, animated: true, completion: nil)
+            
+        } catch let error {
+            print(error.localizedDescription)
+        }
+    }
+    
+   
     
     func switchOnFlashLight() {
         guard let device = AVCaptureDevice.default(for: AVMediaType.video) else { return }
