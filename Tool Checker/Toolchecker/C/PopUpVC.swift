@@ -147,6 +147,13 @@ class PopUpVC: UIViewController {
             } else {
                 
             }
+        case .proximitySensor:
+            if state == .success {
+                self.statusLabel.text = "Proximity Sensor working"
+                self.statusSubLabel.isHidden = true
+            } else {
+                
+            }
         case .none:
             break
         }

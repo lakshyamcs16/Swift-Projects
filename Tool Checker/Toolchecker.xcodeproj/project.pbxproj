@@ -10,7 +10,6 @@
 		1B59738523B545A300F9790D /* DisplayCheckViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B59738423B545A300F9790D /* DisplayCheckViewController.swift */; };
 		1B59738F23B5684F00F9790D /* GridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B59738E23B5684F00F9790D /* GridView.swift */; };
 		1B59739123B5688300F9790D /* TouchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B59739023B5688300F9790D /* TouchViewController.swift */; };
-		1BCD3A1723CA69D300CEC8C7 /* testtone.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 1BCD3A1623CA69D300CEC8C7 /* testtone.mp3 */; };
 		1BCD3A1C23CA751300CEC8C7 /* MicrophoneCheckVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BCD3A1B23CA751300CEC8C7 /* MicrophoneCheckVC.swift */; };
 		438743CF23B08225005C6072 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 438743CE23B08225005C6072 /* AppDelegate.swift */; };
 		438743D123B08225005C6072 /* RunAllTestsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 438743D023B08225005C6072 /* RunAllTestsVC.swift */; };
@@ -55,7 +54,6 @@
 		1B59738423B545A300F9790D /* DisplayCheckViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayCheckViewController.swift; sourceTree = "<group>"; };
 		1B59738E23B5684F00F9790D /* GridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridView.swift; sourceTree = "<group>"; };
 		1B59739023B5688300F9790D /* TouchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchViewController.swift; sourceTree = "<group>"; };
-		1BCD3A1623CA69D300CEC8C7 /* testtone.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = testtone.mp3; path = ../../../../testtone.mp3; sourceTree = "<group>"; };
 		1BCD3A1823CA6B2100CEC8C7 /* testtone.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = testtone.mp3; sourceTree = "<group>"; };
 		1BCD3A1B23CA751300CEC8C7 /* MicrophoneCheckVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicrophoneCheckVC.swift; sourceTree = "<group>"; };
 		438743CB23B08225005C6072 /* Toolchecker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Toolchecker.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -112,14 +110,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		1BCD3A1523CA69AD00CEC8C7 /* Assets */ = {
-			isa = PBXGroup;
-			children = (
-				1BCD3A1623CA69D300CEC8C7 /* testtone.mp3 */,
-			);
-			path = Assets;
-			sourceTree = "<group>";
-		};
 		438743C223B08225005C6072 = {
 			isa = PBXGroup;
 			children = (
@@ -144,9 +134,9 @@
 		438743CD23B08225005C6072 /* Toolchecker */ = {
 			isa = PBXGroup;
 			children = (
-				1BCD3A1523CA69AD00CEC8C7 /* Assets */,
 				438743CE23B08225005C6072 /* AppDelegate.swift */,
 				438743D223B08225005C6072 /* Main.storyboard */,
+				1BCD3A1823CA6B2100CEC8C7 /* testtone.mp3 */,
 				4387440423B09239005C6072 /* Cell */,
 				4387440023B090FA005C6072 /* C */,
 				4387440123B09110005C6072 /* VM */,
@@ -178,7 +168,6 @@
 		4387440023B090FA005C6072 /* C */ = {
 			isa = PBXGroup;
 			children = (
-				1BCD3A1823CA6B2100CEC8C7 /* testtone.mp3 */,
 				438743D023B08225005C6072 /* RunAllTestsVC.swift */,
 				438743FC23B08FF3005C6072 /* InitialTestScreenVC.swift */,
 				4387440B23B367C3005C6072 /* SingleTestListVC.swift */,
@@ -326,7 +315,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1BCD3A1723CA69D300CEC8C7 /* testtone.mp3 in Resources */,
 				438743D923B08227005C6072 /* LaunchScreen.storyboard in Resources */,
 				438743D623B08227005C6072 /* Assets.xcassets in Resources */,
 				438743D423B08225005C6072 /* Main.storyboard in Resources */,

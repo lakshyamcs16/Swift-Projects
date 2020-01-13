@@ -104,14 +104,14 @@ class MicrophoneCheckVC: UIViewController, AVAudioRecorderDelegate, AVAudioPlaye
     func check_record_permission()
     {
         print("Record permission")
-        switch AVAudioSession.sharedInstance().recordPermission() {
-        case AVAudioSessionRecordPermission.granted:
+        switch AVAudioSession.sharedInstance().recordPermission {
+        case AVAudioSession.RecordPermission.granted:
             isAudioRecordingGranted = true
             break
-        case AVAudioSessionRecordPermission.denied:
+        case AVAudioSession.RecordPermission.denied:
             isAudioRecordingGranted = false
             break
-        case AVAudioSessionRecordPermission.undetermined:
+        case AVAudioSession.RecordPermission.undetermined:
             AVAudioSession.sharedInstance().requestRecordPermission({ (allowed) in
                 if allowed {
                     self.isAudioRecordingGranted = true
@@ -144,8 +144,10 @@ class MicrophoneCheckVC: UIViewController, AVAudioRecorderDelegate, AVAudioPlaye
             let session = AVAudioSession.sharedInstance()
             do
             {
-                try session.setCategory(AVAudioSessionCategoryPlayAndRecord, with: .defaultToSpeaker)
-                try session.setActive(true)
+                try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
+                try AVAudioSession.sharedInstance().setActive(true)
+//                try session.setCategory(AVAudioSession.Category.playAndRecord, with: .defaultToSpeaker)
+//                try session.setActive(true)
                 let settings = [
                     AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
                     AVSampleRateKey: 44100,
