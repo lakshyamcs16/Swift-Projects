@@ -141,7 +141,7 @@ class MicrophoneCheckVC: UIViewController, AVAudioRecorderDelegate, AVAudioPlaye
     {
         if isAudioRecordingGranted
         {
-            let session = AVAudioSession.sharedInstance()
+            _ = AVAudioSession.sharedInstance()
             do
             {
                 try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)

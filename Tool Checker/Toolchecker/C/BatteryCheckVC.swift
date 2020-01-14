@@ -95,6 +95,10 @@ class BatteryCheckVC: UIViewController {
             }
         case .speaker:
             self.playSound()
+        case .headphones:
+            self.checkHeadphones()
+        case .buttons:
+            self.listenVolumeButton()
         case .proximitySensor:
             self.checkProximitySensor()
         default:
@@ -131,6 +135,10 @@ extension BatteryCheckVC {
             self.setSpeakerVC()
         case .microphone:
             self.setMicrophoneVC()
+        case .headphones:
+            self.setHeadphonesVC()
+        case .buttons:
+            self.setButtonsVC()
         case .proximitySensor:
             self.setProximitySensorVC()
         default:
@@ -151,6 +159,57 @@ extension BatteryCheckVC {
     
     func checkTouch() {
         self.navigationController?.pushViewController(TouchViewController.newInstance(), animated: true)
+    }
+    
+    func listenVolumeButton() {
+        let audioSession = AVAudioSession()
+        do {
+            try audioSession.setActive(true)
+        } catch {
+            print("some error")
+        }
+        audioSession.addObserver(self, forKeyPath: "outputVolume", options: NSKeyValueObservingOptions.new, context: nil)
+    }
+    
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        if keyPath == "outputVolume" {
+            print("got in here")
+        }
+    }
+    
+    func checkHeadphones() {
+        let session = AVAudioSession.sharedInstance()
+        let currentRoute = session.currentRoute
+        if currentRoute.outputs.count != 0 {
+            for description in currentRoute.outputs {
+                if description.portType == AVAudioSession.Port.headphones {
+                    print("headphone plugged in")
+                } else {
+                    print("headphone pulled out")
+                }
+            }
+        } else {
+            print("requires connection to device")
+        }
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(self.audioRouteChangeListener(_:)),
+            name: AVAudioSession.routeChangeNotification,
+            object: nil)
+    }
+    
+    @objc func audioRouteChangeListener(_ notification:NSNotification) {
+        let audioRouteChangeReason = notification.userInfo![AVAudioSessionRouteChangeReasonKey] as! UInt
+        
+        switch audioRouteChangeReason {
+        case AVAudioSession.RouteChangeReason.newDeviceAvailable.rawValue:
+            print("headphone plugged in")
+        case AVAudioSession.RouteChangeReason.oldDeviceUnavailable.rawValue:
+            print("headphone pulled out")
+        default:
+            break
+        }
     }
     
     func setDisplayScreenVC() {
@@ -290,6 +349,20 @@ extension BatteryCheckVC {
         self.subtitle.text = "Tap on Record button to record the audio"
         self.iconImage.image = UIImage(named: "microphone")
         self.checkButton.setTitle("Record", for: .normal)
+    }
+    
+    func setHeadphonesVC() {
+        self.nameLabel.text = "Headphone Jack test"
+        self.subtitle.text = "Plugin the headphones and wait for the notification. If no notification is shown, headphone jack might be faulty"
+        self.iconImage.image = UIImage(named: "headphone")
+        self.checkButton.setTitle("Check Headphone", for: .normal)
+    }
+    
+    func setButtonsVC() {
+        self.nameLabel.text = "Buttons test"
+        self.subtitle.text = "Press volume and power button one by one to complete the test"
+        self.iconImage.image = UIImage(named: "headphone")
+        self.checkButton.setTitle("<<Checkbox needs to be added>>", for: .normal)
     }
     
     func playSound() {
