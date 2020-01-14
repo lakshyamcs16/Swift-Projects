@@ -113,6 +113,10 @@ extension SingleTestListVC: UITableViewDelegate, UITableViewDataSource {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "SingleTestCell", for: indexPath) as? SingleTestCell else {return UITableViewCell()}
             cell.setupCell(name: "Gyroscope", icon: icon)
             return cell
+        case .buttons:
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "SingleTestCell", for: indexPath) as? SingleTestCell else {return UITableViewCell()}
+            cell.setupCell(name: "Buttons", icon: icon)
+            return cell
         default:
             return UITableViewCell()
         }
@@ -162,6 +166,9 @@ extension SingleTestListVC: UITableViewDelegate, UITableViewDataSource {
             self.navigationController?.pushViewController(vc, animated: true)
         case .motionSensor:
             let vc = BatteryCheckVC.newInstance(sourceTest: .motionSensor)
+            self.navigationController?.pushViewController(vc, animated: true)
+        case .buttons:
+            let vc = BatteryCheckVC.newInstance(sourceTest: .buttons)
             self.navigationController?.pushViewController(vc, animated: true)
         case .gyroscope:
             let vc = GyroscopeTestVC.newInstance()
