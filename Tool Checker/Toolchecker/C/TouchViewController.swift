@@ -64,12 +64,12 @@ class TouchViewController: UIViewController {
                 self.timerLabel.text = "25"
                 print("Time's up")
                 let alert = UIAlertController(title: "Touch Check", message: "Time's up. Want to continue?", preferredStyle: .alert)
-                let yesAction = UIAlertAction(title: "Yes", style: UIAlertActionStyle.default) {
+                let yesAction = UIAlertAction(title: "Yes", style: UIAlertAction.Style.default) {
                     UIAlertAction in
                     self.setTimer()
                     print("Passed")
                 }
-                let noAction = UIAlertAction(title: "No", style: UIAlertActionStyle.default) {
+                let noAction = UIAlertAction(title: "No", style: UIAlertAction.Style.default) {
                     UIAlertAction in
                     self.goToTestView()
                     print("Failed")
@@ -80,14 +80,4 @@ class TouchViewController: UIViewController {
             }
         }
     }
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

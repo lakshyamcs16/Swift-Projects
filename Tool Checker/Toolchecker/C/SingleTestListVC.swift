@@ -117,6 +117,10 @@ extension SingleTestListVC: UITableViewDelegate, UITableViewDataSource {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "SingleTestCell", for: indexPath) as? SingleTestCell else {return UITableViewCell()}
             cell.setupCell(name: "Buttons", icon: icon)
             return cell
+        case .proximitySensor:
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "SingleTestCell", for: indexPath) as? SingleTestCell else {return UITableViewCell()}
+            cell.setupCell(name: "Proximity Sensor", icon: icon)
+            return cell
         default:
             return UITableViewCell()
         }
@@ -172,6 +176,9 @@ extension SingleTestListVC: UITableViewDelegate, UITableViewDataSource {
             self.navigationController?.pushViewController(vc, animated: true)
         case .gyroscope:
             let vc = GyroscopeTestVC.newInstance()
+            self.navigationController?.pushViewController(vc, animated: true)
+        case .proximitySensor:
+            let vc = BatteryCheckVC.newInstance(sourceTest: .proximitySensor)
             self.navigationController?.pushViewController(vc, animated: true)
         default:
             break

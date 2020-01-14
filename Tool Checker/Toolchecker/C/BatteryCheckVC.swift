@@ -66,17 +66,17 @@ class BatteryCheckVC: UIViewController {
                     print("No front facing camera found")
                 return
             }
-            let alert = UIAlertController(title: "Alert", message: "Front camera working", preferredStyle: UIAlertControllerStyle.alert)
-            alert.addAction(UIAlertAction(title: "Click", style: UIAlertActionStyle.default, handler: nil))
-            self.present(alert, animated: true, completion: nil)
+            let vc = PopUpVC.newInstance(state: .failed, source: .frontCamera)
+            vc.modalPresentationStyle = .custom
+            self.present(vc, animated: true, completion:  nil)
         case .rearCamera:
             guard (AVCaptureDevice.DiscoverySession(deviceTypes: [AVCaptureDevice.DeviceType.builtInWideAngleCamera], mediaType: AVMediaType.video, position: AVCaptureDevice.Position.back).devices.filter({ $0.position == .back }).first) != nil else {
                 print("No back facing camera found")
                 return
             }
-            let alert = UIAlertController(title: "Alert", message: "Back camera working", preferredStyle: UIAlertControllerStyle.alert)
-            alert.addAction(UIAlertAction(title: "Click", style: UIAlertActionStyle.default, handler: nil))
-            self.present(alert, animated: true, completion: nil)
+            let vc = PopUpVC.newInstance(state: .failed, source: .rearCamera)
+            vc.modalPresentationStyle = .custom
+            self.present(vc, animated: true, completion:  nil)
         case .motionSensor:
             self.setMotionSensorScreen()
         case .display:
@@ -85,13 +85,13 @@ class BatteryCheckVC: UIViewController {
             self.checkTouch()
         case .wifi:
             if Reachability.isConnectedToNetwork(){
-                let alert = UIAlertController(title: "Alert", message: "Wifi connected", preferredStyle: UIAlertControllerStyle.alert)
-                alert.addAction(UIAlertAction(title: "Click", style: UIAlertActionStyle.default, handler: nil))
-                self.present(alert, animated: true, completion: nil)
+                let vc = PopUpVC.newInstance(state: .success, source: .wifi)
+                vc.modalPresentationStyle = .custom
+                self.present(vc, animated: true, completion:  nil)
             }else{
-                let alert = UIAlertController(title: "Alert", message: "Wifi not connected", preferredStyle: UIAlertControllerStyle.alert)
-                alert.addAction(UIAlertAction(title: "Click", style: UIAlertActionStyle.default, handler: nil))
-                self.present(alert, animated: true, completion: nil)
+                let vc = PopUpVC.newInstance(state: .failed, source: .wifi)
+                vc.modalPresentationStyle = .custom
+                self.present(vc, animated: true, completion:  nil)
             }
         case .speaker:
             self.playSound()
@@ -99,6 +99,8 @@ class BatteryCheckVC: UIViewController {
             self.checkHeadphones()
         case .buttons:
             self.listenVolumeButton()
+        case .proximitySensor:
+            self.checkProximitySensor()
         default:
             break
         }
@@ -137,9 +139,18 @@ extension BatteryCheckVC {
             self.setHeadphonesVC()
         case .buttons:
             self.setButtonsVC()
+        case .proximitySensor:
+            self.setProximitySensorVC()
         default:
             break
         }
+    }
+    
+    func setProximitySensorVC() {
+        self.nameLabel.text = "Proximity Sensor"
+        self.subtitle.text = "Tap to check Proximity Sensor"
+        self.iconImage.image = UIImage(named: "battery")
+        self.checkButton.setTitle("Check Sensor", for: .normal)
     }
     
     func checkDisplay() {
@@ -171,7 +182,7 @@ extension BatteryCheckVC {
         let currentRoute = session.currentRoute
         if currentRoute.outputs.count != 0 {
             for description in currentRoute.outputs {
-                if description.portType == AVAudioSessionPortHeadphones {
+                if description.portType == AVAudioSession.Port.headphones {
                     print("headphone plugged in")
                 } else {
                     print("headphone pulled out")
@@ -184,7 +195,7 @@ extension BatteryCheckVC {
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(self.audioRouteChangeListener(_:)),
-            name: NSNotification.Name.AVAudioSessionRouteChange,
+            name: AVAudioSession.routeChangeNotification,
             object: nil)
     }
     
@@ -192,9 +203,9 @@ extension BatteryCheckVC {
         let audioRouteChangeReason = notification.userInfo![AVAudioSessionRouteChangeReasonKey] as! UInt
         
         switch audioRouteChangeReason {
-        case AVAudioSessionRouteChangeReason.newDeviceAvailable.rawValue:
+        case AVAudioSession.RouteChangeReason.newDeviceAvailable.rawValue:
             print("headphone plugged in")
-        case AVAudioSessionRouteChangeReason.oldDeviceUnavailable.rawValue:
+        case AVAudioSession.RouteChangeReason.oldDeviceUnavailable.rawValue:
             print("headphone pulled out")
         default:
             break
@@ -234,7 +245,7 @@ extension BatteryCheckVC {
             return UIDevice.current.batteryLevel
         }
         
-        var batteryState: UIDeviceBatteryState{
+        var batteryState: UIDevice.BatteryState{
             return UIDevice.current.batteryState
         }
         
@@ -358,8 +369,10 @@ extension BatteryCheckVC {
         guard let url = Bundle.main.url(forResource: "testtone", withExtension: "mp3") else { return }
         
         do {
-            try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
+            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
             try AVAudioSession.sharedInstance().setActive(true)
+//            try AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playback)
+//            try AVAudioSession.sharedInstance().setActive(true)
             
             let player = try AVAudioPlayer(contentsOf: url)
             
@@ -415,6 +428,27 @@ extension BatteryCheckVC {
         let generator = UIImpactFeedbackGenerator(style: .heavy)
         generator.impactOccurred()
     }
+    
+    func checkProximitySensor() {
+        let device = UIDevice.current
+        device.isProximityMonitoringEnabled = true
+        if device.isProximityMonitoringEnabled {
+            NotificationCenter.default.addObserver(self, selector: Selector(("proximityChanged:")), name: NSNotification.Name(rawValue: "UIDeviceProximityStateDidChangeNotification"), object: device)
+        }
+    }
+    func proximityChanged(notification: NSNotification) {
+        if let device = notification.object as? UIDevice {
+            print("\(device) detected!")
+            let vc = PopUpVC.newInstance(state: .success, source: .proximitySensor)
+            vc.modalPresentationStyle = .custom
+            self.present(vc, animated: true, completion:  nil)
+        } else {
+            let alert = UIAlertController(title: "Alert", message: "Wave your hand to check if Proximity Sensor is working or not", preferredStyle: UIAlertController.Style.alert)
+            alert.addAction(UIAlertAction(title: "Click", style: UIAlertAction.Style.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+        }
+    }
+    
 }
 
 public class Reachability {
