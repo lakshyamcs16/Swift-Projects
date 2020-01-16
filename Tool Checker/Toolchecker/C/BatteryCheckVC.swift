@@ -12,9 +12,10 @@ import SystemConfiguration
 import AVFoundation
 import AudioToolbox
 
-class BatteryCheckVC: UIViewController {
+class BatteryCheckVC: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     var sourceTest: testNames = .none
     var result:Bool = false
+    var imagePicker: UIImagePickerController!
     
     @IBOutlet weak var subtitle: UILabel!
     @IBOutlet weak var checkButton: UIButton!
@@ -63,18 +64,24 @@ class BatteryCheckVC: UIViewController {
             self.checkSimCardAvailability()
         case .frontCamera:
             guard (AVCaptureDevice.DiscoverySession(deviceTypes: [AVCaptureDevice.DeviceType.builtInWideAngleCamera], mediaType: AVMediaType.video, position: AVCaptureDevice.Position.front).devices.filter({ $0.position == .front }).first) != nil else {
-                    print("No front facing camera found")
+                let vc = PopUpVC.newInstance(state: .failed, source: .frontCamera)
+                vc.modalPresentationStyle = .custom
+                self.present(vc, animated: true, completion:  nil)
                 return
             }
-            let vc = PopUpVC.newInstance(state: .failed, source: .frontCamera)
+            self.openCamera()
+            let vc = PopUpVC.newInstance(state: .success, source: .frontCamera)
             vc.modalPresentationStyle = .custom
             self.present(vc, animated: true, completion:  nil)
         case .rearCamera:
             guard (AVCaptureDevice.DiscoverySession(deviceTypes: [AVCaptureDevice.DeviceType.builtInWideAngleCamera], mediaType: AVMediaType.video, position: AVCaptureDevice.Position.back).devices.filter({ $0.position == .back }).first) != nil else {
-                print("No back facing camera found")
+                let vc = PopUpVC.newInstance(state: .failed, source: .rearCamera)
+                vc.modalPresentationStyle = .custom
+                self.present(vc, animated: true, completion:  nil)
                 return
             }
-            let vc = PopUpVC.newInstance(state: .failed, source: .rearCamera)
+            self.openCamera()
+            let vc = PopUpVC.newInstance(state: .success, source: .rearCamera)
             vc.modalPresentationStyle = .custom
             self.present(vc, animated: true, completion:  nil)
         case .motionSensor:
@@ -104,6 +111,18 @@ class BatteryCheckVC: UIViewController {
         default:
             break
         }
+    }
+    
+    func openCamera() {
+        imagePicker =  UIImagePickerController()
+        imagePicker.delegate = self
+        imagePicker.sourceType = .camera
+        
+        present(imagePicker, animated: true, completion: nil)
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        imagePicker.dismiss(animated: true, completion: nil)
     }
     
 }
@@ -232,39 +251,38 @@ extension BatteryCheckVC {
         self.checkButton.setTitle("Check Connection", for: .normal)
     }
     
+    var batteryLevel: Float {
+        return UIDevice.current.batteryLevel
+    }
+    
+    var batteryState: UIDevice.BatteryState{
+        return UIDevice.current.batteryState
+    }
+    
+    @objc func batteryLevelDidChange(_ notification: Notification) {
+        print(batteryLevel)
+    }
+    
+    @objc func batteryStateDidChange(_ notification: Notification) {
+        switch batteryState {
+        case .unplugged, .unknown:
+            let vc = PopUpVC.newInstance(state: .failed, source: .charging)
+            vc.modalPresentationStyle = .custom
+            self.present(vc, animated: true, completion:  nil)
+        case .charging, .full:
+            let vc = PopUpVC.newInstance(state: .success, source: .charging, tempText: String(batteryLevel))
+            vc.modalPresentationStyle = .custom
+            self.present(vc, animated: true, completion:  nil)
+        }
+    }
+
+    
     func checkBatteryStatus() {
         UIDevice.current.isBatteryMonitoringEnabled = true
         print(UIDevice.current.batteryLevel)
         print(UIDevice.current.batteryState)
-        //        NotificationCenter.default.addObserver(self, selector: #selector(batteryLevelDidChange), name: NSNotification.Name.UIDevice.batteryLevelDidChangeNotification, object: nil)
-        //
-        //
-        //        NotificationCenter.default.addObserver(self, selector: #selector(batteryStateDidChange), name: NSNotification.Name.UIDevice.batteryStateDidChangeNotification, object: nil)
-        
-        var batteryLevel: Float {
-            return UIDevice.current.batteryLevel
-        }
-        
-        var batteryState: UIDevice.BatteryState{
-            return UIDevice.current.batteryState
-        }
-        
-        func batteryLevelDidChange(_ notification: Notification) {
-            print(batteryLevel)
-        }
-        
-        func batteryStateDidChange(_ notification: Notification) {
-            switch batteryState {
-            case .unplugged, .unknown:
-                let vc = PopUpVC.newInstance(state: .failed, source: .charging)
-                vc.modalPresentationStyle = .custom
-                self.present(vc, animated: true, completion:  nil)
-            case .charging, .full:
-                let vc = PopUpVC.newInstance(state: .success, source: .charging)
-                vc.modalPresentationStyle = .custom
-                self.present(vc, animated: true, completion:  nil)
-            }
-        }
+        NotificationCenter.default.addObserver(self, selector: #selector(batteryLevelDidChange), name: UIDevice.batteryLevelDidChangeNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(batteryStateDidChange), name: UIDevice.batteryStateDidChangeNotification, object: nil)
     }
     
     func setFlashVC() {
@@ -283,7 +301,7 @@ extension BatteryCheckVC {
     
     func setSIMCardVC() {
         self.nameLabel.text = "Sim Card"
-        self.subtitle.text = "Tap to check whether Sim Card is inserted or not"
+        self.subtitle.text = "Tap to check whether Sim Card is present or not"
         self.iconImage.image = UIImage(named: "sim")
         self.checkButton.setTitle("Check Sim Card", for: .normal)
     }
@@ -370,10 +388,7 @@ extension BatteryCheckVC {
         
         do {
             try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
-            try AVAudioSession.sharedInstance().setActive(true)
-//            try AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playback)
-//            try AVAudioSession.sharedInstance().setActive(true)
-            
+            try AVAudioSession.sharedInstance().setActive(true)            
             let player = try AVAudioPlayer(contentsOf: url)
             
             player.play()

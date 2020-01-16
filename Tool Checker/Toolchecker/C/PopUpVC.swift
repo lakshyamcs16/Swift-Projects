@@ -21,15 +21,17 @@ class PopUpVC: UIViewController {
     @IBOutlet weak var popupView: UIView!
     var state: status = .success
     var test: testNames = .none
+    var tempText: String = ""
     var timer = Timer()
     
-    class func newInstance(state: status, source: testNames, tempText: String? = "") -> UIViewController {
+    class func newInstance(state: status, source: testNames, tempText: String = "") -> UIViewController {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         guard let vc = storyboard.instantiateViewController(withIdentifier: "PopUpVC") as? PopUpVC else {
             return UIViewController()
         }
         vc.state = state
         vc .test = source
+        vc.tempText = tempText
         return vc
     }
     
@@ -43,39 +45,50 @@ class PopUpVC: UIViewController {
         switch test {
         case .simCard:
             if state == .success {
-                self.statusLabel.text = "Sim Card Present"
+                self.statusLabel.text = "Sim Card present"
                 self.statusSubLabel.isHidden = true
             } else {
-                self.statusLabel.text = "Sim Card Not Present"
+                self.statusLabel.text = "Sim Card is not present"
                 self.statusSubLabel.isHidden = false
+                self.statusSubLabel.text = "Please insert sim card"
             }
         case .wifi:
             if state == .success {
                 self.statusLabel.text = "Wifi Connected"
-                self.statusSubLabel.isHidden = true
+                self.statusSubLabel.isHidden = false
+                self.statusSubLabel.text = "Your device is connected to wifi"
             } else {
-                
+                self.statusLabel.text = "Wifi is not connected"
+                self.statusSubLabel.isHidden = false
+                self.statusSubLabel.text = "Your device is not connected to wifi"
             }
         case .display:
             if state == .success {
-                self.statusLabel.text = ""
+                self.statusLabel.text = "Display is working fine"
                 self.statusSubLabel.isHidden = true
             } else {
-                
+                self.statusLabel.text = "Display is not working fine"
+                self.statusSubLabel.isHidden = false
+                self.statusSubLabel.text = "Display does not seem to be in good condition"
             }
         case .rearCamera:
             if state == .success {
                 self.statusLabel.text = "Rear Camera working"
                 self.statusSubLabel.isHidden = true
             } else {
-                
+                self.statusLabel.text = "Rear Camera is not working"
+                self.statusSubLabel.isHidden = false
+                self.statusSubLabel.text = "Due to some technical reasons, we are unable to check Rear Camera. Please try after some time."
+
             }
         case .frontCamera:
             if state == .success {
                 self.statusLabel.text = "Front Camera working"
                 self.statusSubLabel.isHidden = true
             } else {
-                
+                self.statusLabel.text = "Front Camera is not working"
+                self.statusSubLabel.isHidden = false
+                self.statusSubLabel.text = "Due to some technical reasons, we are unable to check Front Camera. Please try after some time."
             }
         case .vibration:
             if state == .success {
@@ -122,9 +135,12 @@ class PopUpVC: UIViewController {
         case .charging:
             if state == .success {
                 self.statusLabel.text = "Phone is charging"
-                self.statusSubLabel.isHidden = true
+                self.statusSubLabel.isHidden = false
+                self.statusSubLabel.text = "Your device's current battery level is \(tempText)"
             } else {
-                
+                self.statusLabel.text = "Phone is not charging"
+                self.statusSubLabel.isHidden = false
+                self.statusSubLabel.text = "Please connect your device to a charger"
             }
         case .flash:
             if state == .success {
@@ -152,20 +168,28 @@ class PopUpVC: UIViewController {
                 self.statusLabel.text = "Buttons are working"
                 self.statusSubLabel.isHidden = true
             } else {
-                    
+                self.statusLabel.text = "Buttons are not working"
+                self.statusSubLabel.isHidden = false
+                self.statusSubLabel.text = "Due to some technical reasons, we are unable to check Proximity Sensor. Please try after some time."
             }
         case .proximitySensor:
             if state == .success {
                 self.statusLabel.text = "Proximity Sensor working"
                 self.statusSubLabel.isHidden = true
             } else {
-                
+                self.statusLabel.text = "Proximity Sensor is not working"
+                self.statusSubLabel.isHidden = false
+                self.statusSubLabel.text = "Due to some technical reasons, we are unable to check Proximity Sensor. Please try after some time."
             }
         case .none:
             break
         }
     }
     @objc func timeExpired() {
+        self.dismissButtonTapped(self)
+    }
+    
+    @IBAction func dismissButtonTapped(_ sender: Any) {
         self.dismiss(animated: false, completion: nil)
     }
 }

@@ -47,79 +47,76 @@ extension SingleTestListVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.viewModel.array.count
     }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let icon = UIImage(named: self.viewModel.imagesArray[indexPath.row]) else {
-            return UITableViewCell()
-        }
         switch self.viewModel.array[indexPath.row] {
         case .simCard:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "SingleTestCell", for: indexPath) as? SingleTestCell else {return UITableViewCell()}
-            cell.setupCell(name: "Sim Card", icon: icon)
+            cell.setupCell(name: "Sim Card", icon: "sim")
             return cell
         case .wifi:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "SingleTestCell", for: indexPath) as? SingleTestCell else {return UITableViewCell()}
-            cell.setupCell(name: "Wifi", icon: icon)
+            cell.setupCell(name: "Wifi", icon: "wifi")
             return cell
         case .display:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "SingleTestCell", for: indexPath) as? SingleTestCell else {return UITableViewCell()}
-            cell.setupCell(name: "Display", icon: icon)
+            cell.setupCell(name: "Display", icon: "display")
             return cell
         case .rearCamera:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "SingleTestCell", for: indexPath) as? SingleTestCell else {return UITableViewCell()}
-            cell.setupCell(name: "Rear Camera", icon: icon)
+            cell.setupCell(name: "Rear Camera", icon: "rear")
             return cell
         case .frontCamera:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "SingleTestCell", for: indexPath) as? SingleTestCell else {return UITableViewCell()}
-            cell.setupCell(name: "Front Camera", icon: icon)
+            cell.setupCell(name: "Front Camera", icon: "front")
             return cell
         case .vibration:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "SingleTestCell", for: indexPath) as? SingleTestCell else {return UITableViewCell()}
-            cell.setupCell(name: "Vibration", icon: icon)
+            cell.setupCell(name: "Vibration", icon: "vibrate")
             return cell
         case .touchScreen:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "SingleTestCell", for: indexPath) as? SingleTestCell else {return UITableViewCell()}
-            cell.setupCell(name: "Touch Screen", icon: icon)
+            cell.setupCell(name: "Touch Screen", icon: "touch")
             return cell
         case .earpiece:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "SingleTestCell", for: indexPath) as? SingleTestCell else {return UITableViewCell()}
-            cell.setupCell(name: "Earpiece", icon: icon)
+            cell.setupCell(name: "Earpiece", icon: "earpiece")
             return cell
         case .speaker:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "SingleTestCell", for: indexPath) as? SingleTestCell else {return UITableViewCell()}
-            cell.setupCell(name: "Speaker", icon: icon)
+            cell.setupCell(name: "Speaker", icon: "speaker")
             return cell
         case .microphone:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "SingleTestCell", for: indexPath) as? SingleTestCell else {return UITableViewCell()}
-            cell.setupCell(name: "Microphone", icon: icon)
+            cell.setupCell(name: "Microphone", icon: "microphone")
             return cell
         case .headphones:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "SingleTestCell", for: indexPath) as? SingleTestCell else {return UITableViewCell()}
-            cell.setupCell(name: "Headphones", icon: icon)
+            cell.setupCell(name: "Headphones", icon: "headphone")
             return cell
         case .charging:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "SingleTestCell", for: indexPath) as? SingleTestCell else {return UITableViewCell()}
-            cell.setupCell(name: "Charging", icon: icon)
+            cell.setupCell(name: "Charging", icon: "battery")
             return cell
         case .flash:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "SingleTestCell", for: indexPath) as? SingleTestCell else {return UITableViewCell()}
-            cell.setupCell(name: "Flash", icon: icon)
+            cell.setupCell(name: "Flash", icon: "headphone")
             return cell
         case .motionSensor:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "SingleTestCell", for: indexPath) as? SingleTestCell else {return UITableViewCell()}
-            cell.setupCell(name: "Motion Sensor", icon: icon)
+            cell.setupCell(name: "Motion Sensor", icon: "headphone")
             return cell
         case .gyroscope:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "SingleTestCell", for: indexPath) as? SingleTestCell else {return UITableViewCell()}
-            cell.setupCell(name: "Gyroscope", icon: icon)
+            cell.setupCell(name: "Gyroscope", icon: "battery")
             return cell
         case .buttons:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "SingleTestCell", for: indexPath) as? SingleTestCell else {return UITableViewCell()}
-            cell.setupCell(name: "Buttons", icon: icon)
+            cell.setupCell(name: "Buttons", icon: "headphone")
             return cell
         case .proximitySensor:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "SingleTestCell", for: indexPath) as? SingleTestCell else {return UITableViewCell()}
-            cell.setupCell(name: "Proximity Sensor", icon: icon)
+            cell.setupCell(name: "Proximity Sensor", icon: "headphone")
             return cell
         default:
             return UITableViewCell()
