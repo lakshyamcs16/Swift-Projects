@@ -500,7 +500,7 @@
                             <constraint firstItem="fv2-fG-gQx" firstAttribute="trailing" secondItem="ukk-Ws-yju" secondAttribute="trailing" id="VUh-2M-9VW"/>
                             <constraint firstItem="HM8-Gk-W1o" firstAttribute="trailing" secondItem="ukk-Ws-yju" secondAttribute="trailing" id="pXd-Ie-cZf"/>
                             <constraint firstItem="HM8-Gk-W1o" firstAttribute="bottom" secondItem="ukk-Ws-yju" secondAttribute="bottom" id="rCO-kn-tUm"/>
-                            <constraint firstItem="ukk-Ws-yju" firstAttribute="bottom" secondItem="fv2-fG-gQx" secondAttribute="bottom" id="vs8-fz-pz3"/>
+                            <constraint firstAttribute="bottom" secondItem="fv2-fG-gQx" secondAttribute="bottom" id="vs8-fz-pz3"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="ukk-Ws-yju"/>
                     </view>

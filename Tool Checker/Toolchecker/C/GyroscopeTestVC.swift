@@ -44,6 +44,8 @@ class GyroscopeTestVC: UIViewController {
         self.motionManager = CMMotionManager()
         self.array = [.acceleratorHeader,.acceleratorDetails,.gyroHeader,.gyroDetails]
         self.getGyroValues()
+        self.getAcceleratorValues()
+        self.tableView.reloadData()
     }
     
     @IBAction func backButtonTapped(_ sender: Any) {
