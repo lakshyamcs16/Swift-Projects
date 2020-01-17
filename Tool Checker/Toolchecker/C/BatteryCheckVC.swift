@@ -12,10 +12,11 @@ import SystemConfiguration
 import AVFoundation
 import AudioToolbox
 
-class BatteryCheckVC: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class BatteryCheckVC: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, DisplayCheckVCDelegate {
     var sourceTest: testNames = .none
     var result:Bool = false
     var imagePicker: UIImagePickerController!
+    var hasDisplayCheckCompleted: Bool = false
     
     @IBOutlet weak var subtitle: UILabel!
     @IBOutlet weak var checkButton: UIButton!
@@ -173,7 +174,30 @@ extension BatteryCheckVC {
     }
     
     func checkDisplay() {
-        self.navigationController?.pushViewController(DisplayCheckViewController.newInstance(), animated: true)
+   
+        if hasDisplayCheckCompleted {
+            hasDisplayCheckCompleted = false
+            let alert = UIAlertController(title: "Display Check", message: "Was the screen free of dead or stuck pixels?", preferredStyle: .alert)
+            let yesAction = UIAlertAction(title: "Yes", style: .default) {
+                UIAlertAction in
+                self.navigationController?.popViewController(animated: true)
+                print("Passed")
+            }
+            let noAction = UIAlertAction(title: "No", style: .default) {
+                UIAlertAction in
+                self.navigationController?.popViewController(animated: true)
+                print("Failed")
+            }
+            alert.addAction(yesAction)
+            alert.addAction(noAction)
+
+            self.present(alert, animated: true, completion: nil)
+            return
+        };
+        
+            let goNext = storyboard?.instantiateViewController(withIdentifier: "displayCheckVC") as! DisplayCheckViewController
+            goNext.delegate = self
+        self.navigationController?.pushViewController(goNext, animated: true)
     }
     
     func checkTouch() {
@@ -487,5 +511,12 @@ public class Reachability {
         let isReachable = flags == .reachable
         let needsConnection = flags == .connectionRequired
         return isReachable && !needsConnection
+    }
+}
+
+extension BatteryCheckVC {
+    func DisplayCheckControllerResponse(check hasCheckCompleted: Bool) {
+        self.hasDisplayCheckCompleted = hasCheckCompleted
+        self.checkDisplay()
     }
 }

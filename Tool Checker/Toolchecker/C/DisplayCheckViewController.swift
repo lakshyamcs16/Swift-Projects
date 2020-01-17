@@ -8,10 +8,15 @@
 
 import UIKit
 
+protocol DisplayCheckVCDelegate {
+    func DisplayCheckControllerResponse(check hasCheckCompleted: Bool)
+}
+
 class DisplayCheckViewController: UIViewController {
 
     let colors: [UIColor] = [ .white, .red, .green, .black ]
     var colorIndex: Int = -1
+    var delegate: DisplayCheckVCDelegate?
     
     class func newInstance() -> UIViewController {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
@@ -54,24 +59,8 @@ extension DisplayCheckViewController {
         if colorIndex < colors.count {
             view.backgroundColor = colors[colorIndex]
         } else {
-            print("Test completed")
-            
-            let alert = UIAlertController(title: "Display Check", message: "Was the screen free of dead or stuck pixels?", preferredStyle: .alert)
-            let yesAction = UIAlertAction(title: "Yes", style: .default) {
-                UIAlertAction in
-                self.goToTestView()
-                print("Passed")
-            }
-            let noAction = UIAlertAction(title: "No", style: .default) {
-                UIAlertAction in
-                self.goToTestView()
-                print("Failed")
-            }
-            alert.addAction(yesAction)
-            alert.addAction(noAction)
-
-            self.present(alert, animated: true, completion: nil)
-    
+            navigationController?.popViewController(animated: true)
+            self.delegate?.DisplayCheckControllerResponse(check: true)
         }
     }
 }
