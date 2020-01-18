@@ -77,8 +77,8 @@ extension InitialTestScreenVC: UICollectionViewDataSource, UICollectionViewDeleg
             let vc = SingleTestListVC.newInstance()
             self.navigationController?.pushViewController(vc, animated: true)
         case .runAllTest:
-            let vc = RunAllTestsVC.newInstance()
-            self.navigationController?.pushViewController(vc, animated: true)
+            Tests.allTests(key: .wifi, this: self.navigationController!, runAllTests: true)
+            break
         case .testResults:
             break
         case .deviceInfo:

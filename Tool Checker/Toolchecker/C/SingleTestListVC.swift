@@ -124,61 +124,6 @@ extension SingleTestListVC: UITableViewDelegate, UITableViewDataSource {
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.tableView.deselectRow(at: indexPath, animated: true)
-        switch self.viewModel.array[indexPath.row] {
-        case .simCard:
-            let vc = BatteryCheckVC.newInstance(sourceTest: .simCard)
-            self.navigationController?.pushViewController(vc, animated: true)
-        case .wifi:
-            let vc = BatteryCheckVC.newInstance(sourceTest: .wifi)
-            self.navigationController?.pushViewController(vc, animated: true)
-        case .display:
-            let vc = BatteryCheckVC.newInstance(sourceTest: .display)
-            self.navigationController?.pushViewController(vc, animated: true)
-            break
-        case .rearCamera:
-            let vc = BatteryCheckVC.newInstance(sourceTest: .rearCamera)
-            self.navigationController?.pushViewController(vc, animated: true)
-        case .frontCamera:
-            let vc = BatteryCheckVC.newInstance(sourceTest: .frontCamera)
-            self.navigationController?.pushViewController(vc, animated: true)
-        case .vibration:
-            let vc = BatteryCheckVC.newInstance(sourceTest: .vibration)
-            self.navigationController?.pushViewController(vc, animated: true)
-        case .touchScreen:
-            let vc = BatteryCheckVC.newInstance(sourceTest: .touchScreen)
-            self.navigationController?.pushViewController(vc, animated: true)
-        case .earpiece:
-            break
-        case .speaker:
-            let vc = BatteryCheckVC.newInstance(sourceTest: .speaker)
-            self.navigationController?.pushViewController(vc, animated: true)
-        case .microphone:
-            let vc = MicrophoneCheckVC.newInstance()
-            self.navigationController?.pushViewController(vc, animated: true)
-        case .headphones:
-            let vc = BatteryCheckVC.newInstance(sourceTest: .headphones)
-            self.navigationController?.pushViewController(vc, animated: true)
-            break
-        case .charging:
-            let vc = BatteryCheckVC.newInstance(sourceTest: .charging)
-            self.navigationController?.pushViewController(vc, animated: true)
-        case .flash:
-            let vc = BatteryCheckVC.newInstance(sourceTest: .flash)
-            self.navigationController?.pushViewController(vc, animated: true)
-        case .motionSensor:
-            let vc = BatteryCheckVC.newInstance(sourceTest: .motionSensor)
-            self.navigationController?.pushViewController(vc, animated: true)
-        case .buttons:
-            let vc = BatteryCheckVC.newInstance(sourceTest: .buttons)
-            self.navigationController?.pushViewController(vc, animated: true)
-        case .gyroscope:
-            let vc = GyroscopeTestVC.newInstance()
-            self.navigationController?.pushViewController(vc, animated: true)
-        case .proximitySensor:
-            let vc = BatteryCheckVC.newInstance(sourceTest: .proximitySensor)
-            self.navigationController?.pushViewController(vc, animated: true)
-        default:
-            break
-        }
+        Tests.allTests(key: self.viewModel.array[indexPath.row], this: (self.navigationController)!, runAllTests: false)
     }
 }

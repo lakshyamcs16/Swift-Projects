@@ -7,12 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1B30758C23D391430014C300 /* TestsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B30758B23D391430014C300 /* TestsList.swift */; };
 		1B59738523B545A300F9790D /* DisplayCheckViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B59738423B545A300F9790D /* DisplayCheckViewController.swift */; };
 		1B59738F23B5684F00F9790D /* GridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B59738E23B5684F00F9790D /* GridView.swift */; };
 		1B59739123B5688300F9790D /* TouchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B59739023B5688300F9790D /* TouchViewController.swift */; };
 		1BCD3A1C23CA751300CEC8C7 /* MicrophoneCheckVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BCD3A1B23CA751300CEC8C7 /* MicrophoneCheckVC.swift */; };
 		438743CF23B08225005C6072 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 438743CE23B08225005C6072 /* AppDelegate.swift */; };
-		438743D123B08225005C6072 /* RunAllTestsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 438743D023B08225005C6072 /* RunAllTestsVC.swift */; };
 		438743D423B08225005C6072 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 438743D223B08225005C6072 /* Main.storyboard */; };
 		438743D623B08227005C6072 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 438743D523B08227005C6072 /* Assets.xcassets */; };
 		438743D923B08227005C6072 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 438743D723B08227005C6072 /* LaunchScreen.storyboard */; };
@@ -51,6 +51,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1B30758B23D391430014C300 /* TestsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestsList.swift; sourceTree = "<group>"; };
 		1B59738423B545A300F9790D /* DisplayCheckViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayCheckViewController.swift; sourceTree = "<group>"; };
 		1B59738E23B5684F00F9790D /* GridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridView.swift; sourceTree = "<group>"; };
 		1B59739023B5688300F9790D /* TouchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchViewController.swift; sourceTree = "<group>"; };
@@ -58,7 +59,6 @@
 		1BCD3A1B23CA751300CEC8C7 /* MicrophoneCheckVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicrophoneCheckVC.swift; sourceTree = "<group>"; };
 		438743CB23B08225005C6072 /* Toolchecker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Toolchecker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		438743CE23B08225005C6072 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		438743D023B08225005C6072 /* RunAllTestsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunAllTestsVC.swift; sourceTree = "<group>"; };
 		438743D323B08225005C6072 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		438743D523B08227005C6072 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		438743D823B08227005C6072 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -168,9 +168,9 @@
 		4387440023B090FA005C6072 /* C */ = {
 			isa = PBXGroup;
 			children = (
-				438743D023B08225005C6072 /* RunAllTestsVC.swift */,
 				438743FC23B08FF3005C6072 /* InitialTestScreenVC.swift */,
 				4387440B23B367C3005C6072 /* SingleTestListVC.swift */,
+				1B30758B23D391430014C300 /* TestsList.swift */,
 				1BCD3A1B23CA751300CEC8C7 /* MicrophoneCheckVC.swift */,
 				4387440923B1D429005C6072 /* BatteryCheckVC.swift */,
 				1B59738423B545A300F9790D /* DisplayCheckViewController.swift */,
@@ -342,7 +342,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				438743D123B08225005C6072 /* RunAllTestsVC.swift in Sources */,
 				43875C7823C8569F0052DB5B /* PopUpVC.swift in Sources */,
 				4387440A23B1D429005C6072 /* BatteryCheckVC.swift in Sources */,
 				438743CF23B08225005C6072 /* AppDelegate.swift in Sources */,
@@ -358,6 +357,7 @@
 				438743FF23B0906B005C6072 /* TestCellType.swift in Sources */,
 				1B59738F23B5684F00F9790D /* GridView.swift in Sources */,
 				4387440C23B367C3005C6072 /* SingleTestListVC.swift in Sources */,
+				1B30758C23D391430014C300 /* TestsList.swift in Sources */,
 				43875C7423C741D20052DB5B /* GyroscopeTestVC.swift in Sources */,
 				1BCD3A1C23CA751300CEC8C7 /* MicrophoneCheckVC.swift in Sources */,
 			);

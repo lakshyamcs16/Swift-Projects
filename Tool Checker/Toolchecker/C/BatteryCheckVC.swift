@@ -12,11 +12,12 @@ import SystemConfiguration
 import AVFoundation
 import AudioToolbox
 
-class BatteryCheckVC: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, DisplayCheckVCDelegate {
+class BatteryCheckVC: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, DisplayCheckVCDelegate, PopupDelegate {
     var sourceTest: testNames = .none
     var result:Bool = false
     var imagePicker: UIImagePickerController!
     var hasDisplayCheckCompleted: Bool = false
+    var runAllTests: Bool = false
     
     @IBOutlet weak var subtitle: UILabel!
     @IBOutlet weak var checkButton: UIButton!
@@ -24,18 +25,19 @@ class BatteryCheckVC: UIViewController, UIImagePickerControllerDelegate, UINavig
     @IBOutlet weak var iconImage: UIImageView!
     var player: AVAudioPlayer?
 
-    class func newInstance(sourceTest: testNames) -> UIViewController {
+    class func newInstance(sourceTest: testNames, runAll: Bool) -> UIViewController {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         guard let vc = storyboard.instantiateViewController(withIdentifier: "BatteryCheckVC") as? BatteryCheckVC else {
             return UIViewController()
         }
         vc.sourceTest = sourceTest
+        vc.runAllTests = runAll
         return vc
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.setupVC()
+        self.setupVC(key: self.sourceTest)
     }
     
     @IBAction func backButtonTapped(_ sender: Any) {
@@ -65,24 +67,28 @@ class BatteryCheckVC: UIViewController, UIImagePickerControllerDelegate, UINavig
             self.checkSimCardAvailability()
         case .frontCamera:
             guard (AVCaptureDevice.DiscoverySession(deviceTypes: [AVCaptureDevice.DeviceType.builtInWideAngleCamera], mediaType: AVMediaType.video, position: AVCaptureDevice.Position.front).devices.filter({ $0.position == .front }).first) != nil else {
-                let vc = PopUpVC.newInstance(state: .failed, source: .frontCamera)
+                let vc = PopUpVC.newInstance(state: .failed, source: .frontCamera, next: .motionSensor) as! PopUpVC
+                vc.delegate = self
                 vc.modalPresentationStyle = .custom
                 self.present(vc, animated: true, completion:  nil)
                 return
             }
             self.openCamera()
-            let vc = PopUpVC.newInstance(state: .success, source: .frontCamera)
+            let vc = PopUpVC.newInstance(state: .success, source: .frontCamera, next: .motionSensor) as! PopUpVC
+            vc.delegate = self
             vc.modalPresentationStyle = .custom
             self.present(vc, animated: true, completion:  nil)
         case .rearCamera:
             guard (AVCaptureDevice.DiscoverySession(deviceTypes: [AVCaptureDevice.DeviceType.builtInWideAngleCamera], mediaType: AVMediaType.video, position: AVCaptureDevice.Position.back).devices.filter({ $0.position == .back }).first) != nil else {
-                let vc = PopUpVC.newInstance(state: .failed, source: .rearCamera)
+                let vc = PopUpVC.newInstance(state: .failed, source: .rearCamera, next: .frontCamera) as! PopUpVC
+                vc.delegate = self
                 vc.modalPresentationStyle = .custom
                 self.present(vc, animated: true, completion:  nil)
                 return
             }
             self.openCamera()
-            let vc = PopUpVC.newInstance(state: .success, source: .rearCamera)
+            let vc = PopUpVC.newInstance(state: .success, source: .rearCamera, next: .frontCamera) as! PopUpVC
+            vc.delegate = self
             vc.modalPresentationStyle = .custom
             self.present(vc, animated: true, completion:  nil)
         case .motionSensor:
@@ -92,21 +98,29 @@ class BatteryCheckVC: UIViewController, UIImagePickerControllerDelegate, UINavig
         case .touchScreen:
             self.checkTouch()
         case .wifi:
+            var nextTest: testNames = .charging
+            if !self.runAllTests {
+                nextTest = .none
+            }
             if Reachability.isConnectedToNetwork(){
-                let vc = PopUpVC.newInstance(state: .success, source: .wifi)
+                let vc = PopUpVC.newInstance(state: .success, source: .wifi, next: nextTest) as! PopUpVC
+                vc.delegate = self
                 vc.modalPresentationStyle = .custom
                 self.present(vc, animated: true, completion:  nil)
             }else{
-                let vc = PopUpVC.newInstance(state: .failed, source: .wifi)
+                let vc = PopUpVC.newInstance(state: .failed, source: .wifi, next: nextTest) as! PopUpVC
+                vc.delegate = self
                 vc.modalPresentationStyle = .custom
                 self.present(vc, animated: true, completion:  nil)
             }
+
         case .speaker:
             self.playSound()
         case .headphones:
             self.checkHeadphones()
         case .buttons:
             self.listenVolumeButton()
+            self.applicationDidEnterBackground()
         case .proximitySensor:
             self.checkProximitySensor()
         default:
@@ -129,8 +143,8 @@ class BatteryCheckVC: UIViewController, UIImagePickerControllerDelegate, UINavig
 }
 
 extension BatteryCheckVC {
-    func setupVC() {
-        switch self.sourceTest {
+    func setupVC(key: testNames) {
+        switch key {
         case .charging:
             self.setBatteryVC()
         case .flash:
@@ -288,13 +302,19 @@ extension BatteryCheckVC {
     }
     
     @objc func batteryStateDidChange(_ notification: Notification) {
+        var nextTest: testNames = .vibration
+        if !runAllTests {
+            nextTest = .none
+        }
         switch batteryState {
         case .unplugged, .unknown:
-            let vc = PopUpVC.newInstance(state: .failed, source: .charging)
+            let vc = PopUpVC.newInstance(state: .failed, source: .charging, next: nextTest) as! PopUpVC
+            vc.delegate = self
             vc.modalPresentationStyle = .custom
             self.present(vc, animated: true, completion:  nil)
         case .charging, .full:
-            let vc = PopUpVC.newInstance(state: .success, source: .charging, tempText: String(batteryLevel))
+            let vc = PopUpVC.newInstance(state: .success, source: .charging, tempText: String(batteryLevel), next: nextTest) as! PopUpVC
+            vc.delegate = self
             vc.modalPresentationStyle = .custom
             self.present(vc, animated: true, completion:  nil)
         }
@@ -333,12 +353,18 @@ extension BatteryCheckVC {
     func checkSimCardAvailability() {
         let networkInfo = CTTelephonyNetworkInfo()
         guard let info = networkInfo.subscriberCellularProvider else {return}
+        var nextTest: testNames = .wifi
+        if !self.runAllTests {
+            nextTest = .none
+        }
         if info.isoCountryCode != nil {
-            let vc = PopUpVC.newInstance(state: .success, source: .simCard)
+            let vc = PopUpVC.newInstance(state: .success, source: .simCard, next: nextTest) as! PopUpVC
+            vc.delegate = self
             vc.modalPresentationStyle = .custom
             self.present(vc, animated: true, completion:  nil)
         } else {
-            let vc = PopUpVC.newInstance(state: .failed, source: .simCard)
+            let vc = PopUpVC.newInstance(state: .failed, source: .simCard, next: nextTest) as! PopUpVC
+            vc.delegate = self
             vc.modalPresentationStyle = .custom
             self.present(vc, animated: true, completion:  nil)
         }
@@ -482,7 +508,8 @@ extension BatteryCheckVC {
     func proximityChanged(notification: NSNotification) {
         if let device = notification.object as? UIDevice {
             print("\(device) detected!")
-            let vc = PopUpVC.newInstance(state: .success, source: .proximitySensor)
+            let vc = PopUpVC.newInstance(state: .success, source: .proximitySensor, next: .touchScreen) as! PopUpVC
+            vc.delegate = self
             vc.modalPresentationStyle = .custom
             self.present(vc, animated: true, completion:  nil)
         }
@@ -518,5 +545,26 @@ extension BatteryCheckVC {
     func DisplayCheckControllerResponse(check hasCheckCompleted: Bool) {
         self.hasDisplayCheckCompleted = hasCheckCompleted
         self.checkDisplay()
+    }
+    
+    func applicationDidEnterBackground() {
+        if (DidUserPressLockButton()) {
+            print("User pressed lock button")
+        } else {
+            print("user pressed home button")
+        }
+    }
+
+    private func DidUserPressLockButton() -> Bool {
+        let oldBrightness = UIScreen.main.brightness
+        UIScreen.main.brightness = oldBrightness + (oldBrightness <= 0.01 ? (0.01) : (-0.01))
+        return oldBrightness != UIScreen.main.brightness
+    }
+}
+
+extension BatteryCheckVC {
+    func popupNextTest(check nextTestInQueue: testNames) {
+        self.sourceTest = nextTestInQueue
+        self.setupVC(key: self.sourceTest)
     }
 }
