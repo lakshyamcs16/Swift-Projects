@@ -23,7 +23,7 @@ class BatteryCheckVC: UIViewController, UIImagePickerControllerDelegate, UINavig
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var iconImage: UIImageView!
     var player: AVAudioPlayer?
-
+    
     class func newInstance(sourceTest: testNames) -> UIViewController {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         guard let vc = storyboard.instantiateViewController(withIdentifier: "BatteryCheckVC") as? BatteryCheckVC else {
@@ -173,31 +173,28 @@ extension BatteryCheckVC {
         self.checkButton.setTitle("Check Sensor", for: .normal)
     }
     
-    func checkDisplay() {
-   
+    func checkDisplay() -> status {
+        var state: status = .failed
         if hasDisplayCheckCompleted {
             hasDisplayCheckCompleted = false
             let alert = UIAlertController(title: "Display Check", message: "Was the screen free of dead or stuck pixels?", preferredStyle: .alert)
             let yesAction = UIAlertAction(title: "Yes", style: .default) {
                 UIAlertAction in
-                self.navigationController?.popViewController(animated: true)
-                print("Passed")
+                state = .success
             }
             let noAction = UIAlertAction(title: "No", style: .default) {
                 UIAlertAction in
-                self.navigationController?.popViewController(animated: true)
-                print("Failed")
+                state = .failed
             }
             alert.addAction(yesAction)
             alert.addAction(noAction)
-
             self.present(alert, animated: true, completion: nil)
-            return
         };
         
-            let goNext = storyboard?.instantiateViewController(withIdentifier: "displayCheckVC") as! DisplayCheckViewController
-            goNext.delegate = self
+        let goNext = storyboard?.instantiateViewController(withIdentifier: "displayCheckVC") as! DisplayCheckViewController
+        goNext.delegate = self
         self.navigationController?.pushViewController(goNext, animated: true)
+        return state
     }
     
     func checkTouch() {
@@ -258,12 +255,12 @@ extension BatteryCheckVC {
     func setDisplayScreenVC() {
         self.nameLabel.text = "Display"
         self.subtitle.text = """
-                                The next screens will display a series of color
-                                (black, white, green, red, and blue). Look carefully for dead or
-                                stuck pixels or any discoloration.
-                                \n
-                                Tap the screen when you're ready for the next color.
-                                """
+        The next screens will display a series of color
+        (black, white, green, red, and blue). Look carefully for dead or
+        stuck pixels or any discoloration.
+        \n
+        Tap the screen when you're ready for the next color.
+        """
         self.iconImage.image = UIImage(named: "display")
         self.checkButton.setTitle("Check Display", for: .normal)
     }
@@ -299,7 +296,7 @@ extension BatteryCheckVC {
             self.present(vc, animated: true, completion:  nil)
         }
     }
-
+    
     
     func checkBatteryStatus() {
         UIDevice.current.isBatteryMonitoringEnabled = true
@@ -359,10 +356,10 @@ extension BatteryCheckVC {
     func setTouchScreenVC() {
         self.nameLabel.text = "Touch Screen"
         self.subtitle.text = """
-                                On the next screen, drag your finger over the screen until the whole
-                                content turns green. \n
-                                You have 20 seconds to complete the test
-                            """
+        On the next screen, drag your finger over the screen until the whole
+        content turns green. \n
+        You have 20 seconds to complete the test
+        """
         self.iconImage.image = UIImage(named: "touch")
         self.checkButton.setTitle("Run Touch Test", for: .normal)
     }
@@ -438,7 +435,7 @@ extension BatteryCheckVC {
         }
     }
     
-   
+    
     
     func switchOnFlashLight() {
         guard let device = AVCaptureDevice.default(for: AVMediaType.video) else { return }
@@ -517,6 +514,9 @@ public class Reachability {
 extension BatteryCheckVC {
     func DisplayCheckControllerResponse(check hasCheckCompleted: Bool) {
         self.hasDisplayCheckCompleted = hasCheckCompleted
-        self.checkDisplay()
+        var res = self.checkDisplay()
+        let vc = PopUpVC.newInstance(state: res, source: .charging)
+        vc.modalPresentationStyle = .custom
+        self.present(vc, animated: true, completion:  nil)
     }
 }

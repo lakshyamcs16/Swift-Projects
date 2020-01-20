@@ -11,6 +11,11 @@ import UIKit
 class TouchViewController: UIViewController {
 
     @IBOutlet weak var timerLabel: UILabel!
+    private var timer: Timer?
+    private let pollingDuration: Int = 1
+    private var pollingCount : Int = 10
+    private var maxPollingCount : Int = 1
+    
     class func newInstance() -> UIViewController {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         guard let vc = storyboard.instantiateViewController(withIdentifier: "touchVC") as? TouchViewController else {
@@ -18,8 +23,6 @@ class TouchViewController: UIViewController {
         }
         return vc
     }
-    
-    
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -39,13 +42,7 @@ class TouchViewController: UIViewController {
         timerLabel.textColor = UIColor.black
         timerLabel.layer.masksToBounds = true
         timerLabel.layer.zPosition = CGFloat(UInt64.max)
-        self.setTimer()
-        // Do any additional setup after loading the view.
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+        self.startTimer()
     }
     
     func goToTestView() {
@@ -53,31 +50,35 @@ class TouchViewController: UIViewController {
         self.navigationController?.popToViewController(controller!, animated: true)
     }
     
-    func setTimer() {
-        Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
-            guard let intLabel = Int(self.timerLabel.text!) else {
-                return
+    private func startTimer() {
+        self.stopTimer()
+        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.showAlert), userInfo: nil, repeats: true)
+    }
+    
+    private func stopTimer() {
+        timer?.invalidate()
+    }
+    
+    @objc func showAlert() {
+        if pollingCount >= maxPollingCount {
+            self.timerLabel.text = String(pollingCount)
+            pollingCount = pollingCount - 1
+        } else {
+            self.stopTimer()
+            let alert = UIAlertController(title: "Touch Check", message: "Time's up. Want to continue?", preferredStyle: .alert)
+            let yesAction = UIAlertAction(title: "Yes", style: UIAlertAction.Style.default) {
+                UIAlertAction in
+                self.pollingCount = 10
+                self.startTimer()
             }
-            self.timerLabel.text = String(intLabel - 1)
-            if intLabel == 1 {
-                timer.invalidate()
-                self.timerLabel.text = "25"
-                print("Time's up")
-                let alert = UIAlertController(title: "Touch Check", message: "Time's up. Want to continue?", preferredStyle: .alert)
-                let yesAction = UIAlertAction(title: "Yes", style: UIAlertAction.Style.default) {
-                    UIAlertAction in
-                    self.setTimer()
-                    print("Passed")
-                }
-                let noAction = UIAlertAction(title: "No", style: UIAlertAction.Style.default) {
-                    UIAlertAction in
-                    self.goToTestView()
-                    print("Failed")
-                }
-                alert.addAction(yesAction)
-                alert.addAction(noAction)
-                self.present(alert, animated: true, completion: nil)
+            let noAction = UIAlertAction(title: "No", style: UIAlertAction.Style.default) {
+                UIAlertAction in
+                self.goToTestView()
             }
+            alert.addAction(yesAction)
+            alert.addAction(noAction)
+            self.present(alert, animated: true, completion: nil)
+            
         }
     }
 }
