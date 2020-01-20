@@ -70,5 +70,13 @@ class Tests {
         
     }
     
+    static func getNextTest(next nextTest: testNames, run runAllTests: Bool) -> testNames {
+        var next: testNames = nextTest
+        if !runAllTests {
+            next = .none
+        }
+        
+        return next;
+    }
     
 }

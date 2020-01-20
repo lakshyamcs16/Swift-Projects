@@ -29,7 +29,8 @@ class PopUpVC: UIViewController {
     var tempText: String = ""
     var timer = Timer()
     var delegate: PopupDelegate?
-
+    var tranistionCompleted: Bool = false
+    
     class func newInstance(state: status, source: testNames, tempText: String = "", next: testNames) -> UIViewController {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         guard let vc = storyboard.instantiateViewController(withIdentifier: "PopUpVC") as? PopUpVC else {
@@ -194,14 +195,16 @@ class PopUpVC: UIViewController {
     }
     @objc func timeExpired() {
         self.dismissButtonTapped(self)
-        if self.nextTest != .none {
+        if self.nextTest != .none && !self.tranistionCompleted {
+            self.tranistionCompleted = true
             delegate?.popupNextTest(check: self.nextTest)
         }
     }
     
     @IBAction func dismissButtonTapped(_ sender: Any) {
         self.dismiss(animated: false, completion: nil)
-        if self.nextTest != .none {
+        if self.nextTest != .none && !self.tranistionCompleted {
+            self.tranistionCompleted = true
             delegate?.popupNextTest(check: self.nextTest)
         }
     }

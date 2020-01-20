@@ -14,10 +14,12 @@ import AudioToolbox
 
 class BatteryCheckVC: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, DisplayCheckVCDelegate, PopupDelegate {
     var sourceTest: testNames = .none
+    var nextTest: testNames = .none
     var result:Bool = false
     var imagePicker: UIImagePickerController!
     var hasDisplayCheckCompleted: Bool = false
     var runAllTests: Bool = false
+    var status: status = .failed
     
     @IBOutlet weak var subtitle: UILabel!
     @IBOutlet weak var checkButton: UIButton!
@@ -66,31 +68,38 @@ class BatteryCheckVC: UIViewController, UIImagePickerControllerDelegate, UINavig
         case .simCard:
             self.checkSimCardAvailability()
         case .frontCamera:
+            self.nextTest = Tests.getNextTest(next: .vibration, run: self.runAllTests)
             guard (AVCaptureDevice.DiscoverySession(deviceTypes: [AVCaptureDevice.DeviceType.builtInWideAngleCamera], mediaType: AVMediaType.video, position: AVCaptureDevice.Position.front).devices.filter({ $0.position == .front }).first) != nil else {
-                let vc = PopUpVC.newInstance(state: .failed, source: .frontCamera, next: .motionSensor) as! PopUpVC
-                vc.delegate = self
-                vc.modalPresentationStyle = .custom
-                self.present(vc, animated: true, completion:  nil)
+                if let vc = PopUpVC.newInstance(state: .failed, source: .frontCamera, next: nextTest) as? PopUpVC {
+                    vc.delegate = self
+                    vc.modalPresentationStyle = .custom
+                    self.present(vc, animated: true, completion:  nil)
+                }
                 return
             }
             self.openCamera()
-            let vc = PopUpVC.newInstance(state: .success, source: .frontCamera, next: .motionSensor) as! PopUpVC
-            vc.delegate = self
-            vc.modalPresentationStyle = .custom
-            self.present(vc, animated: true, completion:  nil)
+            if let vc = PopUpVC.newInstance(state: .success, source: .frontCamera, next: nextTest) as? PopUpVC {
+                vc.delegate = self
+                vc.modalPresentationStyle = .custom
+                self.present(vc, animated: true, completion:  nil)
+            }
         case .rearCamera:
+            self.nextTest = Tests.getNextTest(next: .frontCamera, run: self.runAllTests)
+
             guard (AVCaptureDevice.DiscoverySession(deviceTypes: [AVCaptureDevice.DeviceType.builtInWideAngleCamera], mediaType: AVMediaType.video, position: AVCaptureDevice.Position.back).devices.filter({ $0.position == .back }).first) != nil else {
-                let vc = PopUpVC.newInstance(state: .failed, source: .rearCamera, next: .frontCamera) as! PopUpVC
+                if let vc = PopUpVC.newInstance(state: .failed, source: .rearCamera, next: nextTest) as? PopUpVC {
+                    vc.delegate = self
+                    vc.modalPresentationStyle = .custom
+                    self.present(vc, animated: true, completion:  nil)
+                }
+                return;
+            }
+            self.openCamera()
+            if let vc = PopUpVC.newInstance(state: .success, source: .rearCamera, next: nextTest) as? PopUpVC {
                 vc.delegate = self
                 vc.modalPresentationStyle = .custom
                 self.present(vc, animated: true, completion:  nil)
-                return
             }
-            self.openCamera()
-            let vc = PopUpVC.newInstance(state: .success, source: .rearCamera, next: .frontCamera) as! PopUpVC
-            vc.delegate = self
-            vc.modalPresentationStyle = .custom
-            self.present(vc, animated: true, completion:  nil)
         case .motionSensor:
             self.setMotionSensorScreen()
         case .display:
@@ -98,22 +107,7 @@ class BatteryCheckVC: UIViewController, UIImagePickerControllerDelegate, UINavig
         case .touchScreen:
             self.checkTouch()
         case .wifi:
-            var nextTest: testNames = .charging
-            if !self.runAllTests {
-                nextTest = .none
-            }
-            if Reachability.isConnectedToNetwork(){
-                let vc = PopUpVC.newInstance(state: .success, source: .wifi, next: nextTest) as! PopUpVC
-                vc.delegate = self
-                vc.modalPresentationStyle = .custom
-                self.present(vc, animated: true, completion:  nil)
-            }else{
-                let vc = PopUpVC.newInstance(state: .failed, source: .wifi, next: nextTest) as! PopUpVC
-                vc.delegate = self
-                vc.modalPresentationStyle = .custom
-                self.present(vc, animated: true, completion:  nil)
-            }
-
+            self.checkWifi()
         case .speaker:
             self.playSound()
         case .headphones:
@@ -187,28 +181,10 @@ extension BatteryCheckVC {
         self.checkButton.setTitle("Check Sensor", for: .normal)
     }
     
-    func checkDisplay() -> status {
-        var state: status = .failed
-        if hasDisplayCheckCompleted {
-            hasDisplayCheckCompleted = false
-            let alert = UIAlertController(title: "Display Check", message: "Was the screen free of dead or stuck pixels?", preferredStyle: .alert)
-            let yesAction = UIAlertAction(title: "Yes", style: .default) {
-                UIAlertAction in
-                state = .success
-            }
-            let noAction = UIAlertAction(title: "No", style: .default) {
-                UIAlertAction in
-                state = .failed
-            }
-            alert.addAction(yesAction)
-            alert.addAction(noAction)
-            self.present(alert, animated: true, completion: nil)
-        };
-        
+    func checkDisplay() {
         let goNext = storyboard?.instantiateViewController(withIdentifier: "displayCheckVC") as! DisplayCheckViewController
         goNext.delegate = self
         self.navigationController?.pushViewController(goNext, animated: true)
-        return state
     }
     
     func checkTouch() {
@@ -299,18 +275,16 @@ extension BatteryCheckVC {
     }
     
     @objc func batteryStateDidChange(_ notification: Notification) {
-        var nextTest: testNames = .vibration
-        if !runAllTests {
-            nextTest = .none
-        }
+        self.nextTest = Tests.getNextTest(next: .display, run: self.runAllTests)
+        
         switch batteryState {
-        case .unplugged, .unknown:
-            let vc = PopUpVC.newInstance(state: .failed, source: .charging, next: nextTest) as! PopUpVC
-            vc.delegate = self
-            vc.modalPresentationStyle = .custom
-            self.present(vc, animated: true, completion:  nil)
-        case .charging, .full:
-            let vc = PopUpVC.newInstance(state: .success, source: .charging, tempText: String(batteryLevel), next: nextTest) as! PopUpVC
+            case .unplugged, .unknown:
+                self.status = .failed
+            case .charging, .full:
+                self.status = .success
+        }
+        
+        if let vc = PopUpVC.newInstance(state: self.status, source: .charging, tempText: String(batteryLevel), next: nextTest) as? PopUpVC {
             vc.delegate = self
             vc.modalPresentationStyle = .custom
             self.present(vc, animated: true, completion:  nil)
@@ -350,17 +324,28 @@ extension BatteryCheckVC {
     func checkSimCardAvailability() {
         let networkInfo = CTTelephonyNetworkInfo()
         guard let info = networkInfo.subscriberCellularProvider else {return}
-        var nextTest: testNames = .wifi
-        if !self.runAllTests {
-            nextTest = .none
-        }
+        self.nextTest = Tests.getNextTest(next: .wifi, run: self.runAllTests)
+        self.status = .failed
+        
         if info.isoCountryCode != nil {
-            let vc = PopUpVC.newInstance(state: .success, source: .simCard, next: nextTest) as! PopUpVC
+            self.status = .success
+        }
+        
+        if let vc = PopUpVC.newInstance(state: self.status, source: .simCard, next: self.nextTest) as? PopUpVC {
             vc.delegate = self
             vc.modalPresentationStyle = .custom
             self.present(vc, animated: true, completion:  nil)
-        } else {
-            let vc = PopUpVC.newInstance(state: .failed, source: .simCard, next: nextTest) as! PopUpVC
+        }
+    }
+    
+    func checkWifi() {
+        self.nextTest = Tests.getNextTest(next: .charging, run: self.runAllTests)
+        self.status = .failed
+        if Reachability.isConnectedToNetwork(){
+            self.status = .success
+        }
+        
+        if let vc = PopUpVC.newInstance(state: self.status, source: .wifi, next: nextTest) as? PopUpVC {
             vc.delegate = self
             vc.modalPresentationStyle = .custom
             self.present(vc, animated: true, completion:  nil)
@@ -541,10 +526,32 @@ public class Reachability {
 extension BatteryCheckVC {
     func DisplayCheckControllerResponse(check hasCheckCompleted: Bool) {
         self.hasDisplayCheckCompleted = hasCheckCompleted
-        var res = self.checkDisplay()
-        let vc = PopUpVC.newInstance(state: res, source: .charging, next: .none)
-        vc.modalPresentationStyle = .custom
-        self.present(vc, animated: true, completion:  nil)
+        self.nextTest = Tests.getNextTest(next: .rearCamera, run: self.runAllTests)
+        if hasDisplayCheckCompleted {
+            hasDisplayCheckCompleted = false
+            let alert = UIAlertController(title: "Display Check", message: "Was the screen free of dead or stuck pixels?", preferredStyle: .alert)
+            let yesAction = UIAlertAction(title: "Yes", style: .default) {
+                UIAlertAction in
+                if let vc = PopUpVC.newInstance(state: .success, source: .display, next: self.nextTest) as? PopUpVC {
+                    vc.delegate = self
+                    vc.modalPresentationStyle = .custom
+                    self.present(vc, animated: true, completion:  nil)
+                }
+            }
+            let noAction = UIAlertAction(title: "No", style: .default) {
+                UIAlertAction in
+                if let vc = PopUpVC.newInstance(state: .failed, source: .display, next: self.nextTest) as? PopUpVC {
+                   vc.delegate = self
+                   vc.modalPresentationStyle = .custom
+                   self.present(vc, animated: true, completion:  nil)
+               }
+            }
+            alert.addAction(yesAction)
+            alert.addAction(noAction)
+            self.present(alert, animated: true, completion: nil)
+        };
+        
+        
     }
     
     func applicationDidEnterBackground() {
