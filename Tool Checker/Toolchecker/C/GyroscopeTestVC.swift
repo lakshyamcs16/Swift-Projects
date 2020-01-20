@@ -55,7 +55,7 @@ class GyroscopeTestVC: UIViewController {
     func getGyroValues() {
         if motionManager.isGyroAvailable {
             
-            let vc = PopUpVC.newInstance(state: .success, source: .gyroscope)
+            let vc = PopUpVC.newInstance(state: .success, source: .gyroscope, next: .buttons)
             vc.modalPresentationStyle = .custom
             self.present(vc, animated: true, completion:  nil)
             
@@ -73,7 +73,7 @@ class GyroscopeTestVC: UIViewController {
                 }
             }
         } else {
-            let vc = PopUpVC.newInstance(state: .failed, source: .gyroscope)
+            let vc = PopUpVC.newInstance(state: .failed, source: .gyroscope, next: .buttons)
             vc.modalPresentationStyle = .custom
             self.present(vc, animated: true, completion:  nil)
         }

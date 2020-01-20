@@ -13,6 +13,10 @@ enum status {
     case success
 }
 
+protocol PopupDelegate {
+    func popupNextTest(check nextTestInQueue: testNames)
+}
+
 class PopUpVC: UIViewController {
 
     @IBOutlet weak var statusSubLabel: UILabel!
@@ -21,10 +25,12 @@ class PopUpVC: UIViewController {
     @IBOutlet weak var popupView: UIView!
     var state: status = .success
     var test: testNames = .none
+    var nextTest: testNames = .none
     var tempText: String = ""
     var timer = Timer()
-    
-    class func newInstance(state: status, source: testNames, tempText: String = "") -> UIViewController {
+    var delegate: PopupDelegate?
+
+    class func newInstance(state: status, source: testNames, tempText: String = "", next: testNames) -> UIViewController {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         guard let vc = storyboard.instantiateViewController(withIdentifier: "PopUpVC") as? PopUpVC else {
             return UIViewController()
@@ -32,6 +38,7 @@ class PopUpVC: UIViewController {
         vc.state = state
         vc .test = source
         vc.tempText = tempText
+        vc.nextTest = next
         return vc
     }
     
@@ -187,9 +194,15 @@ class PopUpVC: UIViewController {
     }
     @objc func timeExpired() {
         self.dismissButtonTapped(self)
+        if self.nextTest != .none {
+            delegate?.popupNextTest(check: self.nextTest)
+        }
     }
     
     @IBAction func dismissButtonTapped(_ sender: Any) {
         self.dismiss(animated: false, completion: nil)
+        if self.nextTest != .none {
+            delegate?.popupNextTest(check: self.nextTest)
+        }
     }
 }
