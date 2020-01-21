@@ -13,7 +13,7 @@ class TouchViewController: UIViewController {
     @IBOutlet weak var timerLabel: UILabel!
     private var timer: Timer?
     private let pollingDuration: Int = 1
-    private var pollingCount : Int = 10
+    private var pollingCount : Int = 20
     private var maxPollingCount : Int = 1
     
     class func newInstance() -> UIViewController {

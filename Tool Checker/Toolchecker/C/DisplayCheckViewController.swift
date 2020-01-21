@@ -14,7 +14,7 @@ protocol DisplayCheckVCDelegate {
 
 class DisplayCheckViewController: UIViewController {
 
-    let colors: [UIColor] = [ .white, .red, .green, .black ]
+    let colors: [UIColor] = [.red, .green]
     var colorIndex: Int = -1
     var delegate: DisplayCheckVCDelegate?
     

@@ -71,6 +71,7 @@ class GyroscopeTestVC: UIViewController {
                     self.yRot = rotation.y
                     self.zRot = rotation.z
                 }
+                self.tableView.reloadData()
             }
         } else {
             let vc = PopUpVC.newInstance(state: .failed, source: .gyroscope, next: .buttons)
@@ -86,6 +87,7 @@ class GyroscopeTestVC: UIViewController {
         self.yaw = attitude.yaw
         self.pitch = attitude.pitch
         self.roll = attitude.roll
+        self.tableView.reloadData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
