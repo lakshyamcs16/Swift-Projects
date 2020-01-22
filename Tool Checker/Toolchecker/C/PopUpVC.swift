@@ -155,11 +155,13 @@ class PopUpVC: UIViewController {
                 self.statusLabel.text = "Flash Light working"
                 self.statusSubLabel.isHidden = true
             } else {
-                
+                self.statusLabel.text = "Flash Light is not working"
+                self.statusSubLabel.isHidden = false
+                self.statusSubLabel.text = "Flash Light does not seem to be in good condition"
             }
-        case .motionSensor:
+        case .shakeGesture:
             if state == .success {
-                self.statusLabel.text = "Motion Sensor working"
+                self.statusLabel.text = "Shake Gesture working"
                 self.statusSubLabel.isHidden = true
             } else {
                 

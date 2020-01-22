@@ -51,8 +51,8 @@ class Tests {
         case .flash:
             let vc = BatteryCheckVC.newInstance(sourceTest: .flash, runAll: runAllTests)
             this.pushViewController(vc, animated: true)
-        case .motionSensor:
-            let vc = BatteryCheckVC.newInstance(sourceTest: .motionSensor, runAll: runAllTests)
+        case .shakeGesture:
+            let vc = BatteryCheckVC.newInstance(sourceTest: .shakeGesture, runAll: runAllTests)
             this.pushViewController(vc, animated: true)
         case .buttons:
             let vc = BatteryCheckVC.newInstance(sourceTest: .buttons, runAll: runAllTests)

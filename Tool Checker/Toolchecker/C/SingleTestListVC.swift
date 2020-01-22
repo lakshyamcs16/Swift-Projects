@@ -102,9 +102,9 @@ extension SingleTestListVC: UITableViewDelegate, UITableViewDataSource {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "SingleTestCell", for: indexPath) as? SingleTestCell else {return UITableViewCell()}
             cell.setupCell(name: "Flash", icon: "headphone")
             return cell
-        case .motionSensor:
+        case .shakeGesture:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "SingleTestCell", for: indexPath) as? SingleTestCell else {return UITableViewCell()}
-            cell.setupCell(name: "Motion Sensor", icon: "headphone")
+            cell.setupCell(name: "Shake Gesture", icon: "headphone")
             return cell
         case .gyroscope:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "SingleTestCell", for: indexPath) as? SingleTestCell else {return UITableViewCell()}

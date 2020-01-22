@@ -22,7 +22,7 @@ enum testNames {
     case headphones
     case charging
     case flash
-    case motionSensor
+    case shakeGesture
     case gyroscope
     case buttons
     case proximitySensor

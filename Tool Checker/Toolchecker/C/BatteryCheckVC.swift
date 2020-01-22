@@ -100,8 +100,8 @@ class BatteryCheckVC: UIViewController, UIImagePickerControllerDelegate, UINavig
                 vc.modalPresentationStyle = .custom
                 self.present(vc, animated: true, completion:  nil)
             }
-        case .motionSensor:
-            self.setMotionSensorScreen()
+        case .shakeGesture:
+            self.checkShakeGesture()
         case .display:
             self.checkDisplay()
         case .touchScreen:
@@ -151,8 +151,8 @@ extension BatteryCheckVC {
             self.setFrontCameraVC()
         case .rearCamera:
             self.setRearCameraVC()
-        case .motionSensor:
-            self.setMotionSensorScreen()
+        case .shakeGesture:
+            self.checkShakeGesture()
         case .touchScreen:
             self.setTouchScreenVC()
         case .display:
@@ -172,6 +172,10 @@ extension BatteryCheckVC {
         default:
             break
         }
+    }
+    
+    func checkShakeGesture() {
+        
     }
     
     func setProximitySensorVC() {
@@ -374,9 +378,9 @@ extension BatteryCheckVC {
         self.iconImage.image = UIImage(named: "touch")
         self.checkButton.setTitle("Run Touch Test", for: .normal)
     }
-    func setMotionSensorScreen() {
-        self.nameLabel.text = "MotionSensor"
-        self.subtitle.text = "Tap to check whether Motion Sensor is working or not"
+    func setShakeGestureScreen() {
+        self.nameLabel.text = "Shake Gesture"
+        self.subtitle.text = "Tap to check whether Shake Gesture is working or not"
         self.iconImage.image = UIImage(named: "touch")
         self.checkButton.setTitle("Check Sensor", for: .normal)
     }
@@ -456,17 +460,34 @@ extension BatteryCheckVC {
             try device.lockForConfiguration()
             
             if (device.torchMode == AVCaptureDevice.TorchMode.on) {
+                self.checkButton.setTitle("Check Flash", for: .normal)
                 device.torchMode = AVCaptureDevice.TorchMode.off
             } else {
                 do {
                     try device.setTorchModeOn(level: 1.0)
+                    self.checkButton.setTitle("Switch off flash light", for: .normal)
+                    if let vc = PopUpVC.newInstance(state: .success, source: .flash, next: self.nextTest) as? PopUpVC {
+                        vc.delegate = self
+                        vc.modalPresentationStyle = .custom
+                        self.present(vc, animated: true, completion:  nil)
+                    }
                 } catch {
+                    if let vc = PopUpVC.newInstance(state: .failed, source: .flash, next: self.nextTest) as? PopUpVC {
+                        vc.delegate = self
+                        vc.modalPresentationStyle = .custom
+                        self.present(vc, animated: true, completion:  nil)
+                    }
                     print(error)
                 }
             }
             
             device.unlockForConfiguration()
         } catch {
+            if let vc = PopUpVC.newInstance(state: .failed, source: .flash, next: self.nextTest) as? PopUpVC {
+                vc.delegate = self
+                vc.modalPresentationStyle = .custom
+                self.present(vc, animated: true, completion:  nil)
+            }
             print(error)
         }
     }
