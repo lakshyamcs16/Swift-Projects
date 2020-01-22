@@ -21,7 +21,7 @@ class PopUpVC: UIViewController {
 
     @IBOutlet weak var statusSubLabel: UILabel!
     @IBOutlet weak var statusLabel: UILabel!
-    @IBOutlet weak var statusImage: UIImageView!
+    @IBOutlet var statusImage: UIImageView!
     @IBOutlet weak var popupView: UIView!
     var state: status = .success
     var test: testNames = .none
@@ -103,7 +103,9 @@ class PopUpVC: UIViewController {
                 self.statusLabel.text = "Vibration working"
                 self.statusSubLabel.isHidden = true
             } else {
-                
+                self.statusLabel.text = "Vibration is not working"
+                self.statusSubLabel.isHidden = false
+                self.statusSubLabel.text = "Vibration is not working, please get it checked."
             }
         case .touchScreen:
             if state == .success {
@@ -120,11 +122,14 @@ class PopUpVC: UIViewController {
                 
             }
         case .speaker:
+            self.statusImage = UIImageView(image: UIImage(named: "speaker"))
             if state == .success {
-                self.statusLabel.text = ""
+                self.statusLabel.text = "Speakers are working"
                 self.statusSubLabel.isHidden = true
             } else {
-                
+                self.statusLabel.text = "Speakers are not working"
+                self.statusSubLabel.isHidden = false
+                self.statusSubLabel.text = "Speakers are not working, please get them checked."
             }
         case .microphone:
             if state == .success {

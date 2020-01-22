@@ -6,6 +6,11 @@
 //  Copyright © 2019 Aashna Narula. All rights reserved.
 //
 
+/*
+ Bugs/Enhancements:
+ 1. Run all tests: when back button is pressed, it should take to the beginning of the previous test in all case
+ */
+
 import UIKit
 import CoreTelephony
 import SystemConfiguration
@@ -192,7 +197,7 @@ extension BatteryCheckVC {
     }
     
     func checkTouch() {
-        self.navigationController?.pushViewController(TouchViewController.newInstance(), animated: true)
+        self.navigationController?.pushViewController(TouchViewController.newInstance(runAllTests: self.runAllTests), animated: true)
     }
     
     func listenVolumeButton() {
@@ -428,22 +433,12 @@ extension BatteryCheckVC {
             let player = try AVAudioPlayer(contentsOf: url)
             
             player.play()
+            self.nextTest = Tests.getNextTest(next: .microphone, run: self.runAllTests)
+            Tests.createAlert(title: "Speaker Test", message: "Did you hear the sound?", this: self, source: .speaker)
             
-            let alert = UIAlertController(title: "Speaker Test", message: "Did you hear the sound?", preferredStyle: .alert)
-            let yesAction = UIAlertAction(title: "Yes", style: .default) {
-                UIAlertAction in
+            if self.nextTest != .none {
                 self.navigationController?.popViewController(animated: true)
-                print("Passed")
             }
-            let noAction = UIAlertAction(title: "No", style: .default) {
-                UIAlertAction in
-                self.navigationController?.popViewController(animated: true)
-                print("Failed")
-            }
-            alert.addAction(yesAction)
-            alert.addAction(noAction)
-            
-            self.present(alert, animated: true, completion: nil)
             
         } catch let error {
             print(error.localizedDescription)
@@ -495,6 +490,10 @@ extension BatteryCheckVC {
     func switchOnVibration() {
         let generator = UIImpactFeedbackGenerator(style: .heavy)
         generator.impactOccurred()
+        
+        self.nextTest = Tests.getNextTest(next: .touchScreen, run: self.runAllTests)
+        
+        Tests.createAlert(title: "Vibration Check", message: "Did you feel the vibration?", this: self, source: .vibration)
     }
     
     func checkProximitySensor() {
@@ -550,26 +549,7 @@ extension BatteryCheckVC {
         self.nextTest = Tests.getNextTest(next: .rearCamera, run: self.runAllTests)
         if hasDisplayCheckCompleted {
             hasDisplayCheckCompleted = false
-            let alert = UIAlertController(title: "Display Check", message: "Was the screen free of dead or stuck pixels?", preferredStyle: .alert)
-            let yesAction = UIAlertAction(title: "Yes", style: .default) {
-                UIAlertAction in
-                if let vc = PopUpVC.newInstance(state: .success, source: .display, next: self.nextTest) as? PopUpVC {
-                    vc.delegate = self
-                    vc.modalPresentationStyle = .custom
-                    self.present(vc, animated: true, completion:  nil)
-                }
-            }
-            let noAction = UIAlertAction(title: "No", style: .default) {
-                UIAlertAction in
-                if let vc = PopUpVC.newInstance(state: .failed, source: .display, next: self.nextTest) as? PopUpVC {
-                   vc.delegate = self
-                   vc.modalPresentationStyle = .custom
-                   self.present(vc, animated: true, completion:  nil)
-               }
-            }
-            alert.addAction(yesAction)
-            alert.addAction(noAction)
-            self.present(alert, animated: true, completion: nil)
+            Tests.createAlert(title: "Display Check", message: "Was the screen free of dead or stuck pixels?", this: self, source: .display)
         };
         
         

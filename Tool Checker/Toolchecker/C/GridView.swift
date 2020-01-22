@@ -17,6 +17,8 @@ class GridView: UIView {
     var columnWidth: Int = 0
     var rowHeight: Int = 0
     var allLayersTouched: [[Bool]] = [[]]
+    var runAllTest: Bool = false
+    var timer: Timer?
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         let touch:UITouch = touches.first!
@@ -58,7 +60,13 @@ class GridView: UIView {
             let alert = UIAlertController(title: "Touch Check", message: "Touch test passed", preferredStyle: .alert)
             let yesAction = UIAlertAction(title: "Yes", style: .default) {
                 UIAlertAction in
-                self.goBack()
+                
+                self.timer?.invalidate();
+                if self.runAllTest {
+                    Tests.allTests(key: .speaker, this: self.viewController?.navigationController, runAllTests: true)
+                }else{
+                    self.goBack()
+                }
                 print("Passed")
             }
             let noAction = UIAlertAction(title: "No", style: .default) {
