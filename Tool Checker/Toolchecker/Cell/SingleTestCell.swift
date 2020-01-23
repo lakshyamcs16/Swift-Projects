@@ -12,8 +12,8 @@ class SingleTestCell: UITableViewCell {
 
     @IBOutlet weak var testIcon: UIImageView!
     @IBOutlet weak var testName: UILabel!
-    func setupCell(name: String, icon: UIImage) {
-        self.testIcon.image = icon
+    func setupCell(name: String, icon: String) {
+        self.testIcon.image = UIImage(named: icon)
         self.testName.text = name
     }
 }
