@@ -10,7 +10,6 @@ import Foundation
 
 enum testNames {
     case simCard
-    case mobileCarrier
     case wifi
     case display
     case rearCamera
@@ -21,12 +20,21 @@ enum testNames {
     case speaker
     case microphone
     case headphones
+    case charging
+    case flash
+    case shakeGesture
+    case gyroscope
+    case buttons
+    case proximitySensor
+    case none
 }
 
 class RunAllTestsVM {
     var array: [testNames] = []
+    var imagesArray:[String] = []
     
     init() {
-        self.array = [.simCard, .mobileCarrier, .wifi,.display,.rearCamera,.frontCamera,.vibration,.touchScreen,.earpiece,.speaker,.microphone,.headphones]
+        self.array = [.simCard, .wifi,.charging, .display,.rearCamera,.frontCamera,.vibration,.touchScreen,.earpiece,.speaker,.microphone,.headphones, .flash, .gyroscope, .buttons, .proximitySensor]
+        self.imagesArray = ["sim", "wifi", "battery", "display", "rear", "front", "vibrate", "touch", "earpiece", "speaker", "microphone", "headphone", "headphone", "headphone", "headphone", "headphone"]
     }
 }

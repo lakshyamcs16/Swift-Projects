@@ -12,6 +12,6 @@ class SingleTestListVM {
     var array: [testNames] = []
     
     init() {
-        self.array = [.simCard, .mobileCarrier, .wifi,.display,.rearCamera,.frontCamera,.vibration,.touchScreen,.earpiece,.speaker,.microphone,.headphones]
+        self.array = [.simCard, .wifi,.charging, .display,.rearCamera,.frontCamera,.vibration,.touchScreen,.earpiece,.speaker,.microphone,.headphones, .flash, .gyroscope, .shakeGesture, .buttons, .proximitySensor]
     }
 }
