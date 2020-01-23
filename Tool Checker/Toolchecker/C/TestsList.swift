@@ -39,7 +39,7 @@ class Tests {
             let vc = BatteryCheckVC.newInstance(sourceTest: .speaker, runAll: runAllTests)
             this?.pushViewController(vc, animated: true)
         case .microphone:
-            let vc = MicrophoneCheckVC.newInstance()
+            let vc = MicrophoneCheckVC.newInstance(nextTest: .none)
             this?.pushViewController(vc, animated: true)
         case .headphones:
             let vc = BatteryCheckVC.newInstance(sourceTest: .headphones, runAll: runAllTests)
@@ -102,4 +102,11 @@ class Tests {
         this.present(alert, animated: true, completion: nil)
     }
     
+    static func createPopVC(status: status, source: testNames, next: testNames, this: BatteryCheckVC) {
+        if let vc = PopUpVC.newInstance(state: status, source: source, next: next) as? PopUpVC {
+            vc.delegate = this
+            vc.modalPresentationStyle = .custom
+            this.present(vc, animated: true, completion:  nil)
+        }
+    }
 }

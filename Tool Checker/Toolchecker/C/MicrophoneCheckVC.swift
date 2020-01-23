@@ -18,6 +18,7 @@ class MicrophoneCheckVC: UIViewController, AVAudioRecorderDelegate, AVAudioPlaye
     var isAudioRecordingGranted: Bool!
     var isRecording = false
     var isPlaying = false
+    var nextTest: testNames = .none
     
     @IBOutlet weak var play_btn_ref: UIButton!
     @IBOutlet weak var record_btn_ref: UIButton!
@@ -71,11 +72,12 @@ class MicrophoneCheckVC: UIViewController, AVAudioRecorderDelegate, AVAudioPlaye
         }
     }
     
-    class func newInstance() -> UIViewController {
+    class func newInstance(nextTest: testNames) -> UIViewController {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         guard let vc = storyboard.instantiateViewController(withIdentifier: "MicrophoneCheckVC") as? MicrophoneCheckVC else {
             return UIViewController()
         }
+        vc.nextTest = nextTest
         return vc
     }
     
@@ -172,12 +174,18 @@ class MicrophoneCheckVC: UIViewController, AVAudioRecorderDelegate, AVAudioPlaye
     func display_alert(msg_title : String , msg_desc : String , action_title : [String])
     {
         var ac: UIAlertController!
+        ac = UIAlertController(title: msg_title, message: msg_desc, preferredStyle: .alert)
         for title in action_title {
-            ac = UIAlertController(title: msg_title, message: msg_desc, preferredStyle: .alert)
             ac.addAction(UIAlertAction(title: title, style: .default)
             {
                 (result : UIAlertAction) -> Void in
-                _ = self.navigationController?.popViewController(animated: true)
+                if self.nextTest == .none {
+                   _ = self.navigationController?.popViewController(animated: true)
+                    return
+                } else {
+                    Tests.allTests(key: self.nextTest, this: self.navigationController, runAllTests: true)
+                }
+               
             })
         }
         

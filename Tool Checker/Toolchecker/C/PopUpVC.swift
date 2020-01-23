@@ -140,10 +140,12 @@ class PopUpVC: UIViewController {
             }
         case .headphones:
             if state == .success {
-                self.statusLabel.text = ""
+                self.statusLabel.text = "Headphone Jack is working"
                 self.statusSubLabel.isHidden = true
             } else {
-                
+                self.statusLabel.text = "Headphone Jack is not working"
+               self.statusSubLabel.isHidden = false
+               self.statusSubLabel.text = "Headphone jack is not working properly, please try again or get it checked if it fails the test again."
             }
         case .charging:
             if state == .success {

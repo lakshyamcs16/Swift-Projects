@@ -223,8 +223,10 @@ extension BatteryCheckVC {
             for description in currentRoute.outputs {
                 if description.portType == AVAudioSession.Port.headphones {
                     print("headphone plugged in")
+                    Tests.createPopVC(status: .success, source: .headphones, next: .flash, this: self)
                 } else {
                     print("headphone pulled out")
+                    Tests.createPopVC(status: .failed, source: .headphones, next: .flash, this: self)
                 }
             }
         } else {
@@ -244,8 +246,10 @@ extension BatteryCheckVC {
         switch audioRouteChangeReason {
         case AVAudioSession.RouteChangeReason.newDeviceAvailable.rawValue:
             print("headphone plugged in")
+            Tests.createPopVC(status: .success, source: .headphones, next: .flash, this: self)
         case AVAudioSession.RouteChangeReason.oldDeviceUnavailable.rawValue:
             print("headphone pulled out")
+            Tests.createPopVC(status: .failed, source: .headphones, next: .flash, this: self)
         default:
             break
         }
@@ -404,10 +408,13 @@ extension BatteryCheckVC {
     }
     
     func setMicrophoneVC() {
-        self.nameLabel.text = "Microphone Test"
-        self.subtitle.text = "Tap on Record button to record the audio"
-        self.iconImage.image = UIImage(named: "microphone")
-        self.checkButton.setTitle("Record", for: .normal)
+        var vcNext = MicrophoneCheckVC.newInstance(nextTest: .none)
+        
+        if self.runAllTests {
+            vcNext = MicrophoneCheckVC.newInstance(nextTest: .headphones)
+        }
+        
+        self.navigationController?.pushViewController(vcNext, animated: true)
     }
     
     func setHeadphonesVC() {
@@ -433,12 +440,34 @@ extension BatteryCheckVC {
             let player = try AVAudioPlayer(contentsOf: url)
             
             player.play()
-            self.nextTest = Tests.getNextTest(next: .microphone, run: self.runAllTests)
-            Tests.createAlert(title: "Speaker Test", message: "Did you hear the sound?", this: self, source: .speaker)
             
-            if self.nextTest != .none {
+            self.nextTest = Tests.getNextTest(next: .microphone, run: self.runAllTests)
+            
+            if self.nextTest == .none {
                 self.navigationController?.popViewController(animated: true)
+                return
             }
+            
+            let alert = UIAlertController(title: "Speaker Test", message: "Did you hear the sound?", preferredStyle: .alert)
+                let yesAction = UIAlertAction(title: "Yes", style: .default) {
+                    UIAlertAction in
+                    if let vc = PopUpVC.newInstance(state: .success, source: .speaker, next: self.nextTest) as? PopUpVC {
+                        vc.delegate = self
+                        vc.modalPresentationStyle = .custom
+                        self.present(vc, animated: true, completion: nil)
+                    }
+                }
+                let noAction = UIAlertAction(title: "No", style: .default) {
+                    UIAlertAction in
+                    if let vc = PopUpVC.newInstance(state: .failed, source: .speaker, next: self.nextTest) as? PopUpVC {
+                       vc.delegate = self
+                       vc.modalPresentationStyle = .custom
+                        self.present(vc, animated: true, completion: nil)
+                   }
+                }
+                alert.addAction(yesAction)
+                alert.addAction(noAction)
+                self.present(alert, animated: true, completion: nil)
             
         } catch let error {
             print(error.localizedDescription)
@@ -450,7 +479,7 @@ extension BatteryCheckVC {
     func switchOnFlashLight() {
         guard let device = AVCaptureDevice.default(for: AVMediaType.video) else { return }
         guard device.hasTorch else { return }
-        
+        self.nextTest = Tests.getNextTest(next: .gyroscope, run: self.runAllTests)
         do {
             try device.lockForConfiguration()
             
