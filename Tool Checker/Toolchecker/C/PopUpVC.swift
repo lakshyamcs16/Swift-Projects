@@ -8,7 +8,7 @@
 
 import UIKit
 
-enum status {
+enum Status {
     case failed
     case success
 }
@@ -23,7 +23,7 @@ class PopUpVC: UIViewController {
     @IBOutlet weak var statusLabel: UILabel!
     @IBOutlet var statusImage: UIImageView!
     @IBOutlet weak var popupView: UIView!
-    var state: status = .success
+    var state: Status = .success
     var test: testNames = .none
     var nextTest: testNames = .none
     var tempText: String = ""
@@ -31,7 +31,7 @@ class PopUpVC: UIViewController {
     var delegate: PopupDelegate?
     var tranistionCompleted: Bool = false
     
-    class func newInstance(state: status, source: testNames, tempText: String = "", next: testNames) -> UIViewController {
+    class func newInstance(state: Status, source: testNames, tempText: String = "", next: testNames) -> UIViewController {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         guard let vc = storyboard.instantiateViewController(withIdentifier: "PopUpVC") as? PopUpVC else {
             return UIViewController()

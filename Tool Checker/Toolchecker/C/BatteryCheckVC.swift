@@ -24,7 +24,8 @@ class BatteryCheckVC: UIViewController, UIImagePickerControllerDelegate, UINavig
     var imagePicker: UIImagePickerController!
     var hasDisplayCheckCompleted: Bool = false
     var runAllTests: Bool = false
-    var status: status = .failed
+    var status: Status = .failed
+    var count: Int = 0
     
     @IBOutlet weak var subtitle: UILabel!
     @IBOutlet weak var checkButton: UIButton!
@@ -44,6 +45,7 @@ class BatteryCheckVC: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.becomeFirstResponder()
         self.setupVC(key: self.sourceTest)
     }
     
@@ -59,6 +61,12 @@ class BatteryCheckVC: UIViewController, UIImagePickerControllerDelegate, UINavig
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: animated)
+    }
+    
+    override var canBecomeFirstResponder: Bool {
+        get {
+            return true
+        }
     }
     
     
@@ -157,7 +165,7 @@ extension BatteryCheckVC {
         case .rearCamera:
             self.setRearCameraVC()
         case .shakeGesture:
-            self.checkShakeGesture()
+            self.setShakeGestureScreen()
         case .touchScreen:
             self.setTouchScreenVC()
         case .display:
@@ -179,8 +187,20 @@ extension BatteryCheckVC {
         }
     }
     
-    func checkShakeGesture() {
-        
+    func checkShakeGesture(state: Status = .failed) {
+        if let vc = PopUpVC.newInstance(state: state, source: .shakeGesture, next: .none) as? PopUpVC {
+            vc.delegate = self
+            vc.modalPresentationStyle = .custom
+            self.present(vc, animated: true, completion:  nil)
+        }
+    }
+    
+    override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
+        if motion == .motionShake {
+            self.checkShakeGesture(state: .success)
+        } else {
+            self.checkShakeGesture(state: .failed)
+        }
     }
     
     func setProximitySensorVC() {
