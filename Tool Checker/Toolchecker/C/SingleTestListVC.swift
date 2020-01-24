@@ -110,13 +110,13 @@ extension SingleTestListVC: UITableViewDelegate, UITableViewDataSource {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "SingleTestCell", for: indexPath) as? SingleTestCell else {return UITableViewCell()}
             cell.setupCell(name: "Gyroscope", icon: "battery")
             return cell
+        case .proximitySensor:
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "SingleTestCell", for: indexPath) as? SingleTestCell else {return UITableViewCell()}
+            cell.setupCell(name: "Proximity Sensor", icon: "headphone")
+            return cell
         case .buttons:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "SingleTestCell", for: indexPath) as? SingleTestCell else {return UITableViewCell()}
             cell.setupCell(name: "Buttons", icon: "headphone")
-            return cell
-        case .proximitySensor:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "SingleTestCell", for: indexPath) as? SingleTestCell else {return UITableViewCell()}
-            cell.setupCell(name: "Proximity Sensor", icon: "headphone")
             return cell
         default:
             return UITableViewCell()

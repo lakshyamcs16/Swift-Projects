@@ -125,11 +125,11 @@ class BatteryCheckVC: UIViewController, UIImagePickerControllerDelegate, UINavig
             self.playSound()
         case .headphones:
             self.checkHeadphones()
+        case .proximitySensor:
+            self.checkProximitySensor()
         case .buttons:
             self.listenVolumeButton()
             self.applicationDidEnterBackground()
-        case .proximitySensor:
-            self.checkProximitySensor()
         default:
             break
         }
@@ -188,7 +188,12 @@ extension BatteryCheckVC {
     }
     
     func checkShakeGesture(state: Status = .failed) {
-        if let vc = PopUpVC.newInstance(state: state, source: .shakeGesture, next: .none) as? PopUpVC {
+        var next: testNames = .none
+        if self.runAllTests {
+            next = .proximitySensor
+        }
+        
+        if let vc = PopUpVC.newInstance(state: state, source: .shakeGesture, next: next) as? PopUpVC {
             vc.delegate = self
             vc.modalPresentationStyle = .custom
             self.present(vc, animated: true, completion:  nil)
@@ -559,10 +564,11 @@ extension BatteryCheckVC {
     func proximityChanged(notification: NSNotification) {
         if let device = notification.object as? UIDevice {
             print("\(device) detected!")
-            let vc = PopUpVC.newInstance(state: .success, source: .proximitySensor, next: .touchScreen) as! PopUpVC
-            vc.delegate = self
-            vc.modalPresentationStyle = .custom
-            self.present(vc, animated: true, completion:  nil)
+            if let vc = PopUpVC.newInstance(state: .success, source: .proximitySensor, next: .none) as? PopUpVC {
+                vc.delegate = self
+                vc.modalPresentationStyle = .custom
+                self.present(vc, animated: true, completion:  nil)
+            }
         }
     }
     
