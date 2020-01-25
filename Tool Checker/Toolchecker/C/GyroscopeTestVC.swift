@@ -31,11 +31,14 @@ class GyroscopeTestVC: UIViewController, PopupDelegate {
     var yRot: Double = 0.0
     var zRot: Double = 0.0
     
-    class func newInstance() -> UIViewController {
+    var nextTest: testNames = .none
+    
+    class func newInstance(nextTest: testNames) -> UIViewController {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         guard let vc = storyboard.instantiateViewController(withIdentifier: "GyroscopeTestVC") as? GyroscopeTestVC else {
             return UIViewController()
         }
+        vc.nextTest = nextTest
         return vc
     }
     
@@ -55,7 +58,7 @@ class GyroscopeTestVC: UIViewController, PopupDelegate {
     func getGyroValues() {
         if motionManager.isGyroAvailable {
             
-            if let vc = PopUpVC.newInstance(state: .success, source: .gyroscope, next: .shakeGesture) as? PopUpVC {
+            if let vc = PopUpVC.newInstance(state: .success, source: .gyroscope, next: self.nextTest) as? PopUpVC {
                 vc.delegate = self
                 vc.modalPresentationStyle = .custom
                 self.present(vc, animated: true, completion:  nil)
@@ -76,7 +79,7 @@ class GyroscopeTestVC: UIViewController, PopupDelegate {
                 self.tableView.reloadData()
             }
         } else {
-            if let vc = PopUpVC.newInstance(state: .failed, source: .gyroscope, next: .shakeGesture) as? PopUpVC {
+            if let vc = PopUpVC.newInstance(state: .failed, source: .gyroscope, next: self.nextTest) as? PopUpVC {
                 vc.delegate = self
                 vc.modalPresentationStyle = .custom
                 self.present(vc, animated: true, completion:  nil)

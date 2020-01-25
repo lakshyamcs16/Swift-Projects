@@ -11,6 +11,7 @@ import UIKit
 enum Status {
     case failed
     case success
+    case error
 }
 
 protocol PopupDelegate {
@@ -159,8 +160,12 @@ class PopUpVC: UIViewController {
             }
         case .flash:
             if state == .success {
-                self.statusLabel.text = "Flash Light working"
+                self.statusLabel.text = "Flashlight is working"
                 self.statusSubLabel.isHidden = true
+            } else if state == .error {
+                self.statusLabel.text = "Flashlight not present"
+                self.statusSubLabel.isHidden = false
+                self.statusSubLabel.text = "This device does not have a flashlight"
             } else {
                 self.statusLabel.text = "Flash Light is not working"
                 self.statusSubLabel.isHidden = false

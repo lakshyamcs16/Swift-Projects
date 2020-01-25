@@ -26,6 +26,7 @@ class BatteryCheckVC: UIViewController, UIImagePickerControllerDelegate, UINavig
     var runAllTests: Bool = false
     var status: Status = .failed
     var count: Int = 0
+    var timer: Timer?
     
     @IBOutlet weak var subtitle: UILabel!
     @IBOutlet weak var checkButton: UIButton!
@@ -273,15 +274,34 @@ extension BatteryCheckVC {
         UIDevice.current.isBatteryMonitoringEnabled = true
         print(UIDevice.current.batteryLevel)
         print(UIDevice.current.batteryState)
+        
+        self.nextTest = Tests.getNextTest(next: .display, run: self.runAllTests)
+        
+        if UIDevice.current.batteryLevel == -1 {
+            if let vc = PopUpVC.newInstance(state: .failed, source: .charging, tempText: "", next: nextTest) as? PopUpVC {
+                vc.delegate = self
+                vc.modalPresentationStyle = .custom
+                self.present(vc, animated: true, completion:  nil)
+            }
+        }
+        
         NotificationCenter.default.addObserver(self, selector: #selector(batteryLevelDidChange), name: UIDevice.batteryLevelDidChangeNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(batteryStateDidChange), name: UIDevice.batteryStateDidChangeNotification, object: nil)
     }
     
     func checkSimCardAvailability() {
         let networkInfo = CTTelephonyNetworkInfo()
-        guard let info = networkInfo.subscriberCellularProvider else {return}
         self.nextTest = Tests.getNextTest(next: .wifi, run: self.runAllTests)
         self.status = .failed
+        
+        guard let info = networkInfo.subscriberCellularProvider else {
+            if let vc = PopUpVC.newInstance(state: self.status, source: .simCard, next: self.nextTest) as? PopUpVC {
+                vc.delegate = self
+                vc.modalPresentationStyle = .custom
+                self.present(vc, animated: true, completion:  nil)
+            }
+            return
+        }
         
         if info.isoCountryCode != nil {
             self.status = .success
@@ -366,10 +386,18 @@ extension BatteryCheckVC {
     
     
     func switchOnFlashLight() {
-        guard let device = AVCaptureDevice.default(for: AVMediaType.video) else { return }
-        guard device.hasTorch else { return }
         self.nextTest = Tests.getNextTest(next: .gyroscope, run: self.runAllTests)
-        do {
+
+        guard let device = AVCaptureDevice.default(for: AVMediaType.video) else {
+            if let vc = PopUpVC.newInstance(state: .error, source: .flash, next: self.nextTest) as? PopUpVC {
+                vc.delegate = self
+                vc.modalPresentationStyle = .custom
+                self.present(vc, animated: true, completion:  nil)
+            }
+            return
+        }
+        guard device.hasTorch else { return }
+               do {
             try device.lockForConfiguration()
             
             if (device.torchMode == AVCaptureDevice.TorchMode.on) {
@@ -414,14 +442,40 @@ extension BatteryCheckVC {
         Tests.createAlert(title: "Vibration Check", message: "Did you feel the vibration?", this: self, source: .vibration)
     }
     
+    private func startTimer() {
+        self.stopTimer()
+        timer = Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(self.showAlert), userInfo: nil, repeats: true)
+    }
+    
+    private func stopTimer() {
+        timer?.invalidate()
+    }
+    
+    @objc func showAlert() {
+           self.stopTimer()
+           let alert = UIAlertController(title: "Timeout!", message: "We could not detect any sensation. Do you want to try again?", preferredStyle: .alert)
+           let yesAction = UIAlertAction(title: "Yes", style: UIAlertAction.Style.default) {
+               UIAlertAction in
+               self.startTimer()
+           }
+           let noAction = UIAlertAction(title: "No", style: UIAlertAction.Style.default) {
+               UIAlertAction in
+               let controller = self.navigationController?.viewControllers[0]
+                self.navigationController?.popToViewController(controller!, animated: true)
+           }
+           alert.addAction(yesAction)
+           alert.addAction(noAction)
+           self.present(alert, animated: true, completion: nil)
+    }
     func checkProximitySensor() {
+        self.startTimer()
         let device = UIDevice.current
         device.isProximityMonitoringEnabled = true
         if device.isProximityMonitoringEnabled {
             NotificationCenter.default.addObserver(self, selector: Selector(("proximityChanged")), name: NSNotification.Name(rawValue: "UIDeviceProximityStateDidChangeNotification"), object: device)
         } else {
             let alert = UIAlertController(title: "Alert", message: "Wave your hand to check if Proximity Sensor is working or not", preferredStyle: UIAlertController.Style.alert)
-            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
+            alert.addAction(UIAlertAction(title: "Okay", style: UIAlertAction.Style.default, handler: nil))
             self.present(alert, animated: true, completion: nil)
         }
     }
@@ -531,6 +585,8 @@ extension BatteryCheckVC {
             self.setButtonsVC()
         case .proximitySensor:
             self.setProximitySensorVC()
+        case .gyroscope:
+            Tests.allTests(key: .gyroscope, this: self.navigationController, runAllTests: self.runAllTests)
         default:
             break
         }
