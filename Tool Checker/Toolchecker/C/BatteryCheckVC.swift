@@ -211,7 +211,7 @@ extension BatteryCheckVC {
     func setProximitySensorVC() {
         self.nameLabel.text = "Proximity Sensor"
         self.subtitle.text = "Tap to check Proximity Sensor"
-        self.iconImage.image = UIImage(named: "battery")
+        self.iconImage.image = UIImage(named: "proximity")
         self.checkButton.setTitle("Check Sensor", for: .normal)
     }
     
@@ -341,7 +341,7 @@ extension BatteryCheckVC {
     func setFlashVC() {
         self.nameLabel.text = "Flash"
         self.subtitle.text = "Tap to check Flash Light"
-        self.iconImage.image = UIImage(named: "battery")
+        self.iconImage.image = UIImage(named: "flash")
         self.checkButton.setTitle("Check Flash", for: .normal)
     }
     
@@ -354,7 +354,7 @@ extension BatteryCheckVC {
     
     func setSIMCardVC() {
         self.nameLabel.text = "Sim Card"
-        self.subtitle.text = "Tap to check whether Sim Card is present or not"
+        self.subtitle.text = "Tap to check whether sim card is present or not"
         self.iconImage.image = UIImage(named: "sim")
         self.checkButton.setTitle("Check Sim Card", for: .normal)
     }
@@ -415,7 +415,7 @@ extension BatteryCheckVC {
     func setShakeGestureScreen() {
         self.nameLabel.text = "Shake Gesture"
         self.subtitle.text = "Tap to check whether Shake Gesture is working or not"
-        self.iconImage.image = UIImage(named: "touch")
+        self.iconImage.image = UIImage(named: "shake")
         self.checkButton.setTitle("Check Sensor", for: .normal)
     }
     func setWifiVC() {
@@ -452,7 +452,7 @@ extension BatteryCheckVC {
     func setButtonsVC() {
         self.nameLabel.text = "Buttons test"
         self.subtitle.text = "Press volume and power button one by one to complete the test"
-        self.iconImage.image = UIImage(named: "headphone")
+        self.iconImage.image = UIImage(named: "button")
         self.checkButton.setTitle("<<Checkbox needs to be added>>", for: .normal)
     }
     
