@@ -13,6 +13,8 @@
 		1B59739123B5688300F9790D /* TouchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B59739023B5688300F9790D /* TouchViewController.swift */; };
 		1BCD3A1C23CA751300CEC8C7 /* MicrophoneCheckVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BCD3A1B23CA751300CEC8C7 /* MicrophoneCheckVC.swift */; };
 		1BEBE39A23D8F58A00B57471 /* testtone.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 1BEBE39923D8F58A00B57471 /* testtone.mp3 */; };
+		1BF1029E23DC2461005D8B74 /* Setups.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BF1029D23DC2461005D8B74 /* Setups.swift */; };
+		1BF102A123DC2554005D8B74 /* StringConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BF102A023DC2554005D8B74 /* StringConstants.swift */; };
 		438743CF23B08225005C6072 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 438743CE23B08225005C6072 /* AppDelegate.swift */; };
 		438743D423B08225005C6072 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 438743D223B08225005C6072 /* Main.storyboard */; };
 		438743D623B08227005C6072 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 438743D523B08227005C6072 /* Assets.xcassets */; };
@@ -59,6 +61,8 @@
 		1BCD3A1823CA6B2100CEC8C7 /* testtone.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = testtone.mp3; sourceTree = "<group>"; };
 		1BCD3A1B23CA751300CEC8C7 /* MicrophoneCheckVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicrophoneCheckVC.swift; sourceTree = "<group>"; };
 		1BEBE39923D8F58A00B57471 /* testtone.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = testtone.mp3; path = ../../../../testtone.mp3; sourceTree = "<group>"; };
+		1BF1029D23DC2461005D8B74 /* Setups.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Setups.swift; sourceTree = "<group>"; };
+		1BF102A023DC2554005D8B74 /* StringConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringConstants.swift; sourceTree = "<group>"; };
 		438743CB23B08225005C6072 /* Toolchecker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Toolchecker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		438743CE23B08225005C6072 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		438743D323B08225005C6072 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -112,6 +116,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1BF1029F23DC24F8005D8B74 /* Strings */ = {
+			isa = PBXGroup;
+			children = (
+				1BF102A023DC2554005D8B74 /* StringConstants.swift */,
+			);
+			path = Strings;
+			sourceTree = "<group>";
+		};
 		438743C223B08225005C6072 = {
 			isa = PBXGroup;
 			children = (
@@ -136,6 +148,7 @@
 		438743CD23B08225005C6072 /* Toolchecker */ = {
 			isa = PBXGroup;
 			children = (
+				1BF1029F23DC24F8005D8B74 /* Strings */,
 				438743CE23B08225005C6072 /* AppDelegate.swift */,
 				438743D223B08225005C6072 /* Main.storyboard */,
 				1BCD3A1823CA6B2100CEC8C7 /* testtone.mp3 */,
@@ -176,6 +189,7 @@
 				1B30758B23D391430014C300 /* TestsList.swift */,
 				1BCD3A1B23CA751300CEC8C7 /* MicrophoneCheckVC.swift */,
 				4387440923B1D429005C6072 /* BatteryCheckVC.swift */,
+				1BF1029D23DC2461005D8B74 /* Setups.swift */,
 				1B59738423B545A300F9790D /* DisplayCheckViewController.swift */,
 				1B59739023B5688300F9790D /* TouchViewController.swift */,
 				1B59738E23B5684F00F9790D /* GridView.swift */,
@@ -355,9 +369,11 @@
 				4387441023B368E8005C6072 /* SingleTestListVM.swift in Sources */,
 				1B59739123B5688300F9790D /* TouchViewController.swift in Sources */,
 				4387440823B0B174005C6072 /* SpecificTestCell.swift in Sources */,
+				1BF102A123DC2554005D8B74 /* StringConstants.swift in Sources */,
 				43875C7623C742F50052DB5B /* GyroscopeHeaderCell.swift in Sources */,
 				4387440E23B36814005C6072 /* SingleTestCell.swift in Sources */,
 				4387440323B09155005C6072 /* InitialTestScreenVM.swift in Sources */,
+				1BF1029E23DC2461005D8B74 /* Setups.swift in Sources */,
 				438743FD23B08FF3005C6072 /* InitialTestScreenVC.swift in Sources */,
 				438743FF23B0906B005C6072 /* TestCellType.swift in Sources */,
 				1B59738F23B5684F00F9790D /* GridView.swift in Sources */,
