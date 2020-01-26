@@ -213,6 +213,9 @@ class PopUpVC: UIViewController {
             self.tranistionCompleted = true
             delegate?.popupNextTest(check: self.nextTest)
         }
+        if self.nextTest == .none {
+            self.navigationController?.popViewController(animated: true)
+        }
     }
     
     @IBAction func dismissButtonTapped(_ sender: Any) {
@@ -220,6 +223,9 @@ class PopUpVC: UIViewController {
         if self.nextTest != .none && !self.tranistionCompleted {
             self.tranistionCompleted = true
             delegate?.popupNextTest(check: self.nextTest)
+        }
+        if self.nextTest == .none {
+            self.navigationController?.popViewController(animated: true)
         }
     }
 }

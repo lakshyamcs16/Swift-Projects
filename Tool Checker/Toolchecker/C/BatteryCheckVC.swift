@@ -203,14 +203,18 @@ extension BatteryCheckVC {
     func checkHeadphones() {
         let session = AVAudioSession.sharedInstance()
         let currentRoute = session.currentRoute
+        var next: testNames = .none
+        if self.runAllTests {
+            next = .flash
+        }
         if currentRoute.outputs.count != 0 {
             for description in currentRoute.outputs {
                 if description.portType == AVAudioSession.Port.headphones {
                     print("headphone plugged in")
-                    Tests.createPopVC(status: .success, source: .headphones, next: .flash, this: self)
+                        Tests.createPopVC(status: .success, source: .headphones, next: next, this: self)
                 } else {
                     print("headphone pulled out")
-                    Tests.createPopVC(status: .failed, source: .headphones, next: .flash, this: self)
+                        Tests.createPopVC(status: .failed, source: .headphones, next: next, this: self)
                 }
             }
         } else {
@@ -225,15 +229,18 @@ extension BatteryCheckVC {
     }
     
     @objc func audioRouteChangeListener(_ notification:NSNotification) {
-        let audioRouteChangeReason = notification.userInfo![AVAudioSessionRouteChangeReasonKey] as! UInt
-        
+        guard let audioRouteChangeReason = notification.userInfo![AVAudioSessionRouteChangeReasonKey] as? UInt else { return }
+        var next: testNames = .none
+        if self.runAllTests {
+            next = .flash
+        }
         switch audioRouteChangeReason {
         case AVAudioSession.RouteChangeReason.newDeviceAvailable.rawValue:
             print("headphone plugged in")
-            Tests.createPopVC(status: .success, source: .headphones, next: .flash, this: self)
+                Tests.createPopVC(status: .success, source: .headphones, next: next, this: self)
         case AVAudioSession.RouteChangeReason.oldDeviceUnavailable.rawValue:
             print("headphone pulled out")
-            Tests.createPopVC(status: .failed, source: .headphones, next: .flash, this: self)
+                Tests.createPopVC(status: .failed, source: .headphones, next: next, this: self)
         default:
             break
         }
@@ -348,13 +355,10 @@ extension BatteryCheckVC {
             try AVAudioSession.sharedInstance().setActive(true)            
             player = try AVAudioPlayer(contentsOf: url, fileTypeHint: AVFileType.mp3.rawValue)
             player?.play()
-//
-//            self.nextTest = Tests.getNextTest(next: .microphone, run: self.runAllTests)
-//
-//            if self.nextTest == .none {
-//                self.navigationController?.popViewController(animated: true)
-//                return
-//            }
+
+            self.nextTest = Tests.getNextTest(next: .microphone, run: self.runAllTests)
+
+
 
             let alert = UIAlertController(title: "Speaker Test", message: "Did you hear the sound?", preferredStyle: .alert)
                 let yesAction = UIAlertAction(title: "Yes", style: .default) { UIAlertAction in
@@ -460,7 +464,11 @@ extension BatteryCheckVC {
            }
            let noAction = UIAlertAction(title: "No", style: UIAlertAction.Style.default) {
                UIAlertAction in
-            self.navigationController?.popViewController(animated: true)
+               if let vc = PopUpVC.newInstance(state: .failed, source: .proximitySensor, next: .none) as? PopUpVC {
+                    vc.delegate = self
+                    vc.modalPresentationStyle = .custom
+                    self.present(vc, animated: true, completion:  nil)
+                }
         }
            alert.addAction(yesAction)
            alert.addAction(noAction)
@@ -474,7 +482,7 @@ extension BatteryCheckVC {
             NotificationCenter.default.addObserver(self, selector: Selector(("proximityChanged")), name: NSNotification.Name(rawValue: "UIDeviceProximityStateDidChangeNotification"), object: device)
         } else {
             let alert = UIAlertController(title: "Alert", message: "Wave your hand to check if Proximity Sensor is working or not", preferredStyle: UIAlertController.Style.alert)
-            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
+            alert.addAction(UIAlertAction(title: "Okay", style: UIAlertAction.Style.default, handler: nil))
             self.present(alert, animated: true, completion: nil)
         }
     }

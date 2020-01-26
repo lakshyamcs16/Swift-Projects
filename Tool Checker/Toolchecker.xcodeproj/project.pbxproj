@@ -12,9 +12,9 @@
 		1B59738F23B5684F00F9790D /* GridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B59738E23B5684F00F9790D /* GridView.swift */; };
 		1B59739123B5688300F9790D /* TouchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B59739023B5688300F9790D /* TouchViewController.swift */; };
 		1BCD3A1C23CA751300CEC8C7 /* MicrophoneCheckVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BCD3A1B23CA751300CEC8C7 /* MicrophoneCheckVC.swift */; };
+		1BDD46C523DE2D530043170F /* testtone.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 1BDD46C423DE2D530043170F /* testtone.mp3 */; };
 		1BF1029E23DC2461005D8B74 /* Setups.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BF1029D23DC2461005D8B74 /* Setups.swift */; };
 		1BF102A123DC2554005D8B74 /* StringConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BF102A023DC2554005D8B74 /* StringConstants.swift */; };
-		4368BE1823DE1A490019E2B7 /* testtone.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 4368BE1723DE1A490019E2B7 /* testtone.mp3 */; };
 		438743CF23B08225005C6072 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 438743CE23B08225005C6072 /* AppDelegate.swift */; };
 		438743D423B08225005C6072 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 438743D223B08225005C6072 /* Main.storyboard */; };
 		438743D623B08227005C6072 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 438743D523B08227005C6072 /* Assets.xcassets */; };
@@ -59,9 +59,9 @@
 		1B59738E23B5684F00F9790D /* GridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridView.swift; sourceTree = "<group>"; };
 		1B59739023B5688300F9790D /* TouchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchViewController.swift; sourceTree = "<group>"; };
 		1BCD3A1B23CA751300CEC8C7 /* MicrophoneCheckVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicrophoneCheckVC.swift; sourceTree = "<group>"; };
+		1BDD46C423DE2D530043170F /* testtone.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = testtone.mp3; path = ../../../../testtone.mp3; sourceTree = "<group>"; };
 		1BF1029D23DC2461005D8B74 /* Setups.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Setups.swift; sourceTree = "<group>"; };
 		1BF102A023DC2554005D8B74 /* StringConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringConstants.swift; sourceTree = "<group>"; };
-		4368BE1723DE1A490019E2B7 /* testtone.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = testtone.mp3; path = ../../../../../testtone.mp3; sourceTree = "<group>"; };
 		438743CB23B08225005C6072 /* Toolchecker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Toolchecker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		438743CE23B08225005C6072 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		438743D323B08225005C6072 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -181,7 +181,7 @@
 		4387440023B090FA005C6072 /* C */ = {
 			isa = PBXGroup;
 			children = (
-				4368BE1723DE1A490019E2B7 /* testtone.mp3 */,
+				1BDD46C423DE2D530043170F /* testtone.mp3 */,
 				438743FC23B08FF3005C6072 /* InitialTestScreenVC.swift */,
 				4387440B23B367C3005C6072 /* SingleTestListVC.swift */,
 				1B30758B23D391430014C300 /* TestsList.swift */,
@@ -331,7 +331,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4368BE1823DE1A490019E2B7 /* testtone.mp3 in Resources */,
+				1BDD46C523DE2D530043170F /* testtone.mp3 in Resources */,
 				438743D923B08227005C6072 /* LaunchScreen.storyboard in Resources */,
 				438743D623B08227005C6072 /* Assets.xcassets in Resources */,
 				438743D423B08225005C6072 /* Main.storyboard in Resources */,
