@@ -367,7 +367,7 @@ extension BatteryCheckVC {
         if let vc = PopUpVC.newInstance(state: self.status, source: .simCard, next: self.nextTest) as? PopUpVC {
             vc.delegate = self
             vc.modalPresentationStyle = .custom
-            self.present(vc, animated: true, completion:  nil)
+            self.present(vc, animated: false, completion:  nil)
         }
     }
     

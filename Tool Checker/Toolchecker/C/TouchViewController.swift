@@ -49,8 +49,8 @@ class TouchViewController: UIViewController {
         self.startTimer()
     }
     
-    func goToTestView() {
-        let controller = self.navigationController?.viewControllers[(self.navigationController?.viewControllers.count)! - 3]
+    func goToTestView(numOfScreensToPop: Int) {
+        let controller = self.navigationController?.viewControllers[(self.navigationController?.viewControllers.count)! - numOfScreensToPop]
         self.navigationController?.popToViewController(controller!, animated: true)
     }
     
@@ -73,16 +73,16 @@ class TouchViewController: UIViewController {
             let alert = UIAlertController(title: "Touch Check", message: "Time's up. Want to continue?", preferredStyle: .alert)
             let yesAction = UIAlertAction(title: "Yes", style: UIAlertAction.Style.default) {
                 UIAlertAction in
-                self.pollingCount = 10
+                self.pollingCount = 20
                 self.startTimer()
             }
             let noAction = UIAlertAction(title: "No", style: UIAlertAction.Style.default) {
                 UIAlertAction in
-                
+//                self.dismiss(animated: true, completion: nil)
                 if self.runAll {
                     Tests.allTests(key: .speaker, this: self.navigationController, runAllTests: true)
                 }else {
-                    self.goToTestView()
+                    self.goToTestView(numOfScreensToPop: 2)
                 }
             }
             alert.addAction(yesAction)

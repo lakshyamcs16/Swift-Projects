@@ -102,7 +102,7 @@ class Tests {
         this.present(alert, animated: true, completion: nil)
     }
     
-    static func createPopVC(status: status, source: testNames, next: testNames, this: BatteryCheckVC) {
+    static func createPopVC(status: Status, source: testNames, next: testNames, this: BatteryCheckVC) {
         if let vc = PopUpVC.newInstance(state: status, source: source, next: next) as? PopUpVC {
             vc.delegate = this
             vc.modalPresentationStyle = .custom
