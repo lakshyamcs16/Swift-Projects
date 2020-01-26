@@ -33,8 +33,6 @@ class Tests {
         case .touchScreen:
             let vc = BatteryCheckVC.newInstance(sourceTest: .touchScreen, runAll: runAllTests)
             this?.pushViewController(vc, animated: true)
-        case .earpiece:
-            break
         case .speaker:
             let vc = BatteryCheckVC.newInstance(sourceTest: .speaker, runAll: runAllTests)
             this?.pushViewController(vc, animated: true)
