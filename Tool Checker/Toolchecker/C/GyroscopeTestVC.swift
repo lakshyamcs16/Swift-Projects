@@ -16,7 +16,7 @@ enum gyroscopeCell {
     case gyroDetails
 }
 
-class GyroscopeTestVC: UIViewController {
+class GyroscopeTestVC: UIViewController, PopupDelegate {
     
     @IBOutlet weak var tableView: UITableView!
     var array: [gyroscopeCell] = []
@@ -31,11 +31,14 @@ class GyroscopeTestVC: UIViewController {
     var yRot: Double = 0.0
     var zRot: Double = 0.0
     
-    class func newInstance() -> UIViewController {
+    var nextTest: testNames = .none
+    
+    class func newInstance(nextTest: testNames) -> UIViewController {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         guard let vc = storyboard.instantiateViewController(withIdentifier: "GyroscopeTestVC") as? GyroscopeTestVC else {
             return UIViewController()
         }
+        vc.nextTest = nextTest
         return vc
     }
     
@@ -55,9 +58,11 @@ class GyroscopeTestVC: UIViewController {
     func getGyroValues() {
         if motionManager.isGyroAvailable {
             
-            let vc = PopUpVC.newInstance(state: .success, source: .gyroscope, next: .buttons)
-            vc.modalPresentationStyle = .custom
-            self.present(vc, animated: true, completion:  nil)
+            if let vc = PopUpVC.newInstance(state: .success, source: .gyroscope, next: self.nextTest) as? PopUpVC {
+                vc.delegate = self
+                vc.modalPresentationStyle = .custom
+                self.present(vc, animated: true, completion:  nil)
+            }
             
             motionManager.deviceMotionUpdateInterval = 0.2;
             motionManager.startDeviceMotionUpdates()
@@ -74,9 +79,11 @@ class GyroscopeTestVC: UIViewController {
                 self.tableView.reloadData()
             }
         } else {
-            let vc = PopUpVC.newInstance(state: .failed, source: .gyroscope, next: .buttons)
-            vc.modalPresentationStyle = .custom
-            self.present(vc, animated: true, completion:  nil)
+            if let vc = PopUpVC.newInstance(state: .failed, source: .gyroscope, next: self.nextTest) as? PopUpVC {
+                vc.delegate = self
+                vc.modalPresentationStyle = .custom
+                self.present(vc, animated: true, completion:  nil)
+            }
         }
     }
     
@@ -125,5 +132,9 @@ extension GyroscopeTestVC: UITableViewDelegate, UITableViewDataSource {
             cell.setupCell(a: "Rotation X: \(self.yaw)", b: "Rotation Y: \(self.pitch)", c: "Rotation Z: \(self.roll)")
             return cell
         }
+    }
+    
+    func popupNextTest(check nextTestInQueue: testNames) {
+        Tests.allTests(key: nextTestInQueue, this: self.navigationController, runAllTests: true)
     }
 }

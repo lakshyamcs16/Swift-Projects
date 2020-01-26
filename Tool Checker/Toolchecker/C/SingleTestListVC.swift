@@ -100,23 +100,23 @@ extension SingleTestListVC: UITableViewDelegate, UITableViewDataSource {
             return cell
         case .flash:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "SingleTestCell", for: indexPath) as? SingleTestCell else {return UITableViewCell()}
-            cell.setupCell(name: "Flash", icon: "headphone")
+            cell.setupCell(name: "Flash", icon: "flash")
             return cell
         case .shakeGesture:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "SingleTestCell", for: indexPath) as? SingleTestCell else {return UITableViewCell()}
-            cell.setupCell(name: "Shake Gesture", icon: "headphone")
+            cell.setupCell(name: "Shake Gesture", icon: "shake")
             return cell
         case .gyroscope:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "SingleTestCell", for: indexPath) as? SingleTestCell else {return UITableViewCell()}
-            cell.setupCell(name: "Gyroscope", icon: "battery")
+            cell.setupCell(name: "Gyroscope", icon: "gyroscope")
+            return cell
+        case .proximitySensor:
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "SingleTestCell", for: indexPath) as? SingleTestCell else {return UITableViewCell()}
+            cell.setupCell(name: "Proximity Sensor", icon: "proximity")
             return cell
         case .buttons:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "SingleTestCell", for: indexPath) as? SingleTestCell else {return UITableViewCell()}
-            cell.setupCell(name: "Buttons", icon: "headphone")
-            return cell
-        case .proximitySensor:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "SingleTestCell", for: indexPath) as? SingleTestCell else {return UITableViewCell()}
-            cell.setupCell(name: "Proximity Sensor", icon: "headphone")
+            cell.setupCell(name: "Buttons", icon: "button")
             return cell
         default:
             return UITableViewCell()

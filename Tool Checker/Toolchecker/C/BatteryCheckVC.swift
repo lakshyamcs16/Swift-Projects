@@ -26,6 +26,7 @@ class BatteryCheckVC: UIViewController, UIImagePickerControllerDelegate, UINavig
     var runAllTests: Bool = false
     var status: Status = .failed
     var count: Int = 0
+    var timer: Timer?
     
     @IBOutlet weak var subtitle: UILabel!
     @IBOutlet weak var checkButton: UIButton!
@@ -125,11 +126,11 @@ class BatteryCheckVC: UIViewController, UIImagePickerControllerDelegate, UINavig
             self.playSound()
         case .headphones:
             self.checkHeadphones()
+        case .proximitySensor:
+            self.checkProximitySensor()
         case .buttons:
             self.listenVolumeButton()
             self.applicationDidEnterBackground()
-        case .proximitySensor:
-            self.checkProximitySensor()
         default:
             break
         }
@@ -150,45 +151,13 @@ class BatteryCheckVC: UIViewController, UIImagePickerControllerDelegate, UINavig
 }
 
 extension BatteryCheckVC {
-    func setupVC(key: testNames) {
-        switch key {
-        case .charging:
-            self.setBatteryVC()
-        case .flash:
-            self.setFlashVC()
-        case .vibration:
-            self.setVibrationVC()
-        case .simCard:
-            self.setSIMCardVC()
-        case .frontCamera:
-            self.setFrontCameraVC()
-        case .rearCamera:
-            self.setRearCameraVC()
-        case .shakeGesture:
-            self.setShakeGestureScreen()
-        case .touchScreen:
-            self.setTouchScreenVC()
-        case .display:
-            self.setDisplayScreenVC()
-        case .wifi:
-            self.setWifiVC()
-        case .speaker:
-            self.setSpeakerVC()
-        case .microphone:
-            self.setMicrophoneVC()
-        case .headphones:
-            self.setHeadphonesVC()
-        case .buttons:
-            self.setButtonsVC()
-        case .proximitySensor:
-            self.setProximitySensorVC()
-        default:
-            break
-        }
-    }
-    
     func checkShakeGesture(state: Status = .failed) {
-        if let vc = PopUpVC.newInstance(state: state, source: .shakeGesture, next: .none) as? PopUpVC {
+        var next: testNames = .none
+        if self.runAllTests {
+            next = .proximitySensor
+        }
+        
+        if let vc = PopUpVC.newInstance(state: state, source: .shakeGesture, next: next) as? PopUpVC {
             vc.delegate = self
             vc.modalPresentationStyle = .custom
             self.present(vc, animated: true, completion:  nil)
@@ -203,12 +172,7 @@ extension BatteryCheckVC {
         }
     }
     
-    func setProximitySensorVC() {
-        self.nameLabel.text = "Proximity Sensor"
-        self.subtitle.text = "Tap to check Proximity Sensor"
-        self.iconImage.image = UIImage(named: "battery")
-        self.checkButton.setTitle("Check Sensor", for: .normal)
-    }
+    
     
     func checkDisplay() {
         let goNext = storyboard?.instantiateViewController(withIdentifier: "displayCheckVC") as! DisplayCheckViewController
@@ -275,25 +239,6 @@ extension BatteryCheckVC {
         }
     }
     
-    func setDisplayScreenVC() {
-        self.nameLabel.text = "Display"
-        self.subtitle.text = """
-        The next screens will display a series of color
-        (black, white, green, red, and blue). Look carefully for dead or
-        stuck pixels or any discoloration.
-        \n
-        Tap the screen when you're ready for the next color.
-        """
-        self.iconImage.image = UIImage(named: "display")
-        self.checkButton.setTitle("Check Display", for: .normal)
-    }
-    
-    func setBatteryVC() {
-        self.nameLabel.text = "Charging"
-        self.subtitle.text = "Plugin the charger to test your charging point"
-        self.iconImage.image = UIImage(named: "battery")
-        self.checkButton.setTitle("Check Connection", for: .normal)
-    }
     
     var batteryLevel: Float {
         return UIDevice.current.batteryLevel
@@ -329,36 +274,34 @@ extension BatteryCheckVC {
         UIDevice.current.isBatteryMonitoringEnabled = true
         print(UIDevice.current.batteryLevel)
         print(UIDevice.current.batteryState)
+        
+        self.nextTest = Tests.getNextTest(next: .display, run: self.runAllTests)
+        
+        if UIDevice.current.batteryLevel == -1 {
+            if let vc = PopUpVC.newInstance(state: .failed, source: .charging, tempText: "", next: nextTest) as? PopUpVC {
+                vc.delegate = self
+                vc.modalPresentationStyle = .custom
+                self.present(vc, animated: true, completion:  nil)
+            }
+        }
+        
         NotificationCenter.default.addObserver(self, selector: #selector(batteryLevelDidChange), name: UIDevice.batteryLevelDidChangeNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(batteryStateDidChange), name: UIDevice.batteryStateDidChangeNotification, object: nil)
     }
     
-    func setFlashVC() {
-        self.nameLabel.text = "Flash"
-        self.subtitle.text = "Tap to check Flash Light"
-        self.iconImage.image = UIImage(named: "battery")
-        self.checkButton.setTitle("Check Flash", for: .normal)
-    }
-    
-    func setVibrationVC() {
-        self.nameLabel.text = "Vibration"
-        self.subtitle.text = "Tap to check Vibration"
-        self.iconImage.image = UIImage(named: "vibrate")
-        self.checkButton.setTitle("Check to Vibrate", for: .normal)
-    }
-    
-    func setSIMCardVC() {
-        self.nameLabel.text = "Sim Card"
-        self.subtitle.text = "Tap to check whether Sim Card is present or not"
-        self.iconImage.image = UIImage(named: "sim")
-        self.checkButton.setTitle("Check Sim Card", for: .normal)
-    }
-    
     func checkSimCardAvailability() {
         let networkInfo = CTTelephonyNetworkInfo()
-        guard let info = networkInfo.subscriberCellularProvider else {return}
         self.nextTest = Tests.getNextTest(next: .wifi, run: self.runAllTests)
         self.status = .failed
+        
+        guard let info = networkInfo.subscriberCellularProvider else {
+            if let vc = PopUpVC.newInstance(state: self.status, source: .simCard, next: self.nextTest) as? PopUpVC {
+                vc.delegate = self
+                vc.modalPresentationStyle = .custom
+                self.present(vc, animated: true, completion:  nil)
+            }
+            return
+        }
         
         if info.isoCountryCode != nil {
             self.status = .success
@@ -385,47 +328,6 @@ extension BatteryCheckVC {
         }
     }
     
-    func setFrontCameraVC() {
-        self.nameLabel.text = "Front Camera"
-        self.subtitle.text = "Tap to check whether Front Camera is working or not"
-        self.iconImage.image = UIImage(named: "front")
-        self.checkButton.setTitle("Check Front Camera", for: .normal)
-    }
-    func setRearCameraVC() {
-        self.nameLabel.text = "Rear Camera"
-        self.subtitle.text = "Tap to check whether Rear Camera is working or not"
-        self.iconImage.image = UIImage(named: "rear")
-        self.checkButton.setTitle("Check Rear Camera", for: .normal)
-    }
-    func setTouchScreenVC() {
-        self.nameLabel.text = "Touch Screen"
-        self.subtitle.text = """
-        On the next screen, drag your finger over the screen until the whole
-        content turns green. \n
-        You have 20 seconds to complete the test
-        """
-        self.iconImage.image = UIImage(named: "touch")
-        self.checkButton.setTitle("Run Touch Test", for: .normal)
-    }
-    func setShakeGestureScreen() {
-        self.nameLabel.text = "Shake Gesture"
-        self.subtitle.text = "Tap to check whether Shake Gesture is working or not"
-        self.iconImage.image = UIImage(named: "touch")
-        self.checkButton.setTitle("Check Sensor", for: .normal)
-    }
-    func setWifiVC() {
-        self.nameLabel.text = "WiFi"
-        self.subtitle.text = "Tap to check whether phone is connected to WiFi or not"
-        self.iconImage.image = UIImage(named: "wifi")
-        self.checkButton.setTitle("Check WiFi Connection", for: .normal)
-    }
-    
-    func setSpeakerVC() {
-        self.nameLabel.text = "Speaker Test"
-        self.subtitle.text = "Tap on Check Speakers button to hear the sound"
-        self.iconImage.image = UIImage(named: "speaker")
-        self.checkButton.setTitle("Check Speakers", for: .normal)
-    }
     
     func setMicrophoneVC() {
         var vcNext = MicrophoneCheckVC.newInstance(nextTest: .none)
@@ -437,19 +339,6 @@ extension BatteryCheckVC {
         self.navigationController?.pushViewController(vcNext, animated: true)
     }
     
-    func setHeadphonesVC() {
-        self.nameLabel.text = "Headphone Jack test"
-        self.subtitle.text = "Plugin the headphones and wait for the notification. If no notification is shown, headphone jack might be faulty"
-        self.iconImage.image = UIImage(named: "headphone")
-        self.checkButton.setTitle("Check Headphone", for: .normal)
-    }
-    
-    func setButtonsVC() {
-        self.nameLabel.text = "Buttons test"
-        self.subtitle.text = "Press volume and power button one by one to complete the test"
-        self.iconImage.image = UIImage(named: "headphone")
-        self.checkButton.setTitle("<<Checkbox needs to be added>>", for: .normal)
-    }
     
     func playSound() {
         guard let url = Bundle.main.url(forResource: "testtone", withExtension: "mp3") else { return }
@@ -497,10 +386,18 @@ extension BatteryCheckVC {
     
     
     func switchOnFlashLight() {
-        guard let device = AVCaptureDevice.default(for: AVMediaType.video) else { return }
-        guard device.hasTorch else { return }
         self.nextTest = Tests.getNextTest(next: .gyroscope, run: self.runAllTests)
-        do {
+
+        guard let device = AVCaptureDevice.default(for: AVMediaType.video) else {
+            if let vc = PopUpVC.newInstance(state: .error, source: .flash, next: self.nextTest) as? PopUpVC {
+                vc.delegate = self
+                vc.modalPresentationStyle = .custom
+                self.present(vc, animated: true, completion:  nil)
+            }
+            return
+        }
+        guard device.hasTorch else { return }
+               do {
             try device.lockForConfiguration()
             
             if (device.torchMode == AVCaptureDevice.TorchMode.on) {
@@ -545,24 +442,51 @@ extension BatteryCheckVC {
         Tests.createAlert(title: "Vibration Check", message: "Did you feel the vibration?", this: self, source: .vibration)
     }
     
+    private func startTimer() {
+        self.stopTimer()
+        timer = Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(self.showAlert), userInfo: nil, repeats: true)
+    }
+    
+    private func stopTimer() {
+        timer?.invalidate()
+    }
+    
+    @objc func showAlert() {
+           self.stopTimer()
+           let alert = UIAlertController(title: "Timeout!", message: "We could not detect any sensation. Do you want to try again?", preferredStyle: .alert)
+           let yesAction = UIAlertAction(title: "Yes", style: UIAlertAction.Style.default) {
+               UIAlertAction in
+               self.startTimer()
+           }
+           let noAction = UIAlertAction(title: "No", style: UIAlertAction.Style.default) {
+               UIAlertAction in
+               let controller = self.navigationController?.viewControllers[0]
+                self.navigationController?.popToViewController(controller!, animated: true)
+           }
+           alert.addAction(yesAction)
+           alert.addAction(noAction)
+           self.present(alert, animated: true, completion: nil)
+    }
     func checkProximitySensor() {
+        self.startTimer()
         let device = UIDevice.current
         device.isProximityMonitoringEnabled = true
         if device.isProximityMonitoringEnabled {
             NotificationCenter.default.addObserver(self, selector: Selector(("proximityChanged")), name: NSNotification.Name(rawValue: "UIDeviceProximityStateDidChangeNotification"), object: device)
         } else {
             let alert = UIAlertController(title: "Alert", message: "Wave your hand to check if Proximity Sensor is working or not", preferredStyle: UIAlertController.Style.alert)
-            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
+            alert.addAction(UIAlertAction(title: "Okay", style: UIAlertAction.Style.default, handler: nil))
             self.present(alert, animated: true, completion: nil)
         }
     }
     func proximityChanged(notification: NSNotification) {
         if let device = notification.object as? UIDevice {
             print("\(device) detected!")
-            let vc = PopUpVC.newInstance(state: .success, source: .proximitySensor, next: .touchScreen) as! PopUpVC
-            vc.delegate = self
-            vc.modalPresentationStyle = .custom
-            self.present(vc, animated: true, completion:  nil)
+            if let vc = PopUpVC.newInstance(state: .success, source: .proximitySensor, next: .none) as? PopUpVC {
+                vc.delegate = self
+                vc.modalPresentationStyle = .custom
+                self.present(vc, animated: true, completion:  nil)
+            }
         }
     }
     
@@ -623,5 +547,104 @@ extension BatteryCheckVC {
     func popupNextTest(check nextTestInQueue: testNames) {
         self.sourceTest = nextTestInQueue
         self.setupVC(key: self.sourceTest)
+    }
+}
+
+// ---------------------------------SetupVC----------------------------------
+
+extension BatteryCheckVC {
+    func setupVC(key: testNames) {
+        switch key {
+        case .charging:
+            self.setBatteryVC()
+        case .flash:
+            self.setFlashVC()
+        case .vibration:
+            self.setVibrationVC()
+        case .simCard:
+            self.setSIMCardVC()
+        case .frontCamera:
+            self.setFrontCameraVC()
+        case .rearCamera:
+            self.setRearCameraVC()
+        case .shakeGesture:
+            self.setShakeGestureScreen()
+        case .touchScreen:
+            self.setTouchScreenVC()
+        case .display:
+            self.setDisplayScreenVC()
+        case .wifi:
+            self.setWifiVC()
+        case .speaker:
+            self.setSpeakerVC()
+        case .microphone:
+            self.setMicrophoneVC()
+        case .headphones:
+            self.setHeadphonesVC()
+        case .buttons:
+            self.setButtonsVC()
+        case .proximitySensor:
+            self.setProximitySensorVC()
+        case .gyroscope:
+            Tests.allTests(key: .gyroscope, this: self.navigationController, runAllTests: self.runAllTests)
+        default:
+            break
+        }
+    }
+    
+    func setBatteryVC() {
+        Setups.setupVCScreen(this: self, name: StringConstants.BATTERY["name"] as! String, subtitle: StringConstants.BATTERY["subtitle"] as! String, image: StringConstants.BATTERY["image"] as! String, button: StringConstants.BATTERY["button"] as! String);
+    }
+    
+    func setFlashVC() {
+        Setups.setupVCScreen(this: self, name: StringConstants.FLASH["name"] as! String, subtitle: StringConstants.FLASH["subtitle"] as! String, image: StringConstants.FLASH["image"] as! String, button: StringConstants.FLASH["button"] as! String);
+    }
+    
+    func setVibrationVC() {
+        Setups.setupVCScreen(this: self, name: StringConstants.VIBRATE["name"] as! String, subtitle: StringConstants.VIBRATE["subtitle"] as! String, image: StringConstants.VIBRATE["image"] as! String, button: StringConstants.VIBRATE["button"] as! String);
+    }
+    
+    func setSIMCardVC() {
+        Setups.setupVCScreen(this: self, name: StringConstants.SIMCARD["name"] as! String, subtitle: StringConstants.SIMCARD["subtitle"] as! String, image: StringConstants.SIMCARD["image"] as! String, button: StringConstants.SIMCARD["button"] as! String);
+    }
+    
+    func setFrontCameraVC() {
+        Setups.setupVCScreen(this: self, name: StringConstants.FRONTCAMERA["name"] as! String, subtitle: StringConstants.FRONTCAMERA["subtitle"] as! String, image: StringConstants.FRONTCAMERA["image"] as! String, button: StringConstants.FRONTCAMERA["button"] as! String);
+    }
+    
+    func setRearCameraVC() {
+        Setups.setupVCScreen(this: self, name: StringConstants.REARCAMERA["name"] as! String, subtitle: StringConstants.REARCAMERA["subtitle"] as! String, image: StringConstants.REARCAMERA["image"] as! String, button: StringConstants.REARCAMERA["button"] as! String);
+    }
+    
+    func setShakeGestureScreen() {
+        Setups.setupVCScreen(this: self, name: StringConstants.SHAKE["name"] as! String, subtitle: StringConstants.SHAKE["subtitle"] as! String, image: StringConstants.SHAKE["image"] as! String, button: StringConstants.SHAKE["button"] as! String);
+    }
+    
+    func setTouchScreenVC() {
+        Setups.setupVCScreen(this: self, name: StringConstants.TOUCHSCREEN["name"] as! String, subtitle: StringConstants.TOUCHSCREEN["subtitle"] as! String, image: StringConstants.TOUCHSCREEN["image"] as! String, button: StringConstants.TOUCHSCREEN["button"] as! String);
+    }
+    
+    func setDisplayScreenVC() {
+        Setups.setupVCScreen(this: self, name: StringConstants.DISPLAY["name"] as! String, subtitle: StringConstants.DISPLAY["subtitle"] as! String, image: StringConstants.DISPLAY["image"] as! String, button: StringConstants.DISPLAY["button"] as! String);
+    }
+    
+    func setWifiVC() {
+        Setups.setupVCScreen(this: self, name: StringConstants.WIFI["name"] as! String, subtitle: StringConstants.WIFI["subtitle"] as! String, image: StringConstants.WIFI["image"] as! String, button: StringConstants.WIFI["button"] as! String);
+    }
+    
+    func setSpeakerVC() {
+        Setups.setupVCScreen(this: self, name: StringConstants.SPEAKER["name"] as! String, subtitle: StringConstants.SPEAKER["subtitle"] as! String, image: StringConstants.SPEAKER["image"] as! String, button: StringConstants.SPEAKER["button"] as! String);
+    }
+    
+    func setHeadphonesVC() {
+        Setups.setupVCScreen(this: self, name: StringConstants.HEADPHONES["name"] as! String, subtitle: StringConstants.HEADPHONES["subtitle"] as! String, image: StringConstants.HEADPHONES["image"] as! String, button: StringConstants.HEADPHONES["button"] as! String);
+    }
+    
+    func setButtonsVC() {
+        Setups.setupVCScreen(this: self, name: StringConstants.BUTTONS["name"] as! String, subtitle: StringConstants.BUTTONS["subtitle"] as! String, image: StringConstants.BUTTONS["image"] as! String, button: StringConstants.BUTTONS["button"] as! String);
+    }
+    
+    func setProximitySensorVC() {
+        Setups.setupVCScreen(this: self, name: StringConstants.PROXIMITY["name"] as! String, subtitle: StringConstants.PROXIMITY["subtitle"] as! String, image: StringConstants.PROXIMITY["image"] as! String, button: StringConstants.PROXIMITY["button"] as! String);
     }
 }

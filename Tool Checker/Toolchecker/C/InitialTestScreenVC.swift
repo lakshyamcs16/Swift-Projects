@@ -77,7 +77,7 @@ extension InitialTestScreenVC: UICollectionViewDataSource, UICollectionViewDeleg
             let vc = SingleTestListVC.newInstance()
             self.navigationController?.pushViewController(vc, animated: true)
         case .runAllTest:
-            Tests.allTests(key: .speaker, this: self.navigationController!, runAllTests: true)
+            Tests.allTests(key: .simCard, this: self.navigationController!, runAllTests: true)
             break
         case .testResults:
             break
