@@ -310,7 +310,7 @@ extension BatteryCheckVC {
         if let vc = PopUpVC.newInstance(state: self.status, source: .simCard, next: self.nextTest) as? PopUpVC {
             vc.delegate = self
             vc.modalPresentationStyle = .custom
-            self.present(vc, animated: true, completion:  nil)
+            self.present(vc, animated: false, completion:  nil)
         }
     }
     
@@ -346,28 +346,27 @@ extension BatteryCheckVC {
         do {
             try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
             try AVAudioSession.sharedInstance().setActive(true)            
-            let player = try AVAudioPlayer(contentsOf: url)
-            
-            player.play()
-            
-            self.nextTest = Tests.getNextTest(next: .microphone, run: self.runAllTests)
-            
-            if self.nextTest == .none {
-                self.navigationController?.popViewController(animated: true)
-                return
-            }
-            
+            player = try AVAudioPlayer(contentsOf: url, fileTypeHint: AVFileType.mp3.rawValue)
+            player?.play()
+//
+//            self.nextTest = Tests.getNextTest(next: .microphone, run: self.runAllTests)
+//
+//            if self.nextTest == .none {
+//                self.navigationController?.popViewController(animated: true)
+//                return
+//            }
+
             let alert = UIAlertController(title: "Speaker Test", message: "Did you hear the sound?", preferredStyle: .alert)
-                let yesAction = UIAlertAction(title: "Yes", style: .default) {
-                    UIAlertAction in
+                let yesAction = UIAlertAction(title: "Yes", style: .default) { UIAlertAction in
+                    self.player?.stop()
                     if let vc = PopUpVC.newInstance(state: .success, source: .speaker, next: self.nextTest) as? PopUpVC {
                         vc.delegate = self
                         vc.modalPresentationStyle = .custom
                         self.present(vc, animated: true, completion: nil)
                     }
                 }
-                let noAction = UIAlertAction(title: "No", style: .default) {
-                    UIAlertAction in
+                let noAction = UIAlertAction(title: "No", style: .default) { UIAlertAction in
+                    self.player?.stop()
                     if let vc = PopUpVC.newInstance(state: .failed, source: .speaker, next: self.nextTest) as? PopUpVC {
                        vc.delegate = self
                        vc.modalPresentationStyle = .custom
@@ -379,6 +378,7 @@ extension BatteryCheckVC {
                 self.present(alert, animated: true, completion: nil)
             
         } catch let error {
+            print("hi")
             print(error.localizedDescription)
         }
     }
@@ -460,9 +460,8 @@ extension BatteryCheckVC {
            }
            let noAction = UIAlertAction(title: "No", style: UIAlertAction.Style.default) {
                UIAlertAction in
-               let controller = self.navigationController?.viewControllers[0]
-                self.navigationController?.popToViewController(controller!, animated: true)
-           }
+            self.navigationController?.popViewController(animated: true)
+        }
            alert.addAction(yesAction)
            alert.addAction(noAction)
            self.present(alert, animated: true, completion: nil)
@@ -475,7 +474,7 @@ extension BatteryCheckVC {
             NotificationCenter.default.addObserver(self, selector: Selector(("proximityChanged")), name: NSNotification.Name(rawValue: "UIDeviceProximityStateDidChangeNotification"), object: device)
         } else {
             let alert = UIAlertController(title: "Alert", message: "Wave your hand to check if Proximity Sensor is working or not", preferredStyle: UIAlertController.Style.alert)
-            alert.addAction(UIAlertAction(title: "Okay", style: UIAlertAction.Style.default, handler: nil))
+            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
             self.present(alert, animated: true, completion: nil)
         }
     }

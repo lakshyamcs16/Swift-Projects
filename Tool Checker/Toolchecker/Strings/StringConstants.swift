@@ -14,7 +14,7 @@ class StringConstants {
         "name": "Proximity Sensor",
         "subtitle": """
                     Hold the device as you normally would while speaking
-                    on the phone, or simplay bring your hand over it.
+                    on the phone, or simply bring your hand over it.
                     \n
                     If result pop-up does not appear, tap the Check Sensor button.
                     """,
