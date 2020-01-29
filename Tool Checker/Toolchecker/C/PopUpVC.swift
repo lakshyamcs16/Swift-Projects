@@ -115,13 +115,6 @@ class PopUpVC: UIViewController {
             } else {
                 
             }
-        case .earpiece:
-            if state == .success {
-                self.statusLabel.text = ""
-                self.statusSubLabel.isHidden = true
-            } else {
-                
-            }
         case .speaker:
             self.statusImage = UIImageView(image: UIImage(named: "speaker"))
             if state == .success {

@@ -16,7 +16,6 @@ enum testNames {
     case frontCamera
     case vibration
     case touchScreen
-    case earpiece
     case speaker
     case microphone
     case headphones
@@ -34,7 +33,7 @@ class RunAllTestsVM {
     var imagesArray:[String] = []
     
     init() {
-        self.array = [.simCard, .wifi,.charging, .display,.rearCamera,.frontCamera,.vibration,.touchScreen,.earpiece,.speaker,.microphone,.headphones, .flash, .gyroscope, .buttons, .proximitySensor]
-        self.imagesArray = ["sim", "wifi", "battery", "display", "rear", "front", "vibrate", "touch", "earpiece", "speaker", "microphone", "headphone", "flash", "gyroscope", "button", "proximity"]
+        self.array = [.simCard, .wifi,.charging, .display,.rearCamera,.frontCamera,.vibration,.touchScreen,.speaker,.microphone,.headphones, .flash, .gyroscope, .buttons, .proximitySensor]
+        self.imagesArray = ["sim", "wifi", "battery", "display", "rear", "front", "vibrate", "touch", "speaker", "microphone", "headphone", "flash", "gyroscope", "button", "proximity"]
     }
 }

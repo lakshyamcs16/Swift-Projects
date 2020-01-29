@@ -26,7 +26,7 @@ class StringConstants {
         "name" : "Display",
         "subtitle": """
                     The next screens will display a series of color
-                    (green, red, and blue,. Look carefully for dead or
+                    (green, red, and blue). Look carefully for dead or
                     stuck pixels or any discoloration.
                     \n
                     Tap the screen when you're ready for the next color.
@@ -54,7 +54,7 @@ class StringConstants {
     ]
     
     static let SIMCARD : [String: Any] = [
-        "name" : "Display",
+        "name" : "SIM Card",
         "subtitle": """
                     Please insert a SIM Card and press the Check SIM Card button.
                     """,
@@ -77,7 +77,7 @@ class StringConstants {
         "name": "Touch Screen",
         "subtitle": """
                     On the next screen, drag your finger over the screen until the whole
-                    content turns green. \n
+                    content turns red. \n
                     You have 20 seconds to complete the test
                     """,
         "image": "touch",
@@ -134,6 +134,6 @@ class StringConstants {
                      If result pop-up does not appear, tap the Check Connection button.
                      """,
         "image":  "battery",
-        "button": "Check Connection"
+        "button": "Check charging jack"
     ]
 }
