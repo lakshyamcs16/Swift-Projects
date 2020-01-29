@@ -128,9 +128,6 @@ class BatteryCheckVC: UIViewController, UIImagePickerControllerDelegate, UINavig
             self.checkHeadphones()
         case .proximitySensor:
             self.checkProximitySensor()
-        case .buttons:
-            self.listenVolumeButton()
-            self.applicationDidEnterBackground()
         default:
             break
         }
@@ -184,21 +181,6 @@ extension BatteryCheckVC {
         self.navigationController?.pushViewController(TouchViewController.newInstance(runAllTests: self.runAllTests), animated: true)
     }
     
-    func listenVolumeButton() {
-        let audioSession = AVAudioSession()
-        do {
-            try audioSession.setActive(true)
-        } catch {
-            print("some error")
-        }
-        audioSession.addObserver(self, forKeyPath: "outputVolume", options: NSKeyValueObservingOptions.new, context: nil)
-    }
-    
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        if keyPath == "outputVolume" {
-            print("got in here")
-        }
-    }
     
     func checkHeadphones() {
         let session = AVAudioSession.sharedInstance()
@@ -535,19 +517,6 @@ extension BatteryCheckVC {
         
     }
     
-    func applicationDidEnterBackground() {
-        if (DidUserPressLockButton()) {
-            print("User pressed lock button")
-        } else {
-            print("user pressed home button")
-        }
-    }
-
-    private func DidUserPressLockButton() -> Bool {
-        let oldBrightness = UIScreen.main.brightness
-        UIScreen.main.brightness = oldBrightness + (oldBrightness <= 0.01 ? (0.01) : (-0.01))
-        return oldBrightness != UIScreen.main.brightness
-    }
 }
 
 extension BatteryCheckVC {
@@ -589,7 +558,7 @@ extension BatteryCheckVC {
         case .headphones:
             self.setHeadphonesVC()
         case .buttons:
-            self.setButtonsVC()
+            Tests.allTests(key: .buttons, this: self.navigationController, runAllTests: self.runAllTests)
         case .proximitySensor:
             self.setProximitySensorVC()
         case .gyroscope:
@@ -645,10 +614,6 @@ extension BatteryCheckVC {
     
     func setHeadphonesVC() {
         Setups.setupVCScreen(this: self, name: StringConstants.HEADPHONES["name"] as! String, subtitle: StringConstants.HEADPHONES["subtitle"] as! String, image: StringConstants.HEADPHONES["image"] as! String, button: StringConstants.HEADPHONES["button"] as! String);
-    }
-    
-    func setButtonsVC() {
-        Setups.setupVCScreen(this: self, name: StringConstants.BUTTONS["name"] as! String, subtitle: StringConstants.BUTTONS["subtitle"] as! String, image: StringConstants.BUTTONS["image"] as! String, button: StringConstants.BUTTONS["button"] as! String);
     }
     
     func setProximitySensorVC() {

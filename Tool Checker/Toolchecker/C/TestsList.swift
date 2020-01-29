@@ -53,7 +53,12 @@ class Tests {
             let vc = BatteryCheckVC.newInstance(sourceTest: .shakeGesture, runAll: runAllTests)
             this?.pushViewController(vc, animated: true)
         case .buttons:
-            let vc = BatteryCheckVC.newInstance(sourceTest: .buttons, runAll: runAllTests)
+            var nextTest: testNames = .none
+            
+            if runAllTests {
+                nextTest = .proximitySensor
+            }
+            let vc = ButtonsVC.newInstance(nextTest: nextTest)
             this?.pushViewController(vc, animated: true)
         case .gyroscope:
             var nextTest: testNames = .none
