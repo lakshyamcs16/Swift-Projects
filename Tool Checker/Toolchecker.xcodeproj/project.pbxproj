@@ -13,7 +13,6 @@
 		1B59738F23B5684F00F9790D /* GridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B59738E23B5684F00F9790D /* GridView.swift */; };
 		1B59739123B5688300F9790D /* TouchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B59739023B5688300F9790D /* TouchViewController.swift */; };
 		1BCD3A1C23CA751300CEC8C7 /* MicrophoneCheckVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BCD3A1B23CA751300CEC8C7 /* MicrophoneCheckVC.swift */; };
-		1BDD46C523DE2D530043170F /* testtone.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 1BDD46C423DE2D530043170F /* testtone.mp3 */; };
 		1BF1029E23DC2461005D8B74 /* Setups.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BF1029D23DC2461005D8B74 /* Setups.swift */; };
 		1BF102A123DC2554005D8B74 /* StringConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BF102A023DC2554005D8B74 /* StringConstants.swift */; };
 		438743CF23B08225005C6072 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 438743CE23B08225005C6072 /* AppDelegate.swift */; };
@@ -35,6 +34,7 @@
 		43875C7623C742F50052DB5B /* GyroscopeHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43875C7523C742F50052DB5B /* GyroscopeHeaderCell.swift */; };
 		43875C7823C8569F0052DB5B /* PopUpVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43875C7723C8569F0052DB5B /* PopUpVC.swift */; };
 		43875C7F23CBAB060052DB5B /* Xcode.app in Frameworks */ = {isa = PBXBuildFile; fileRef = 43875C7E23CBAB060052DB5B /* Xcode.app */; };
+		438BDA2B23E2B91F00650CCF /* testtone.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 438BDA2A23E2B91F00650CCF /* testtone.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,7 +61,6 @@
 		1B59738E23B5684F00F9790D /* GridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridView.swift; sourceTree = "<group>"; };
 		1B59739023B5688300F9790D /* TouchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchViewController.swift; sourceTree = "<group>"; };
 		1BCD3A1B23CA751300CEC8C7 /* MicrophoneCheckVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicrophoneCheckVC.swift; sourceTree = "<group>"; };
-		1BDD46C423DE2D530043170F /* testtone.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = testtone.mp3; path = ../../../../testtone.mp3; sourceTree = "<group>"; };
 		1BF1029D23DC2461005D8B74 /* Setups.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Setups.swift; sourceTree = "<group>"; };
 		1BF102A023DC2554005D8B74 /* StringConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringConstants.swift; sourceTree = "<group>"; };
 		438743CB23B08225005C6072 /* Toolchecker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Toolchecker.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -89,6 +88,7 @@
 		43875C7523C742F50052DB5B /* GyroscopeHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GyroscopeHeaderCell.swift; sourceTree = "<group>"; };
 		43875C7723C8569F0052DB5B /* PopUpVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopUpVC.swift; sourceTree = "<group>"; };
 		43875C7E23CBAB060052DB5B /* Xcode.app */ = {isa = PBXFileReference; lastKnownFileType = wrapper.application; name = Xcode.app; path = ../../../../../../Applications/Xcode.app; sourceTree = "<group>"; };
+		438BDA2A23E2B91F00650CCF /* testtone.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = testtone.mp3; path = ../../../../../testtone.mp3; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -183,7 +183,7 @@
 		4387440023B090FA005C6072 /* C */ = {
 			isa = PBXGroup;
 			children = (
-				1BDD46C423DE2D530043170F /* testtone.mp3 */,
+				438BDA2A23E2B91F00650CCF /* testtone.mp3 */,
 				1B0FE0CD23E222FA00D2D9B7 /* ButtonsVC.swift */,
 				438743FC23B08FF3005C6072 /* InitialTestScreenVC.swift */,
 				4387440B23B367C3005C6072 /* SingleTestListVC.swift */,
@@ -334,7 +334,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1BDD46C523DE2D530043170F /* testtone.mp3 in Resources */,
+				438BDA2B23E2B91F00650CCF /* testtone.mp3 in Resources */,
 				438743D923B08227005C6072 /* LaunchScreen.storyboard in Resources */,
 				438743D623B08227005C6072 /* Assets.xcassets in Resources */,
 				438743D423B08225005C6072 /* Main.storyboard in Resources */,
@@ -561,14 +561,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = STGLXT4654;
+				DEVELOPMENT_TEAM = 3525CH98VP;
 				INFOPLIST_FILE = Toolchecker/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "vishalbhatia017-gmail.com.Toolchecker";
+				PRODUCT_BUNDLE_IDENTIFIER = "mohit.jethwa-gmail.com.Toolchecker";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.2;
@@ -582,14 +582,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = STGLXT4654;
+				DEVELOPMENT_TEAM = 3525CH98VP;
 				INFOPLIST_FILE = Toolchecker/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "vishalbhatia017-gmail.com.Toolchecker";
+				PRODUCT_BUNDLE_IDENTIFIER = "mohit.jethwa-gmail.com.Toolchecker";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.2;

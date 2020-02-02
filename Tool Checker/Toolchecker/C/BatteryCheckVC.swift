@@ -9,6 +9,18 @@
 /*
  Bugs/Enhancements:
  1. Run all tests: when back button is pressed, it should take to the beginning of the previous test in all case
+ 
+ 
+ Single Test:
+ 1. speaker - timer is not updated when record is pressed, app carshing on play btn
+ 2. front camera- opening rear, no pop up
+ 3. rear camera - no pop up
+ 4. vibration - not working
+ 5. gyroscope values notupdated
+ 6. buttons - not working
+ 7. proximity sensor-app carshing
+ 8. charging not working
+ 9. shake gesture - not working
  */
 
 import UIKit
