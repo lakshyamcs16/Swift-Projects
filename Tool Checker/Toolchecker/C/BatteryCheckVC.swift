@@ -104,11 +104,7 @@ class BatteryCheckVC: UIViewController, UIImagePickerControllerDelegate, UINavig
                 return
             }
             self.openCamera()
-            if let vc = PopUpVC.newInstance(state: .success, source: .frontCamera, next: nextTest) as? PopUpVC {
-                vc.delegate = self
-                vc.modalPresentationStyle = .custom
-                self.present(vc, animated: true, completion:  nil)
-            }
+            
         case .rearCamera:
             self.nextTest = Tests.getNextTest(next: .frontCamera, run: self.runAllTests)
 
@@ -121,11 +117,7 @@ class BatteryCheckVC: UIViewController, UIImagePickerControllerDelegate, UINavig
                 return;
             }
             self.openCamera()
-            if let vc = PopUpVC.newInstance(state: .success, source: .rearCamera, next: nextTest) as? PopUpVC {
-                vc.delegate = self
-                vc.modalPresentationStyle = .custom
-                self.present(vc, animated: true, completion:  nil)
-            }
+            
         case .shakeGesture:
             self.checkShakeGesture()
         case .display:
@@ -154,6 +146,11 @@ class BatteryCheckVC: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        if let vc = PopUpVC.newInstance(state: .success, source: .rearCamera, next: self.nextTest) as? PopUpVC {
+            vc.delegate = self
+            vc.modalPresentationStyle = .custom
+            self.present(vc, animated: true, completion:  nil)
+        }
         imagePicker.dismiss(animated: true, completion: nil)
     }
     
@@ -432,12 +429,11 @@ extension BatteryCheckVC {
     }
     
     func switchOnVibration() {
-        let generator = UIImpactFeedbackGenerator(style: .heavy)
-        generator.impactOccurred()
-        
-        self.nextTest = Tests.getNextTest(next: .touchScreen, run: self.runAllTests)
-        
-        Tests.createAlert(title: "Vibration Check", message: "Did you feel the vibration?", this: self, source: .vibration)
+           self.nextTest = Tests.getNextTest(next: .touchScreen, run: self.runAllTests)
+        AudioServicesPlayAlertSoundWithCompletion(SystemSoundID(kSystemSoundID_Vibrate)) {
+         Tests.createAlert(title: "Vibration Check", message: "Did you feel the vibration?", this: self, source: .vibration)
+        }
+       
     }
     
     private func startTimer() {
@@ -569,8 +565,6 @@ extension BatteryCheckVC {
             self.setMicrophoneVC()
         case .headphones:
             self.setHeadphonesVC()
-        case .buttons:
-            Tests.allTests(key: .buttons, this: self.navigationController, runAllTests: self.runAllTests)
         case .proximitySensor:
             self.setProximitySensorVC()
         case .gyroscope:

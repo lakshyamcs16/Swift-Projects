@@ -178,15 +178,6 @@ class PopUpVC: UIViewController {
             } else {
                 
             }
-        case .buttons:
-            if state == .success {
-                self.statusLabel.text = "Buttons are working"
-                self.statusSubLabel.isHidden = true
-            } else {
-                self.statusLabel.text = "Buttons are not working"
-                self.statusSubLabel.isHidden = false
-                self.statusSubLabel.text = "Due to some technical reasons, we are unable to check Proximity Sensor. Please try after some time."
-            }
         case .proximitySensor:
             if state == .success {
                 self.statusLabel.text = "Proximity Sensor working"

@@ -119,13 +119,6 @@ class StringConstants {
         "button": "Check Headphone"
     ]
     
-    static let BUTTONS: [String: Any] = [
-        "name":  "Buttons test",
-        "subtitle":  "Press volume and power button one by one to complete the test",
-        "image":  "button",
-        "button": "Checkbox needs to be added"
-    ]
-    
     static let BATTERY: [String: Any] = [
         "name":  "Charging",
         "subtitle":  """
