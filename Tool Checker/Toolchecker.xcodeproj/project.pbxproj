@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1B0FE0CE23E222FD00D2D9B7 /* ButtonsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0FE0CD23E222FA00D2D9B7 /* ButtonsVC.swift */; };
 		1B30758C23D391430014C300 /* TestsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B30758B23D391430014C300 /* TestsList.swift */; };
 		1B59738523B545A300F9790D /* DisplayCheckViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B59738423B545A300F9790D /* DisplayCheckViewController.swift */; };
 		1B59738F23B5684F00F9790D /* GridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B59738E23B5684F00F9790D /* GridView.swift */; };
@@ -55,7 +54,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		1B0FE0CD23E222FA00D2D9B7 /* ButtonsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonsVC.swift; sourceTree = "<group>"; };
 		1B30758B23D391430014C300 /* TestsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestsList.swift; sourceTree = "<group>"; };
 		1B59738423B545A300F9790D /* DisplayCheckViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayCheckViewController.swift; sourceTree = "<group>"; };
 		1B59738E23B5684F00F9790D /* GridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridView.swift; sourceTree = "<group>"; };
@@ -184,7 +182,6 @@
 			isa = PBXGroup;
 			children = (
 				1BDD46C423DE2D530043170F /* testtone.mp3 */,
-				1B0FE0CD23E222FA00D2D9B7 /* ButtonsVC.swift */,
 				438743FC23B08FF3005C6072 /* InitialTestScreenVC.swift */,
 				4387440B23B367C3005C6072 /* SingleTestListVC.swift */,
 				1B30758B23D391430014C300 /* TestsList.swift */,
@@ -365,7 +362,6 @@
 				43875C7823C8569F0052DB5B /* PopUpVC.swift in Sources */,
 				4387440A23B1D429005C6072 /* BatteryCheckVC.swift in Sources */,
 				438743CF23B08225005C6072 /* AppDelegate.swift in Sources */,
-				1B0FE0CE23E222FD00D2D9B7 /* ButtonsVC.swift in Sources */,
 				4387440623B0B00E005C6072 /* RunAllTestsVM.swift in Sources */,
 				1B59738523B545A300F9790D /* DisplayCheckViewController.swift in Sources */,
 				4387441023B368E8005C6072 /* SingleTestListVM.swift in Sources */,
