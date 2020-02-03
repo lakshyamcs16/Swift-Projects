@@ -2,21 +2,11 @@
 //  GameScene.swift
 //  Game
 //
-//  Created by Aashna Narula on 03/02/20.
-//  Copyright © 2020 Aashna Narula. All rights reserved.
+//  Created by Aashna & Lakshya on 03/02/20.
+//  Copyright © 2020 Aashna & Lakshya. All rights reserved.
 //
 
-import SpriteKit
 import GameplayKit
-
-//
-//  FirstScene.swift
-//  Shapify
-//
-//  Created by Aashna Narula on 20.03.18.
-//  Copyright © 2018 aashnanarula. All rights reserved.
-//
-
 import SpriteKit
 import Foundation
 import GameKit
