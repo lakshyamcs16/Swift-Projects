@@ -63,17 +63,18 @@ extension GameScene {
     
     func drawDeck() {
         for (index, node) in deckNodes.enumerated() {
-            let name = logic?.deck[index]
-            self.deckNodesName[index] = name!
-            node.texture = SKTexture(imageNamed: name!)
+            guard let name = logic?.deck[index] else {return}
+            self.deckNodesName[index] = name
+            node.texture = SKTexture(imageNamed: name)
             node.xScale = 1.5
             node.yScale = 1.5
         }
     }
     
     func drawRightFigure() {
-        let name = logic?.rightFigureName
-        self.rightFigureNode?.texture = SKTexture(imageNamed: name!)
+        if let name = logic?.rightFigureName {
+            self.rightFigureNode?.texture = SKTexture(imageNamed: name)
+        }
     }
     
     func drawLives() {
@@ -240,11 +241,11 @@ extension GameScene {
             let action1 = SKAction.playSoundFileNamed("nextLevel.mp3", waitForCompletion: false)
             self.run(action1)
             let transition = SKTransition.crossFade(withDuration: 0)
-            let nextLevelScene = GameScene(fileNamed:"GameScene")
-            nextLevelScene!.level = self.level + 1
-            nextLevelScene!.lives = self.lives
-            nextLevelScene!.scaleMode = SKSceneScaleMode.aspectFill
-            self.scene!.view?.presentScene(nextLevelScene!, transition: transition)
+            guard let nextLevelScene = GameScene(fileNamed:"GameScene") else {return}
+            nextLevelScene.level = self.level + 1
+            nextLevelScene.lives = self.lives
+            nextLevelScene.scaleMode = SKSceneScaleMode.aspectFill
+            self.scene?.view?.presentScene(nextLevelScene, transition: transition)
         }
         self.run(SKAction.sequence([SKAction.wait(forDuration : 0.35), action ]))
         
@@ -260,9 +261,9 @@ extension GameScene {
             let position = touch.location(in: self)
             let node = self.atPoint(position)
             if node.name == "figure" {
-                let figure = node as? SKSpriteNode
-                let index = deckNodes.firstIndex(of: figure!)
-                self.logic?.userChoose(index: index!)
+                guard let figure = node as? SKSpriteNode else {return}
+                guard let index = deckNodes.firstIndex(of: figure) else {return}
+                self.logic?.userChoose(index: index)
             }
         }
     }
@@ -274,10 +275,10 @@ extension GameScene: ResetButtonDelegate {
         let action = SKAction.playSoundFileNamed("popSound.mp3", waitForCompletion: false)
         self.run(action)
         let transition = SKTransition.crossFade(withDuration: 0)
-        let scene1 = GameScene(fileNamed:"GameScene")
-        scene1!.level = level
-        scene1!.scaleMode = SKSceneScaleMode.aspectFill
-        self.scene!.view?.presentScene(scene1!, transition: transition)
+        guard let scene1 = GameScene(fileNamed:"GameScene") else {return}
+        scene1.level = level
+        scene1.scaleMode = SKSceneScaleMode.aspectFill
+        self.scene?.view?.presentScene(scene1, transition: transition)
     }
 }
 
