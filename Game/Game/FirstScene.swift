@@ -121,10 +121,9 @@ extension FirstScene: PlayButtonDelegate {
         let action = SKAction.playSoundFileNamed("popSound.mp3", waitForCompletion: false)
         self.run(action)
         let transition = SKTransition.crossFade(withDuration: 0)
-        let scene1 = GameScene(fileNamed:"GameScene")
-        scene1!.level = 1
-        scene1!.scaleMode = SKSceneScaleMode.aspectFill
-        self.scene!.view?.presentScene(scene1!, transition: transition)
-
+        guard let scene1 = GameScene(fileNamed:"GameScene") else {return}
+        scene1.level = 1
+        scene1.scaleMode = SKSceneScaleMode.aspectFill
+        self.scene?.view?.presentScene(scene1, transition: transition)
     }
 }
