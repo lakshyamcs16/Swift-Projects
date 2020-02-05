@@ -71,13 +71,13 @@ public class FirstScene: SKScene {
     {
         print(self.frame.height, self.frame.width)
         physicsWorld.gravity = CGVector.init(dx: 0, dy: 0)
-
+        
         let wait = SKAction.wait(forDuration:0.02)
         let action = SKAction.run {
             let point = CGPoint(x: self.lineWiseX, y: self.lineWiseY)
             self.createShape(at: point)
             self.lineWiseX = self.lineWiseX + 30
-            if(self.lineWiseX >= self.frame.width + 50)
+            if(self.lineWiseX >= self.frame.width)
             {
                 self.lineWiseX = 0
                 self.jumpedAhead = false
@@ -109,6 +109,7 @@ public class FirstScene: SKScene {
         shape.name = "textureFig"
         shape.size = CGSize(width:70, height: 70)
         shape.position = CGPoint(x: point.x, y: point.y)
+        shape.zPosition = 10
         let maxRadius = max(shape.frame.size.width/2, shape.frame.size.height/2)
         let interPersonSeparationConstant: CGFloat = 1.25
         shape.physicsBody = SKPhysicsBody(circleOfRadius: maxRadius*interPersonSeparationConstant)
@@ -121,9 +122,10 @@ extension FirstScene: PlayButtonDelegate {
         let action = SKAction.playSoundFileNamed("popSound.mp3", waitForCompletion: false)
         self.run(action)
         let transition = SKTransition.crossFade(withDuration: 0)
-        guard let scene1 = GameScene(fileNamed:"GameScene") else {return}
-        scene1.level = 1
-        scene1.scaleMode = SKSceneScaleMode.aspectFill
-        self.scene?.view?.presentScene(scene1, transition: transition)
+        let scene1 = GameScene(fileNamed:"GameScene")
+        scene1!.level = 1
+        scene1!.scaleMode = .aspectFill
+        self.scene!.view?.presentScene(scene1!, transition: transition)
+
     }
 }
