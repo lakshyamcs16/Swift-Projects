@@ -115,12 +115,6 @@ extension GameScene {
                 let action = SKAction.playSoundFileNamed("lose.mp3", waitForCompletion: false)
                 self.run(action)
         
-                self.enumerateChildNodes(withName: "//*") {
-                    node, stop in
-                    if node.name == "figure" {
-                        node.run(SKAction.fadeOut(withDuration: 0.01))
-                    }
-                }
                 let timeUp = SKLabelNode(fontNamed: "HelveticaNeue-Bold")
                 timeUp.text = "Time Up..Try Again 😭"
                 timeUp.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: timeUp.frame.width * 1.25 , height: timeUp.frame.height * 2.5))
@@ -151,7 +145,13 @@ extension GameScene {
                     button.alpha = 1
                 })
                 
-                //print("Game Over!!!")
+                self.enumerateChildNodes(withName: "//*") {
+                    node, stop in
+                    if node.name != "timeUp" || node.name != "deck"{
+                        node.alpha = 0.5
+                        node.isUserInteractionEnabled = true
+                    }
+                }
             }
             else {
                 if flag == 1 {

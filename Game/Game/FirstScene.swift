@@ -56,7 +56,7 @@ public class FirstScene: SKScene {
         let button = PlayButton()
         button.name = buttonNodeName
         button.delegate = self
-        button.position = CGPoint(x: self.frame.midX, y: 200)
+        button.position = CGPoint(x: self.frame.midX, y: self.frame.midY)
         button.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: button.frame.width * 2.25 , height: button.frame.height * 3.5))
         button.physicsBody?.isDynamic = false
         button.alpha = 0
