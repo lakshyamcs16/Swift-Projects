@@ -30,9 +30,20 @@ public class FirstScene: SKScene {
     var lineWiseX : CGFloat = 0
     var lineWiseY : CGFloat = 0
     var jumpedAhead = false
+    static var width: CGFloat = 0
+    static var height: CGFloat = 0
     
+    static func setDimenions(width: CGFloat, height: CGFloat) {
+        FirstScene.width = width
+        FirstScene.height = height
+    }
+    
+    static func getDimensions() -> CGPoint {
+        return CGPoint(x: FirstScene.width, y: FirstScene.height)
+    }
     
     public override func didMove(to view: SKView) {
+        FirstScene.setDimenions(width: self.frame.width, height: self.frame.height)
         let background = SKSpriteNode(imageNamed: "img.png")
         background.name = "background"
         background.setScale(2.8)
@@ -56,7 +67,7 @@ public class FirstScene: SKScene {
         let button = PlayButton()
         button.name = buttonNodeName
         button.delegate = self
-        button.position = CGPoint(x: self.frame.midX, y: self.frame.midY)
+        button.position = CGPoint(x: self.frame.midX, y: 200)
         button.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: button.frame.width * 2.25 , height: button.frame.height * 3.5))
         button.physicsBody?.isDynamic = false
         button.alpha = 0
@@ -124,7 +135,7 @@ extension FirstScene: PlayButtonDelegate {
         let transition = SKTransition.crossFade(withDuration: 0)
         let scene1 = GameScene(fileNamed:"GameScene")
         scene1!.level = 1
-        scene1!.scaleMode = .aspectFill
+        scene1!.scaleMode = .resizeFill
         self.scene!.view?.presentScene(scene1!, transition: transition)
 
     }

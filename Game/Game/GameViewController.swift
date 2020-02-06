@@ -28,11 +28,11 @@ class GameViewController: UIViewController {
             }
             
             view.ignoresSiblingOrder = true
-            //view.showsFields = true
-            //view.sizeToFit()
-            //view.showsPhysics = true
-            //view.showsFPS = true
-            //view.showsNodeCount = true
+            view.showsFields = true
+            view.sizeToFit()
+            view.showsPhysics = true
+            view.showsFPS = true
+            view.showsNodeCount = true
         }
     }
 

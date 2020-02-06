@@ -63,18 +63,18 @@ extension GameScene {
     
     func drawDeck() {
         for (index, node) in deckNodes.enumerated() {
-            guard let name = logic?.deck[index] else {return}
-            self.deckNodesName[index] = name
-            node.texture = SKTexture(imageNamed: name)
-            node.xScale = 1.5
-            node.yScale = 1.5
+            let name = logic?.deck[index]
+            self.deckNodesName[index] = name!
+            node.texture = SKTexture(imageNamed: name!)
+            node.xScale = 1.1
+            node.yScale = 1.1
+            
         }
     }
     
     func drawRightFigure() {
-        if let name = logic?.rightFigureName {
-            self.rightFigureNode?.texture = SKTexture(imageNamed: name)
-        }
+        let name = logic?.rightFigureName
+        self.rightFigureNode?.texture = SKTexture(imageNamed: name!)
     }
     
     func drawLives() {
@@ -109,12 +109,20 @@ extension GameScene {
         let runTimer = timer
         let waitTimer = SKAction.wait(forDuration: 1)
         let actionTimer = SKAction.run {
-            self.timerLabelNode?.text = "Time Left : \(timer)"
+            self.timerLabelNode?.text = "Time Left: \(timer)"
+            self.timerLabelNode?.xScale = 0.7
+            self.timerLabelNode?.yScale = 0.7
             if timer == 1 {
                 flag = 1
                 let action = SKAction.playSoundFileNamed("lose.mp3", waitForCompletion: false)
                 self.run(action)
         
+                self.enumerateChildNodes(withName: "//*") {
+                    node, stop in
+                    if node.name == "figure" {
+                        node.run(SKAction.fadeOut(withDuration: 0.01))
+                    }
+                }
                 let timeUp = SKLabelNode(fontNamed: "HelveticaNeue-Bold")
                 timeUp.text = "Time Up..Try Again 😭"
                 timeUp.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: timeUp.frame.width * 1.25 , height: timeUp.frame.height * 2.5))
@@ -133,7 +141,7 @@ extension GameScene {
                 
                 
                 let button = ResetButton()
-                button.position = CGPoint(x: self.frame.midX, y: self.frame.midY - (timeUp.frame.height + 30))
+                button.position = CGPoint(x: self.frame.midX, y: self.frame.midY - (timeUp.frame.height + 10))
                 button.delegate = self
                 button.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: button.frame.width * 1.25 , height: button.frame.height * 2.5))
                 button.physicsBody?.isDynamic = false
@@ -145,13 +153,7 @@ extension GameScene {
                     button.alpha = 1
                 })
                 
-                self.enumerateChildNodes(withName: "//*") {
-                    node, stop in
-                    if node.name != "timeUp" || node.name != "deck"{
-                        node.alpha = 0.5
-                        node.isUserInteractionEnabled = true
-                    }
-                }
+                //print("Game Over!!!")
             }
             else {
                 if flag == 1 {
@@ -201,12 +203,18 @@ extension GameScene {
         overMsg.text = "You Lose 😭"
         overMsg.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: overMsg.frame.width * 1.25 , height: overMsg.frame.height * 2.5))
         overMsg.physicsBody?.isDynamic = false
-        overMsg.fontSize = 24
+        overMsg.fontSize = 50
         overMsg.fontColor = SKColor.black
         overMsg.position = CGPoint(x: frame.midX, y: frame.midY)
         addChild(overMsg)
         overMsg.alpha = 1
         overMsg.zPosition = 4
+        self.enumerateChildNodes(withName: "//*") {
+            node, stop in
+            if node.name == "figure" {
+                node.run(SKAction.fadeOut(withDuration: 0.01))
+            }
+        }
         var fadeOutAction = SKAction.fadeIn(withDuration: 1) //SKAction.fadeOut(withDuration: 1.25)
         fadeOutAction.timingMode = .easeInEaseOut
         overMsg.run(fadeOutAction, completion: {
@@ -214,16 +222,9 @@ extension GameScene {
         self.removeAllActions()
         })
         
-        self.enumerateChildNodes(withName: "//*") {
-            node, stop in
-            if node.name != "overMsg" || node.name != "deck"{
-                node.alpha = 0.5
-                node.isUserInteractionEnabled = true
-            }
-        }
         
         let button = ResetButton()
-        button.position = CGPoint(x: frame.midX, y: frame.midY - (overMsg.frame.height + 30))
+        button.position = CGPoint(x: frame.midX, y: frame.midY - (overMsg.frame.height + 10))
         button.delegate = self
         button.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: button.frame.width * 1.25 , height: button.frame.height * 2.5))
         button.physicsBody?.isDynamic = false
@@ -242,11 +243,11 @@ extension GameScene {
             let action1 = SKAction.playSoundFileNamed("nextLevel.mp3", waitForCompletion: false)
             self.run(action1)
             let transition = SKTransition.crossFade(withDuration: 0)
-            guard let nextLevelScene = GameScene(fileNamed:"GameScene") else {return}
-            nextLevelScene.level = self.level + 1
-            nextLevelScene.lives = self.lives
-            nextLevelScene.scaleMode = SKSceneScaleMode.aspectFill
-            self.scene?.view?.presentScene(nextLevelScene, transition: transition)
+            let nextLevelScene = GameScene(fileNamed:"GameScene")
+            nextLevelScene!.level = self.level + 1
+            nextLevelScene!.lives = self.lives
+            nextLevelScene!.scaleMode = .resizeFill
+            self.scene!.view?.presentScene(nextLevelScene!, transition: transition)
         }
         self.run(SKAction.sequence([SKAction.wait(forDuration : 0.35), action ]))
         
@@ -262,9 +263,9 @@ extension GameScene {
             let position = touch.location(in: self)
             let node = self.atPoint(position)
             if node.name == "figure" {
-                guard let figure = node as? SKSpriteNode else {return}
-                guard let index = deckNodes.firstIndex(of: figure) else {return}
-                self.logic?.userChoose(index: index)
+                let figure = node as? SKSpriteNode
+                let index = deckNodes.firstIndex(of: figure!)
+                self.logic?.userChoose(index: index!)
             }
         }
     }
@@ -276,10 +277,10 @@ extension GameScene: ResetButtonDelegate {
         let action = SKAction.playSoundFileNamed("popSound.mp3", waitForCompletion: false)
         self.run(action)
         let transition = SKTransition.crossFade(withDuration: 0)
-        guard let scene1 = GameScene(fileNamed:"GameScene") else {return}
-        scene1.level = level
-        scene1.scaleMode = SKSceneScaleMode.aspectFill
-        self.scene?.view?.presentScene(scene1, transition: transition)
+        let scene1 = GameScene(fileNamed:"GameScene")
+        scene1!.level = level
+        scene1!.scaleMode = .resizeFill
+        self.scene!.view?.presentScene(scene1!, transition: transition)
     }
 }
 
