@@ -133,7 +133,7 @@ extension GameScene {
                 
                 
                 let button = ResetButton()
-                button.position = CGPoint(x: self.frame.midX, y: self.frame.midY - (timeUp.frame.height + 10))
+                button.position = CGPoint(x: self.frame.midX, y: self.frame.midY - (timeUp.frame.height + 30))
                 button.delegate = self
                 button.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: button.frame.width * 1.25 , height: button.frame.height * 2.5))
                 button.physicsBody?.isDynamic = false
@@ -201,18 +201,12 @@ extension GameScene {
         overMsg.text = "You Lose 😭"
         overMsg.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: overMsg.frame.width * 1.25 , height: overMsg.frame.height * 2.5))
         overMsg.physicsBody?.isDynamic = false
-        overMsg.fontSize = 50
+        overMsg.fontSize = 24
         overMsg.fontColor = SKColor.black
         overMsg.position = CGPoint(x: frame.midX, y: frame.midY)
         addChild(overMsg)
         overMsg.alpha = 1
         overMsg.zPosition = 4
-        self.enumerateChildNodes(withName: "//*") {
-            node, stop in
-            if node.name == "figure" {
-                node.run(SKAction.fadeOut(withDuration: 0.01))
-            }
-        }
         var fadeOutAction = SKAction.fadeIn(withDuration: 1) //SKAction.fadeOut(withDuration: 1.25)
         fadeOutAction.timingMode = .easeInEaseOut
         overMsg.run(fadeOutAction, completion: {
@@ -220,9 +214,16 @@ extension GameScene {
         self.removeAllActions()
         })
         
+        self.enumerateChildNodes(withName: "//*") {
+            node, stop in
+            if node.name != "overMsg" || node.name != "deck"{
+                node.alpha = 0.5
+                node.isUserInteractionEnabled = true
+            }
+        }
         
         let button = ResetButton()
-        button.position = CGPoint(x: frame.midX, y: frame.midY - (overMsg.frame.height + 10))
+        button.position = CGPoint(x: frame.midX, y: frame.midY - (overMsg.frame.height + 30))
         button.delegate = self
         button.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: button.frame.width * 1.25 , height: button.frame.height * 2.5))
         button.physicsBody?.isDynamic = false
