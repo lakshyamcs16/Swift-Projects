@@ -15,19 +15,19 @@ var SKViewSizeRect: CGRect?
 
 class GameViewController: UIViewController {
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
+    func presentView() {
+        let transition = SKTransition.crossFade(withDuration: 0)
+
         if let view = self.view as! SKView? {
             // Load the SKScene from 'GameScene.sks'
             if let scene = SKScene(fileNamed: "FirstScene") {
                 // Set the scale mode to scale to fit the window
                 scene.scaleMode = .aspectFill
                 // Present the scene
-                view.presentScene(scene)
+                view.presentScene(scene, transition: transition)
             }
             
-            view.ignoresSiblingOrder = true
+            //view.ignoresSiblingOrder = true
             //view.showsFields = true
             //view.sizeToFit()
             //view.showsPhysics = true
@@ -35,26 +35,17 @@ class GameViewController: UIViewController {
             //view.showsNodeCount = true
         }
     }
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        presentView()
+    }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        SKViewSize = self.view.bounds.size
-        SKViewSizeRect = getViewSizeRect()
-
-        let skView = self.view as! SKView
-        if let scene = skView.scene {
-            if scene.size != self.view.bounds.size {
-                scene.size = self.view.bounds.size
-            }
-        }
-    }
-    
-    func getViewSizeRect() -> CGRect {
-        return CGRect(x: ((SKViewSize!.width  * 0.5) * -1.0), y: ((SKViewSize!.height * 0.5) * -1.0), width: SKViewSize!.width, height: SKViewSize!.height)
     }
     
     override var shouldAutorotate: Bool {
-        return true
+        return false
     }
 
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
@@ -67,11 +58,5 @@ class GameViewController: UIViewController {
 
     override var prefersStatusBarHidden: Bool {
         return true
-    }
-}
-
-public extension SKNode {
-    func posByScreen(x: CGFloat, y: CGFloat) {
-        self.position = CGPoint(x: CGFloat((SKViewSizeRect!.width * x) + SKViewSizeRect!.origin.x), y: CGFloat((SKViewSizeRect!.height * y) + SKViewSizeRect!.origin.y))
     }
 }

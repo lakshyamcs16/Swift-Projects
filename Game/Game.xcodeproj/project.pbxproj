@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1B0549DA23F093F900C2E0EB /* HighscoreVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0549D923F093F900C2E0EB /* HighscoreVC.swift */; };
+		1B0549DC23F0941100C2E0EB /* Highscore.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1B0549DB23F0941100C2E0EB /* Highscore.storyboard */; };
 		1B27072723E8866F00075CA8 /* GameActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B27072623E8866F00075CA8 /* GameActions.swift */; };
 		1B27072923E8869500075CA8 /* GameEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B27072823E8869500075CA8 /* GameEvents.swift */; };
 		1B27072B23E886B000075CA8 /* GameLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B27072A23E886B000075CA8 /* GameLogic.swift */; };
@@ -53,6 +55,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1B0549D923F093F900C2E0EB /* HighscoreVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighscoreVC.swift; sourceTree = "<group>"; };
+		1B0549DB23F0941100C2E0EB /* Highscore.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Highscore.storyboard; sourceTree = "<group>"; };
 		1B27072623E8866F00075CA8 /* GameActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameActions.swift; sourceTree = "<group>"; };
 		1B27072823E8869500075CA8 /* GameEvents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameEvents.swift; sourceTree = "<group>"; };
 		1B27072A23E886B000075CA8 /* GameLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameLogic.swift; sourceTree = "<group>"; };
@@ -160,6 +164,8 @@
 				1B27072623E8866F00075CA8 /* GameActions.swift */,
 				1B27072823E8869500075CA8 /* GameEvents.swift */,
 				1B27072A23E886B000075CA8 /* GameLogic.swift */,
+				1B0549D923F093F900C2E0EB /* HighscoreVC.swift */,
+				1B0549DB23F0941100C2E0EB /* Highscore.storyboard */,
 			);
 			path = Game;
 			sourceTree = "<group>";
@@ -293,6 +299,7 @@
 				1B5C148923E75E3D00ABEFED /* Main.storyboard in Resources */,
 				433A12C523E8AF0D00C1E53D /* nextLevel.mp3 in Resources */,
 				433A12C723E8AF0D00C1E53D /* lose.mp3 in Resources */,
+				1B0549DC23F0941100C2E0EB /* Highscore.storyboard in Resources */,
 				433A12D323E8B09800C1E53D /* GameScene.sks in Resources */,
 				1B5C148023E75E3D00ABEFED /* FirstScene.sks in Resources */,
 				1B5C148B23E75E3E00ABEFED /* Assets.xcassets in Resources */,
@@ -332,6 +339,7 @@
 				1B5C147E23E75E3D00ABEFED /* AppDelegate.swift in Sources */,
 				1B27072723E8866F00075CA8 /* GameActions.swift in Sources */,
 				1B27072D23E8871100075CA8 /* GameScene.swift in Sources */,
+				1B0549DA23F093F900C2E0EB /* HighscoreVC.swift in Sources */,
 				1B27072923E8869500075CA8 /* GameEvents.swift in Sources */,
 				1B27072F23E8872600075CA8 /* Int.swift in Sources */,
 			);

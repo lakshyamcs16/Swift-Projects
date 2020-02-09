@@ -9,7 +9,7 @@
 import SpriteKit
 import UIKit
 
-public class GameScene: SKScene {
+public class GameScene: SKScene, present {
     
     var level: Int = 1
     var timer:Int = 0
@@ -23,7 +23,8 @@ public class GameScene: SKScene {
     var lifeNodes: [SKSpriteNode] = []
     var lives: Int = 3
     
-    
+    let defaults = UserDefaults.standard
+
     public override func didMove(to view: SKView) {
         let action = SKAction.playSoundFileNamed("nextLevel.mp3", waitForCompletion: false)
         self.run(action)
@@ -114,7 +115,7 @@ extension GameScene {
                 flag = 1
                 let action = SKAction.playSoundFileNamed("lose.mp3", waitForCompletion: false)
                 self.run(action)
-        
+                showHighscore()
                 let timeUp = SKLabelNode(fontNamed: "HelveticaNeue-Bold")
                 timeUp.text = "Time Up..Try Again 😭"
                 timeUp.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: timeUp.frame.width * 1.25 , height: timeUp.frame.height * 2.5))
@@ -192,10 +193,23 @@ extension GameScene: GameEvents {
 
 
 extension GameScene {
-    
+    func showHighscore() {
+        let lastHighest = self.defaults.integer(forKey: "level")
+        // let lastHighest = 0
+         if self.level > lastHighest {
+             self.defaults.set(self.level, forKey: "level")
+             if let vc = HighscoreVC.newInstance(levels: self.level) as? HighscoreVC {
+                 vc.delegate = self
+                 vc.modalPresentationStyle = .custom
+                 self.view?.window?.rootViewController?.present(vc, animated:true, completion: nil)
+             }
+         }
+    }
     func gameOver() {
         let action = SKAction.playSoundFileNamed("lose.mp3", waitForCompletion: true)
         self.run(action)
+        
+        showHighscore()
         
         let overMsg = SKLabelNode(fontNamed: "HelveticaNeue-Bold")
         overMsg.text = "You Lose 😭"
@@ -278,6 +292,13 @@ extension GameScene: ResetButtonDelegate {
         let transition = SKTransition.crossFade(withDuration: 0)
         guard let scene1 = GameScene(fileNamed:"GameScene") else {return}
         scene1.level = level
+        scene1.scaleMode = SKSceneScaleMode.aspectFill
+        self.scene?.view?.presentScene(scene1, transition: transition)
+    }
+    
+    func presentView() {
+        let transition = SKTransition.crossFade(withDuration: 0)
+        guard let scene1 = FirstScene(fileNamed:"FirstScene") else {return}
         scene1.scaleMode = SKSceneScaleMode.aspectFill
         self.scene?.view?.presentScene(scene1, transition: transition)
     }
