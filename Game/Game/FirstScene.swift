@@ -40,7 +40,7 @@ public class FirstScene: SKScene {
         
         
         let gameName = "Let's Shapify!"
-        let welcome = SKLabelNode(fontNamed: "Helvetica Neue")
+        let welcome = SKLabelNode(fontNamed: "Chalkduster")
         welcome.text = gameName
         welcome.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: welcome.frame.width * 2.25 , height: welcome.frame.height * 3.5))
         welcome.physicsBody?.isDynamic = false
@@ -64,6 +64,18 @@ public class FirstScene: SKScene {
                                            .fadeOut(withDuration: 0.5)])
         button.run(.repeatForever(fadeInOut))
         addChild(button)
+        
+        let helpButtonNodeName = "helpButton"
+        let helpButton = HelpButton()
+        helpButton.name = helpButtonNodeName
+        helpButton.delegate = self
+        helpButton.position = CGPoint(x: self.frame.midX, y: frame.midY - (button.frame.height + 30))
+        helpButton.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: helpButton.frame.width, height: helpButton.frame.height))
+        helpButton.physicsBody?.isDynamic = false
+        helpButton.alpha = 1
+        addChild(helpButton)
+        
+        
         addLinewiseShape()
     }
     
@@ -127,5 +139,11 @@ extension FirstScene: PlayButtonDelegate {
         scene1!.scaleMode = .aspectFill
         self.scene!.view?.presentScene(scene1!, transition: transition)
 
+    }
+}
+
+extension FirstScene: HelpButtonDelegate {
+    func didTapHelp(sender: HelpButton) {
+        
     }
 }

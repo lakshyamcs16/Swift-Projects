@@ -33,6 +33,7 @@
 		433A12C723E8AF0D00C1E53D /* lose.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 433A12BB23E8AF0D00C1E53D /* lose.mp3 */; };
 		433A12CF23E8AF0D00C1E53D /* wrongFig.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 433A12C323E8AF0D00C1E53D /* wrongFig.mp3 */; };
 		433A12D323E8B09800C1E53D /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 433A12D123E8B09800C1E53D /* GameScene.sks */; };
+		4367004723F0A8F600A153FE /* HelpButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4367004623F0A8F600A153FE /* HelpButton.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -85,6 +86,7 @@
 		433A12BB23E8AF0D00C1E53D /* lose.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = lose.mp3; sourceTree = "<group>"; };
 		433A12C323E8AF0D00C1E53D /* wrongFig.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = wrongFig.mp3; sourceTree = "<group>"; };
 		433A12D123E8B09800C1E53D /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
+		4367004623F0A8F600A153FE /* HelpButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -151,6 +153,7 @@
 				1B27072C23E8871100075CA8 /* GameScene.swift */,
 				1B27072E23E8872600075CA8 /* Int.swift */,
 				1B27073023E8873F00075CA8 /* PlayButton.swift */,
+				4367004623F0A8F600A153FE /* HelpButton.swift */,
 				1B27073223E8875800075CA8 /* ResetButton.swift */,
 				1B5C148523E75E3D00ABEFED /* GameViewController.swift */,
 				1B5C148723E75E3D00ABEFED /* Main.storyboard */,
@@ -326,6 +329,7 @@
 			files = (
 				1B27072B23E886B000075CA8 /* GameLogic.swift in Sources */,
 				1B27073323E8875800075CA8 /* ResetButton.swift in Sources */,
+				4367004723F0A8F600A153FE /* HelpButton.swift in Sources */,
 				1B5C148423E75E3D00ABEFED /* FirstScene.swift in Sources */,
 				1B27073123E8873F00075CA8 /* PlayButton.swift in Sources */,
 				1B5C148623E75E3D00ABEFED /* GameViewController.swift in Sources */,
