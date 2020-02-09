@@ -14,7 +14,7 @@ public class GameScene: SKScene, present {
     var level: Int = 1
     var timer:Int = 0
     var logic: GameActions?
-    
+    var homeNode: SKSpriteNode?
     var levelLabelNode: SKLabelNode?
     var timerLabelNode: SKLabelNode?
     var rightFigureNode: SKSpriteNode?
@@ -32,6 +32,7 @@ public class GameScene: SKScene, present {
         self.levelLabelNode = childNode(withName: "level") as? SKLabelNode
         self.timerLabelNode = childNode(withName: "timer") as? SKLabelNode
         self.rightFigureNode = childNode(withName: "rightFigure") as? SKSpriteNode
+        self.homeNode = childNode(withName: "home") as? SKSpriteNode
         
         enumerateChildNodes(withName: "//*") {
             node, stop in
@@ -44,8 +45,9 @@ public class GameScene: SKScene, present {
             }
         }
         // configure the label
-        self.levelLabelNode?.text = "Level : \(level)"
-        self.timerLabelNode?.text = String(timer)
+        self.levelLabelNode?.text = "Level: \(level)"
+        self.timerLabelNode?.text = "Time Left:"
+        self.homeNode?.texture = SKTexture(imageNamed: "home")
         // configure logic
         self.logic = GameLogic()
         logic?.setupLogic(delegate: self, deckSize: deckNodes.count)
@@ -61,6 +63,11 @@ public class GameScene: SKScene, present {
 
 // MARK: - Drawings
 extension GameScene {
+    
+    func HomeButtonTapped() {
+        let newViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "GameViewController")
+        UIApplication.topViewController()?.present(newViewController, animated: false, completion: nil)
+    }
     
     func drawDeck() {
         for (index, node) in deckNodes.enumerated() {
@@ -110,13 +117,13 @@ extension GameScene {
         let runTimer = timer
         let waitTimer = SKAction.wait(forDuration: 1)
         let actionTimer = SKAction.run {
-            self.timerLabelNode?.text = "Time Left : \(timer)"
+            self.timerLabelNode?.text = "Time Left: \(timer)"
             if timer == 1 {
                 flag = 1
                 let action = SKAction.playSoundFileNamed("lose.mp3", waitForCompletion: false)
                 self.run(action)
-                showHighscore()
-                let timeUp = SKLabelNode(fontNamed: "HelveticaNeue-Bold")
+                self.showHighscore()
+                let timeUp = SKLabelNode(fontNamed: "Chalkduster")
                 timeUp.text = "Time Up..Try Again 😭"
                 timeUp.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: timeUp.frame.width * 1.25 , height: timeUp.frame.height * 2.5))
                 timeUp.physicsBody?.isDynamic = false
@@ -210,8 +217,7 @@ extension GameScene {
         self.run(action)
         
         showHighscore()
-        
-        let overMsg = SKLabelNode(fontNamed: "HelveticaNeue-Bold")
+        let overMsg = SKLabelNode(fontNamed: "Chalkduster")
         overMsg.text = "You Lose 😭"
         overMsg.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: overMsg.frame.width * 1.25 , height: overMsg.frame.height * 2.5))
         overMsg.physicsBody?.isDynamic = false
@@ -280,6 +286,9 @@ extension GameScene {
                 guard let index = deckNodes.firstIndex(of: figure) else {return}
                 self.logic?.userChoose(index: index)
             }
+            if node.name == "home" {
+                self.HomeButtonTapped()
+            }
         }
     }
 }
@@ -304,3 +313,19 @@ extension GameScene: ResetButtonDelegate {
     }
 }
 
+extension UIApplication {
+    class func topViewController(base: UIViewController? = UIApplication.shared.keyWindow?.rootViewController) -> UIViewController? {
+        if let nav = base as? UINavigationController {
+            return topViewController(base: nav.visibleViewController)
+        }
+        if let tab = base as? UITabBarController {
+            if let selected = tab.selectedViewController {
+                return topViewController(base: selected)
+            }
+        }
+        if let presented = base?.presentedViewController {
+            return topViewController(base: presented)
+        }
+        return base
+    }
+}
