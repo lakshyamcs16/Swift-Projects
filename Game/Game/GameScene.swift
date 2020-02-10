@@ -9,10 +9,15 @@
 import SpriteKit
 import UIKit
 
+var currentscore: Int = 0
+
 public class GameScene: SKScene, present {
     
     var level: Int = 1
     var timer:Int = 0
+    var timeLeft: Int = 0
+    var highscore: Int = 0
+    
     var logic: GameActions?
     var homeNode: SKSpriteNode?
     var levelLabelNode: SKLabelNode?
@@ -94,35 +99,39 @@ extension GameScene {
         }
     }
     
-    //set timer for each level
-    func setupTimer() {
-        var timer = 0
+    func getTimer(level: Int) -> Int {
         if (level >= 1 && level <=  15) {
-            timer = 7
+            timer = 25
         } else if (level >= 16 && level <=  35) {
-            timer = 10
+            timer = 20
         } else if (level >= 36 && level <=  45) {
-            timer = 12
+            timer = 17
         } else if (level >= 46 && level <=  65) {
             timer = 15
         } else if (level >= 66 && level <=  85) {
-            timer = 17
+            timer = 12
         } else if (level >= 86 && level <=  105) {
-            timer = 20
+            timer = 10
         } else if (level >= 106 && level <=  120) {
-            timer = 25
+            timer = 7
         }
         
+        return timer
+    }
+    //set timer for each level
+    func setupTimer() {
+        var timer = getTimer(level: self.level)
         var flag = 0
         let runTimer = timer
         let waitTimer = SKAction.wait(forDuration: 1)
         let actionTimer = SKAction.run {
+            self.timeLeft = timer
             self.timerLabelNode?.text = "Time Left: \(timer)"
             if timer == 1 {
                 flag = 1
                 let action = SKAction.playSoundFileNamed("lose.mp3", waitForCompletion: false)
                 self.run(action)
-                self.showHighscore()
+                self.displayScore()
                 let timeUp = SKLabelNode(fontNamed: "Chalkduster")
                 timeUp.text = "Time Up..Try Again 😭"
                 timeUp.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: timeUp.frame.width * 1.25 , height: timeUp.frame.height * 2.5))
@@ -201,59 +210,74 @@ extension GameScene: GameEvents {
 
 extension GameScene {
     func showHighscore() {
-        let lastHighest = self.defaults.integer(forKey: "level")
-        // let lastHighest = 0
-         if self.level > lastHighest {
-             self.defaults.set(self.level, forKey: "level")
-             if let vc = HighscoreVC.newInstance(levels: self.level) as? HighscoreVC {
-                 vc.delegate = self
-                 vc.modalPresentationStyle = .custom
-                 self.view?.window?.rootViewController?.present(vc, animated:true, completion: nil)
-             }
-         }
+        let lastHighscore = self.defaults.integer(forKey: "highscore")
+        currentscore += self.timeLeft*self.level
+        if currentscore > lastHighscore {
+            self.defaults.set(currentscore, forKey: "highscore")
+            self.highscore = currentscore
+            displayScore()
+        }
+    }
+    
+    func displayScore() {
+        let lastHighscore = self.defaults.integer(forKey: "highscore")
+        
+        self.highscore = lastHighscore
+        
+        if currentscore > lastHighscore {
+            self.defaults.set(currentscore, forKey: "highscore")
+            self.highscore = currentscore
+        }
+        
+        if let vc = HighscoreVC.newInstance(levels: self.level, highscore: self.highscore, currentscore: currentscore) as? HighscoreVC {
+            vc.delegate = self
+            vc.modalPresentationStyle = .custom
+            currentscore = 0
+            self.view?.window?.rootViewController?.present(vc, animated:true, completion: nil)
+        }
     }
     func gameOver() {
         let action = SKAction.playSoundFileNamed("lose.mp3", waitForCompletion: true)
         self.run(action)
         
-        showHighscore()
-        let overMsg = SKLabelNode(fontNamed: "Chalkduster")
-        overMsg.text = "You Lose 😭"
-        overMsg.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: overMsg.frame.width * 1.25 , height: overMsg.frame.height * 2.5))
-        overMsg.physicsBody?.isDynamic = false
-        overMsg.fontSize = 24
-        overMsg.fontColor = SKColor.black
-        overMsg.position = CGPoint(x: frame.midX, y: frame.midY)
-        addChild(overMsg)
-        overMsg.alpha = 1
-        overMsg.zPosition = 4
-        var fadeOutAction = SKAction.fadeIn(withDuration: 1) //SKAction.fadeOut(withDuration: 1.25)
-        fadeOutAction.timingMode = .easeInEaseOut
-        overMsg.run(fadeOutAction, completion: {
-            overMsg.alpha = 1
-        self.removeAllActions()
-        })
+        displayScore()
+//        let overMsg = SKLabelNode(fontNamed: "Chalkduster")
+//        overMsg.text = "You Lose 😭"
+//        overMsg.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: overMsg.frame.width * 1.25 , height: overMsg.frame.height * 2.5))
+//        overMsg.physicsBody?.isDynamic = false
+//        overMsg.fontSize = 24
+//        overMsg.fontColor = SKColor.black
+//        overMsg.position = CGPoint(x: frame.midX, y: frame.midY)
+//        addChild(overMsg)
+//        overMsg.alpha = 1
+//        overMsg.zPosition = 4
+//        var fadeOutAction = SKAction.fadeIn(withDuration: 1) //SKAction.fadeOut(withDuration: 1.25)
+//        fadeOutAction.timingMode = .easeInEaseOut
+//        overMsg.run(fadeOutAction, completion: {
+//            overMsg.alpha = 1
+//        self.removeAllActions()
+//        })
         
-        self.enumerateChildNodes(withName: "//*") {
-            node, stop in
-            if node.name != "overMsg" || node.name != "deck"{
-                node.alpha = 0.5
-                node.isUserInteractionEnabled = true
-            }
-        }
-        
-        let button = ResetButton()
-        button.position = CGPoint(x: frame.midX, y: frame.midY - (overMsg.frame.height + 30))
-        button.delegate = self
-        button.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: button.frame.width * 1.25 , height: button.frame.height * 2.5))
-        button.physicsBody?.isDynamic = false
-        addChild(button)
-        button.alpha = 1
-        fadeOutAction = SKAction.fadeIn(withDuration: 1.5)
-        fadeOutAction.timingMode = .easeInEaseOut
-        button.run(fadeOutAction, completion: {
-            button.alpha = 1
-        })
+//        self.enumerateChildNodes(withName: "//*") {
+//            node, stop in
+//            if node.name != "overMsg" || node.name != "deck"{
+//                node.alpha = 0.5
+//                node.isUserInteractionEnabled = true
+//            }
+//        }
+//
+//        let button = ResetButton()
+//        button.position = CGPoint(x: frame.midX, y: frame.midY - (overMsg.frame.height + 30))
+//        button.delegate = self
+//        button.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: button.frame.width * 1.25 , height: button.frame.height * 2.5))
+//        button.physicsBody?.isDynamic = false
+//        addChild(button)
+//        button.alpha = 1
+//        fadeOutAction = SKAction.fadeIn(withDuration: 1.5)
+//        fadeOutAction.timingMode = .easeInEaseOut
+//        button.run(fadeOutAction, completion: {
+//            button.alpha = 1
+//        })
     }
     
     
@@ -265,6 +289,9 @@ extension GameScene {
             guard let nextLevelScene = GameScene(fileNamed:"GameScene") else {return}
             nextLevelScene.level = self.level + 1
             nextLevelScene.lives = self.lives
+            currentscore += self.timeLeft*self.level
+            //self.defaults.set(self.currentscore, forKey: "currentscore")
+            //self.showHighscore()
             nextLevelScene.scaleMode = SKSceneScaleMode.aspectFill
             self.scene?.view?.presentScene(nextLevelScene, transition: transition)
         }
@@ -305,11 +332,20 @@ extension GameScene: ResetButtonDelegate {
         self.scene?.view?.presentScene(scene1, transition: transition)
     }
     
-    func presentView() {
+    func presentView(scene: String, level: Int) {
+        
         let transition = SKTransition.crossFade(withDuration: 0)
-        guard let scene1 = FirstScene(fileNamed:"FirstScene") else {return}
-        scene1.scaleMode = SKSceneScaleMode.aspectFill
-        self.scene?.view?.presentScene(scene1, transition: transition)
+        if level != -1 {
+            guard let scene1 = GameScene(fileNamed:scene) else {return}
+            scene1.scaleMode = SKSceneScaleMode.aspectFill
+            scene1.level = level
+            self.scene?.view?.presentScene(scene1, transition: transition)
+        }else{
+            guard let scene1 = FirstScene(fileNamed: scene) else {return}
+            scene1.scaleMode = SKSceneScaleMode.aspectFill
+            self.scene?.view?.presentScene(scene1, transition: transition)
+        }
+        
     }
 }
 

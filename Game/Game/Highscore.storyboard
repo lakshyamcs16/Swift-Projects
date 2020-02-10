@@ -109,10 +109,16 @@
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uy3-Kq-E4g">
                                         <rect key="frame" x="126" y="283" width="50" height="30"/>
                                         <state key="normal" title="Restart"/>
+                                        <connections>
+                                            <action selector="restartTapped:" destination="79c-gw-xAE" eventType="touchUpInside" id="CHd-tH-DsZ"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SCg-H8-dLl">
                                         <rect key="frame" x="211" y="283" width="32" height="30"/>
                                         <state key="normal" title="Next"/>
+                                        <connections>
+                                            <action selector="nextTapped:" destination="79c-gw-xAE" eventType="touchUpInside" id="gPR-9j-cFw"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
@@ -150,6 +156,11 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="dTv-BK-JKm"/>
                     </view>
+                    <connections>
+                        <outlet property="bestscoreLabel" destination="0aF-F0-Uhi" id="ReO-uu-kSy"/>
+                        <outlet property="highscoreLabel" destination="59p-ko-Ong" id="ieQ-ND-dlf"/>
+                        <outlet property="levelLabel" destination="5Hr-2G-B2c" id="JAo-qC-0Uo"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6hV-ge-3F2" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
