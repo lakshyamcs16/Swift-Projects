@@ -27,6 +27,8 @@ public class GameScene: SKScene, present {
     var deckNodesName: [String] = []
     var lifeNodes: [SKSpriteNode] = []
     var lives: Int = 3
+    var minNumberOfFigures = 3
+    var maxNumberOfFigures = 7
     
     let defaults = UserDefaults.standard
 
@@ -55,7 +57,8 @@ public class GameScene: SKScene, present {
         self.homeNode?.texture = SKTexture(imageNamed: "home")
         // configure logic
         self.logic = GameLogic()
-        logic?.setupLogic(delegate: self, deckSize: deckNodes.count)
+        _ = getTimer(level: self.level)
+        logic?.setupLogic(delegate: self, deckSize: deckNodes.count, minNumberOfFigures: self.minNumberOfFigures, maxNumberOfFigures: self.maxNumberOfFigures)
         // Draw sprites
         drawDeck()
         drawRightFigure()
@@ -102,18 +105,32 @@ extension GameScene {
     func getTimer(level: Int) -> Int {
         if (level >= 1 && level <=  15) {
             timer = 25
+            self.minNumberOfFigures = 2
+            self.maxNumberOfFigures = 4
         } else if (level >= 16 && level <=  35) {
             timer = 20
+            self.minNumberOfFigures = 3
+            self.maxNumberOfFigures = 5
         } else if (level >= 36 && level <=  45) {
             timer = 17
+            self.minNumberOfFigures = 4
+            self.maxNumberOfFigures = 7
         } else if (level >= 46 && level <=  65) {
             timer = 15
+            self.minNumberOfFigures = 6
+            self.maxNumberOfFigures = 9
         } else if (level >= 66 && level <=  85) {
             timer = 12
+            self.minNumberOfFigures = 10
+            self.maxNumberOfFigures = 14
         } else if (level >= 86 && level <=  105) {
             timer = 10
+            self.minNumberOfFigures = 12
+            self.maxNumberOfFigures = 16
         } else if (level >= 106 && level <=  120) {
             timer = 7
+            self.minNumberOfFigures = 12
+            self.maxNumberOfFigures = 20
         }
         
         return timer
@@ -287,7 +304,7 @@ extension GameScene {
             self.run(action1)
             let transition = SKTransition.crossFade(withDuration: 0)
             guard let nextLevelScene = GameScene(fileNamed:"GameScene") else {return}
-            nextLevelScene.level = self.level + 1
+            nextLevelScene.level = self.level + 15
             nextLevelScene.lives = self.lives
             currentscore += self.timeLeft*self.level
             //self.defaults.set(self.currentscore, forKey: "currentscore")
