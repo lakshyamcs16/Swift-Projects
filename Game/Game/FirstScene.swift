@@ -69,8 +69,9 @@ public class FirstScene: SKScene {
         let helpButton = HelpButton()
         helpButton.name = helpButtonNodeName
         helpButton.delegate = self
-        helpButton.position = CGPoint(x: self.frame.midX, y: frame.midY - (button.frame.height + 30))
-        helpButton.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: helpButton.frame.width, height: helpButton.frame.height))
+        helpButton.position = CGPoint(x: self.frame.maxX - 150, y: frame.maxY - 100)
+        helpButton.size = CGSize(width: 120, height: 120)
+        helpButton.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: helpButton.frame.width * 1.5, height: helpButton.frame.height * 1.5))
         helpButton.physicsBody?.isDynamic = false
         helpButton.alpha = 1
         addChild(helpButton)
@@ -112,7 +113,7 @@ public class FirstScene: SKScene {
     
     func createShape(at point: CGPoint) {
         
-        let action = SKAction.playSoundFileNamed("begin.mp3", waitForCompletion: false)
+        let action = SKAction.playSoundFileNamed("begin.mp3", waitForCompletion: true)
         self.run(action)
         
         let randomIndex = GKRandomSource.sharedRandom().nextInt(upperBound: allFig.count)
@@ -134,16 +135,17 @@ extension FirstScene: PlayButtonDelegate {
         let action = SKAction.playSoundFileNamed("popSound.mp3", waitForCompletion: false)
         self.run(action)
         let transition = SKTransition.crossFade(withDuration: 0)
-        let scene1 = GameScene(fileNamed:"GameScene")
-        scene1!.level = 1
-        scene1!.scaleMode = .aspectFill
-        self.scene!.view?.presentScene(scene1!, transition: transition)
+        guard let scene1 = GameScene(fileNamed:"GameScene") else {return}
+        scene1.level = 1
+        scene1.scaleMode = .aspectFill
+        self.scene?.view?.presentScene(scene1, transition: transition)
 
     }
 }
 
 extension FirstScene: HelpButtonDelegate {
     func didTapHelp(sender: HelpButton) {
-        
+        let newViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "HelpViewController")
+        UIApplication.topViewController()?.present(newViewController, animated: false, completion: nil)
     }
 }
