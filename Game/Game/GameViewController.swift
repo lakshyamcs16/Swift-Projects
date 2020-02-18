@@ -19,20 +19,10 @@ class GameViewController: UIViewController {
         let transition = SKTransition.crossFade(withDuration: 0)
 
         if let view = self.view as! SKView? {
-            // Load the SKScene from 'GameScene.sks'
             if let scene = SKScene(fileNamed: "FirstScene") {
-                // Set the scale mode to scale to fit the window
                 scene.scaleMode = .aspectFill
-                // Present the scene
                 view.presentScene(scene, transition: transition)
             }
-            
-            //view.ignoresSiblingOrder = true
-            //view.showsFields = true
-            //view.sizeToFit()
-            //view.showsPhysics = true
-            //view.showsFPS = true
-            //view.showsNodeCount = true
         }
     }
     override func viewDidLoad() {

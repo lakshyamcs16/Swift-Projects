@@ -36,6 +36,7 @@
 		433A12CF23E8AF0D00C1E53D /* wrongFig.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 433A12C323E8AF0D00C1E53D /* wrongFig.mp3 */; };
 		433A12D323E8B09800C1E53D /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 433A12D123E8B09800C1E53D /* GameScene.sks */; };
 		4367004723F0A8F600A153FE /* HelpButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4367004623F0A8F600A153FE /* HelpButton.swift */; };
+		43892CCE23FC72B0008D7FBA /* HelpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43892CCD23FC72B0008D7FBA /* HelpViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -91,6 +92,7 @@
 		433A12C323E8AF0D00C1E53D /* wrongFig.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = wrongFig.mp3; sourceTree = "<group>"; };
 		433A12D123E8B09800C1E53D /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
 		4367004623F0A8F600A153FE /* HelpButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpButton.swift; sourceTree = "<group>"; };
+		43892CCD23FC72B0008D7FBA /* HelpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelpViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -143,6 +145,7 @@
 			children = (
 				433A12D123E8B09800C1E53D /* GameScene.sks */,
 				433A12BA23E8AF0C00C1E53D /* Lives.sks */,
+				43892CCD23FC72B0008D7FBA /* HelpViewController.swift */,
 				433A12BB23E8AF0D00C1E53D /* lose.mp3 */,
 				433A12B923E8AF0C00C1E53D /* nextLevel.mp3 */,
 				433A12B823E8AF0C00C1E53D /* rightFig.mp3 */,
@@ -342,6 +345,7 @@
 				1B5C148623E75E3D00ABEFED /* GameViewController.swift in Sources */,
 				1B5C147E23E75E3D00ABEFED /* AppDelegate.swift in Sources */,
 				1B27072723E8866F00075CA8 /* GameActions.swift in Sources */,
+				43892CCE23FC72B0008D7FBA /* HelpViewController.swift in Sources */,
 				1B27072D23E8871100075CA8 /* GameScene.swift in Sources */,
 				1B0549DA23F093F900C2E0EB /* HighscoreVC.swift in Sources */,
 				1B27072923E8869500075CA8 /* GameEvents.swift in Sources */,
