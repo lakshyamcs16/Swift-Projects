@@ -38,21 +38,21 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="02D-2p-C9n">
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="star" translatesAutoresizingMaskIntoConstraints="NO" id="02D-2p-C9n">
                                         <rect key="frame" x="50" y="102" width="50" height="50"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="50" id="AXh-mz-OMj"/>
                                             <constraint firstAttribute="width" constant="50" id="NgF-kH-TET"/>
                                         </constraints>
                                     </imageView>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="JgJ-6B-x8e">
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="star" translatesAutoresizingMaskIntoConstraints="NO" id="JgJ-6B-x8e">
                                         <rect key="frame" x="130" y="82" width="50" height="50"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="50" id="Dlt-ti-XeE"/>
                                             <constraint firstAttribute="width" constant="50" id="Ho7-9q-EIw"/>
                                         </constraints>
                                     </imageView>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Wct-gt-3LH">
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="star" translatesAutoresizingMaskIntoConstraints="NO" id="Wct-gt-3LH">
                                         <rect key="frame" x="210" y="100" width="50" height="50"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="50" id="ohi-Q6-jtx"/>
@@ -99,22 +99,26 @@
                                             <constraint firstItem="Dq7-Pc-yqc" firstAttribute="leading" secondItem="ulG-OE-7j9" secondAttribute="leading" constant="5" id="kIU-nY-kol"/>
                                         </constraints>
                                     </view>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sBb-V8-T9M">
-                                        <rect key="frame" x="50" y="283" width="41" height="30"/>
-                                        <state key="normal" title="Home"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sBb-V8-T9M">
+                                        <rect key="frame" x="50" y="283" width="72" height="52"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="72" id="JaE-eH-Rns"/>
+                                            <constraint firstAttribute="height" constant="52" id="sew-0V-Ers"/>
+                                        </constraints>
+                                        <state key="normal" title="Home" image="home"/>
                                         <connections>
                                             <action selector="homeButtonTapped:" destination="79c-gw-xAE" eventType="touchUpInside" id="0Sh-2H-8Kd"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uy3-Kq-E4g">
-                                        <rect key="frame" x="126" y="283" width="50" height="30"/>
+                                        <rect key="frame" x="157" y="283" width="50" height="30"/>
                                         <state key="normal" title="Restart"/>
                                         <connections>
                                             <action selector="restartTapped:" destination="79c-gw-xAE" eventType="touchUpInside" id="CHd-tH-DsZ"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SCg-H8-dLl">
-                                        <rect key="frame" x="211" y="283" width="32" height="30"/>
+                                        <rect key="frame" x="242" y="283" width="32" height="30"/>
                                         <state key="normal" title="Next"/>
                                         <connections>
                                             <action selector="nextTapped:" destination="79c-gw-xAE" eventType="touchUpInside" id="gPR-9j-cFw"/>
@@ -167,4 +171,8 @@
             <point key="canvasLocation" x="108.69565217391305" y="-97.098214285714278"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="home" width="294" height="210"/>
+        <image name="star" width="2048" height="2048"/>
+    </resources>
 </document>
