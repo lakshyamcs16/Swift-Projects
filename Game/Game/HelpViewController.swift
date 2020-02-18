@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import SpriteKit
+import GameplayKit
 
 class HelpViewController: UIViewController {
     
@@ -24,9 +26,8 @@ class HelpViewController: UIViewController {
         self.dismiss(animated: false, completion: nil)
     }
     
-    
     @IBAction func playButtonTapped(_ sender: Any) {
-        
+        self.dismiss(animated: false, completion: nil)
     }
     
     
