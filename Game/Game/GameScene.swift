@@ -31,7 +31,7 @@ public class GameScene: SKScene, present {
     var maxNumberOfFigures = 7
     
     let defaults = UserDefaults.standard
-
+    
     public override func didMove(to view: SKView) {
         let action = SKAction.playSoundFileNamed("nextLevel.mp3", waitForCompletion: false)
         self.run(action)
@@ -235,6 +235,24 @@ extension GameScene {
             displayScore()
         }
     }
+    func getNumOfStars(highscore: Int, currentscore: Int) -> Int {
+        if currentscore == 0 {
+            return 1;
+        }
+        
+        if currentscore >= highscore {
+            return 3
+        }
+        
+        let percent = ((highscore - currentscore)/highscore)*100;
+        if  percent >= 66 {
+            return 3;
+        }else if percent >= 33 {
+            return 2;
+        }else {
+            return 1;
+        }
+    }
     
     func displayScore() {
         let lastHighscore = self.defaults.integer(forKey: "highscore")
@@ -249,8 +267,11 @@ extension GameScene {
         if let vc = HighscoreVC.newInstance(levels: self.level, highscore: self.highscore, currentscore: currentscore) as? HighscoreVC {
             vc.delegate = self
             vc.modalPresentationStyle = .custom
-            currentscore = 0
-            self.view?.window?.rootViewController?.present(vc, animated:true, completion: nil)
+            self.view?.window?.rootViewController?.present(vc, animated:true, completion: {
+                vc.setStars(stars: self.getNumOfStars(highscore: self.highscore, currentscore: currentscore))
+                currentscore = 0
+            })
+            
         }
     }
     func gameOver() {
@@ -258,6 +279,7 @@ extension GameScene {
         self.run(action)
         
         displayScore()
+        self.removeAllActions()
 //        let overMsg = SKLabelNode(fontNamed: "Chalkduster")
 //        overMsg.text = "You Lose 😭"
 //        overMsg.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: overMsg.frame.width * 1.25 , height: overMsg.frame.height * 2.5))
@@ -356,6 +378,7 @@ extension GameScene: ResetButtonDelegate {
             guard let scene1 = GameScene(fileNamed:scene) else {return}
             scene1.scaleMode = SKSceneScaleMode.aspectFill
             scene1.level = level
+            scene1.lives = 3
             self.scene?.view?.presentScene(scene1, transition: transition)
         }else{
             guard let scene1 = FirstScene(fileNamed: scene) else {return}

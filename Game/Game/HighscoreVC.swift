@@ -17,6 +17,9 @@ class HighscoreVC: UIViewController {
 
     var delegate: present?
     
+    @IBOutlet weak var star3: UIImageView!
+    @IBOutlet weak var star2: UIImageView!
+    @IBOutlet weak var star1: UIImageView!
     @IBAction func restartTapped(_ sender: Any) {
         self.dismiss(animated: false, completion:{
             self.delegate?.presentView(scene: "GameScene", level: 1)
@@ -31,7 +34,9 @@ class HighscoreVC: UIViewController {
     }
     
     @IBAction func tappedOutside(_ sender: Any) {
-        self.dismiss(animated: false, completion: nil)
+        self.dismiss(animated: false, completion:{
+            self.delegate?.presentView(scene:"FirstScene", level: -1)
+        })
     }
     
     @IBAction func homeButtonTapped(_ sender: Any) {
@@ -69,5 +74,14 @@ class HighscoreVC: UIViewController {
         self.levelLabel.text = "Level " + String(self.levels)
         self.highscoreLabel.text = String(self.currentscore)
         self.bestscoreLabel.text = String(self.highscore)
+    }
+    
+    func setStars(stars: Int) {
+        if stars <= 2 {
+            star3.alpha = 0.1
+        }
+        if stars <= 1 {
+            star2.alpha = 0.1
+        }
     }
 }
