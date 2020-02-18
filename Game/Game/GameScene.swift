@@ -304,7 +304,7 @@ extension GameScene {
             self.run(action1)
             let transition = SKTransition.crossFade(withDuration: 0)
             guard let nextLevelScene = GameScene(fileNamed:"GameScene") else {return}
-            nextLevelScene.level = self.level + 15
+            nextLevelScene.level = self.level + 1
             nextLevelScene.lives = self.lives
             currentscore += self.timeLeft*self.level
             //self.defaults.set(self.currentscore, forKey: "currentscore")
