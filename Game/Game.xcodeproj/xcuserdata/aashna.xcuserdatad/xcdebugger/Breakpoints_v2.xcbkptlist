@@ -20,5 +20,53 @@
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "58771609-79CA-48D0-B668-27604369FA42"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Game/HelpViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "35"
+            endingLineNumber = "35"
+            landmarkName = "playButtonTapped(_:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "58771609-79CA-48D0-B668-27604369FA42 - 128978feec86074a"
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Game.HelpViewController.playButtonTapped(Any) -&gt; ()"
+                  moduleName = "Game"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/aashna/Desktop/Swift-Projects/Game/Game/HelpViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "32"
+                  endingLineNumber = "32"
+                  offsetFromSymbolStart = "32">
+               </Location>
+               <Location
+                  uuid = "58771609-79CA-48D0-B668-27604369FA42 - 5b6b87c17b2ea97e"
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 () -&gt; () in Game.HelpViewController.playButtonTapped(Any) -&gt; ()"
+                  moduleName = "Game"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/aashna/Desktop/Swift-Projects/Game/Game/HelpViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "33"
+                  endingLineNumber = "33"
+                  offsetFromSymbolStart = "55">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>

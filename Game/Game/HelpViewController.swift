@@ -10,11 +10,16 @@ import UIKit
 import SpriteKit
 import GameplayKit
 
+protocol openGame {
+    func openGameSceneProtocol()
+}
 class HelpViewController: UIViewController {
     
     @IBOutlet var label1: UILabel!
     @IBOutlet var label2: UILabel!
     @IBOutlet var label3: UILabel!
+    var delegate: openGame?
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setLabel1()
@@ -27,7 +32,9 @@ class HelpViewController: UIViewController {
     }
     
     @IBAction func playButtonTapped(_ sender: Any) {
-        self.dismiss(animated: false, completion: nil)
+        self.dismiss(animated: false, completion:{
+            self.delegate?.openGameSceneProtocol()
+        })
     }
     
     
@@ -77,13 +84,13 @@ class HelpViewController: UIViewController {
         let endAttributedString6 = NSAttributedString(string: "\n\n• Level 106 - Level 120 :  Time - ", attributes: regularAttribute )
         
         
-        let attrString1 =  NSAttributedString(string: "7 Seconds", attributes: boldAttribute)
-        let attrString2 =  NSAttributedString(string: "10 Seconds", attributes: boldAttribute)
-        let attrString3 =  NSAttributedString(string: "12 Seconds ", attributes: boldAttribute)
-        let attrString4 =  NSAttributedString(string: "15 Seconds ", attributes: boldAttribute)
-        let attrString5 =  NSAttributedString(string: "17 Seconds ", attributes: boldAttribute)
-        let attrString6 =  NSAttributedString(string: "20 Seconds ", attributes: boldAttribute)
-        let attrString7 =  NSAttributedString(string: "22 Seconds ", attributes: boldAttribute)
+        let attrString1 =  NSAttributedString(string: "15 Seconds", attributes: boldAttribute)
+        let attrString2 =  NSAttributedString(string: "12 Seconds", attributes: boldAttribute)
+        let attrString3 =  NSAttributedString(string: "10 Seconds ", attributes: boldAttribute)
+        let attrString4 =  NSAttributedString(string: "8 Seconds ", attributes: boldAttribute)
+        let attrString5 =  NSAttributedString(string: "7 Seconds ", attributes: boldAttribute)
+        let attrString6 =  NSAttributedString(string: "6 Seconds ", attributes: boldAttribute)
+        let attrString7 =  NSAttributedString(string: "5 Seconds ", attributes: boldAttribute)
         
         let fullString =  NSMutableAttributedString()
         fullString.append(beginningAttributedString)

@@ -130,8 +130,16 @@ public class FirstScene: SKScene {
     }
 }
 
-extension FirstScene: PlayButtonDelegate {
+extension FirstScene: PlayButtonDelegate, openGame {
     func didTapPlay(sender: PlayButton) {
+        openGameScene()
+    }
+    
+    func openGameSceneProtocol() {
+        openGameScene()
+    }
+    
+    func openGameScene() {
         let action = SKAction.playSoundFileNamed("popSound.mp3", waitForCompletion: false)
         self.run(action)
         let transition = SKTransition.crossFade(withDuration: 0)
@@ -139,13 +147,14 @@ extension FirstScene: PlayButtonDelegate {
         scene1.level = 1
         scene1.scaleMode = .aspectFill
         self.scene?.view?.presentScene(scene1, transition: transition)
-
     }
 }
 
 extension FirstScene: HelpButtonDelegate {
     func didTapHelp(sender: HelpButton) {
         let newViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "HelpViewController")
+        let hvc = newViewController as? HelpViewController
+        hvc?.delegate = self
         UIApplication.topViewController()?.present(newViewController, animated: false, completion: nil)
     }
 }

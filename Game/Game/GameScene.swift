@@ -104,31 +104,31 @@ extension GameScene {
     
     func getTimer(level: Int) -> Int {
         if (level >= 1 && level <=  15) {
-            timer = 25
+            timer = 15
             self.minNumberOfFigures = 2
             self.maxNumberOfFigures = 4
         } else if (level >= 16 && level <=  35) {
-            timer = 20
+            timer = 12
             self.minNumberOfFigures = 3
             self.maxNumberOfFigures = 5
         } else if (level >= 36 && level <=  45) {
-            timer = 17
+            timer = 10
             self.minNumberOfFigures = 4
             self.maxNumberOfFigures = 7
         } else if (level >= 46 && level <=  65) {
-            timer = 15
+            timer = 8
             self.minNumberOfFigures = 6
             self.maxNumberOfFigures = 9
         } else if (level >= 66 && level <=  85) {
-            timer = 12
+            timer = 7
             self.minNumberOfFigures = 10
             self.maxNumberOfFigures = 14
         } else if (level >= 86 && level <=  105) {
-            timer = 10
+            timer = 6
             self.minNumberOfFigures = 12
             self.maxNumberOfFigures = 16
         } else if (level >= 106 && level <=  120) {
-            timer = 7
+            timer = 5
             self.minNumberOfFigures = 12
             self.maxNumberOfFigures = 20
         }
