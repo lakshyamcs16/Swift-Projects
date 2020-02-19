@@ -7,33 +7,65 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "3DEE3494-4D40-487B-A108-10EC3C05075F"
+            uuid = "3D0D405A-204D-4AF1-AA8A-32C3D4EAEBF9"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Game/GameScene.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "225"
-            endingLineNumber = "225"
-            landmarkName = "displayScore()"
+            startingLineNumber = "243"
+            endingLineNumber = "243"
+            landmarkName = "getNumOfStars(highscore:currentscore:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "7CCB5F1C-5162-44B3-AAB8-1C5371E12D0A"
+            uuid = "58771609-79CA-48D0-B668-27604369FA42"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Game/GameScene.swift"
+            filePath = "Game/HelpViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "292"
-            endingLineNumber = "292"
-            landmarkName = "moveToNextLevel()"
+            startingLineNumber = "35"
+            endingLineNumber = "35"
+            landmarkName = "playButtonTapped(_:)"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "58771609-79CA-48D0-B668-27604369FA42 - 128978feec86074a"
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Game.HelpViewController.playButtonTapped(Any) -&gt; ()"
+                  moduleName = "Game"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/aashna/Desktop/Swift-Projects/Game/Game/HelpViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "32"
+                  endingLineNumber = "32"
+                  offsetFromSymbolStart = "32">
+               </Location>
+               <Location
+                  uuid = "58771609-79CA-48D0-B668-27604369FA42 - 5b6b87c17b2ea97e"
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 () -&gt; () in Game.HelpViewController.playButtonTapped(Any) -&gt; ()"
+                  moduleName = "Game"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/aashna/Desktop/Swift-Projects/Game/Game/HelpViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "33"
+                  endingLineNumber = "33"
+                  offsetFromSymbolStart = "55">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

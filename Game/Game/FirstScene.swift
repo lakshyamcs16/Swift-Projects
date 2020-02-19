@@ -25,7 +25,7 @@ public class FirstScene: SKScene {
     private var label : SKLabelNode!
     var backgroundMusic: SKAudioNode!
     
-    let allFig: [String] = ["1_1.png","1_3.png","1_2.png","4","8","12","16","20","24","28","32","36","40","44","48","52","56","60","64","68","72","76","80","84","88","92","96","100","104","108","112","116","120","124","128","132","136","140"]
+    let allFig: [String] = ["1_1.png","1_3.png","1_2.png","4","8","12","16","20","24","28","32","36","40","44","48","52","56","60","64","68","72","76","80","84","88","92","96","100","104","108","112","116","120","124","128","132","136","140","144","148","152","156","160"]
     let buttonNodeName = "button"
     var lineWiseX : CGFloat = 0
     var lineWiseY : CGFloat = 0
@@ -69,8 +69,9 @@ public class FirstScene: SKScene {
         let helpButton = HelpButton()
         helpButton.name = helpButtonNodeName
         helpButton.delegate = self
-        helpButton.position = CGPoint(x: self.frame.midX, y: frame.midY - (button.frame.height + 30))
-        helpButton.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: helpButton.frame.width, height: helpButton.frame.height))
+        helpButton.position = CGPoint(x: self.frame.maxX - 150, y: frame.maxY - 100)
+        helpButton.size = CGSize(width: 120, height: 120)
+        helpButton.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: helpButton.frame.width * 1.5, height: helpButton.frame.height * 1.5))
         helpButton.physicsBody?.isDynamic = false
         helpButton.alpha = 1
         addChild(helpButton)
@@ -112,7 +113,7 @@ public class FirstScene: SKScene {
     
     func createShape(at point: CGPoint) {
         
-        let action = SKAction.playSoundFileNamed("begin.mp3", waitForCompletion: false)
+        let action = SKAction.playSoundFileNamed("begin.mp3", waitForCompletion: true)
         self.run(action)
         
         let randomIndex = GKRandomSource.sharedRandom().nextInt(upperBound: allFig.count)
@@ -129,21 +130,31 @@ public class FirstScene: SKScene {
     }
 }
 
-extension FirstScene: PlayButtonDelegate {
+extension FirstScene: PlayButtonDelegate, openGame {
     func didTapPlay(sender: PlayButton) {
+        openGameScene()
+    }
+    
+    func openGameSceneProtocol() {
+        openGameScene()
+    }
+    
+    func openGameScene() {
         let action = SKAction.playSoundFileNamed("popSound.mp3", waitForCompletion: false)
         self.run(action)
         let transition = SKTransition.crossFade(withDuration: 0)
-        let scene1 = GameScene(fileNamed:"GameScene")
-        scene1!.level = 1
-        scene1!.scaleMode = .aspectFill
-        self.scene!.view?.presentScene(scene1!, transition: transition)
-
+        guard let scene1 = GameScene(fileNamed:"GameScene") else {return}
+        scene1.level = 1
+        scene1.scaleMode = .aspectFill
+        self.scene?.view?.presentScene(scene1, transition: transition)
     }
 }
 
 extension FirstScene: HelpButtonDelegate {
     func didTapHelp(sender: HelpButton) {
-        
+        let newViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "HelpViewController")
+        let hvc = newViewController as? HelpViewController
+        hvc?.delegate = self
+        UIApplication.topViewController()?.present(newViewController, animated: false, completion: nil)
     }
 }

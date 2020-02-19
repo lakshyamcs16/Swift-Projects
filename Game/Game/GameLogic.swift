@@ -11,8 +11,6 @@ import SpriteKit
 import Foundation
 import GameKit
 
-let minNumberOfFigures = 3 // minimal number of figures to choose in level
-let maxNumberOfFigures = 7 // maximal number of figures to choose in level
 
 public class GameLogic {
     // Delegate
@@ -21,6 +19,9 @@ public class GameLogic {
     // Protocol properties
     var deck: [String]  = []
     var rightFigureName: String?
+    var minNumberOfFigures = 3 // minimal number of figures to choose in level
+    var maxNumberOfFigures = 7 // maximal number of figures to choose in level
+    
     
     // Class properties
     // Figure settings
@@ -32,7 +33,7 @@ public class GameLogic {
     var figuresToChoose: [Int] = []
     
     // Initializer
-    func setupLogic(delegate: GameEvents, deckSize: Int) {
+    func setupLogic(delegate: GameEvents, deckSize: Int, minNumberOfFigures: Int, maxNumberOfFigures: Int) {
         self.delegate = delegate
         self.deckSize = deckSize
         // number of figures to choose

@@ -27,9 +27,11 @@ public class GameScene: SKScene, present {
     var deckNodesName: [String] = []
     var lifeNodes: [SKSpriteNode] = []
     var lives: Int = 3
+    var minNumberOfFigures = 3
+    var maxNumberOfFigures = 7
     
     let defaults = UserDefaults.standard
-
+    
     public override func didMove(to view: SKView) {
         let action = SKAction.playSoundFileNamed("nextLevel.mp3", waitForCompletion: false)
         self.run(action)
@@ -55,7 +57,8 @@ public class GameScene: SKScene, present {
         self.homeNode?.texture = SKTexture(imageNamed: "home")
         // configure logic
         self.logic = GameLogic()
-        logic?.setupLogic(delegate: self, deckSize: deckNodes.count)
+        _ = getTimer(level: self.level)
+        logic?.setupLogic(delegate: self, deckSize: deckNodes.count, minNumberOfFigures: self.minNumberOfFigures, maxNumberOfFigures: self.maxNumberOfFigures)
         // Draw sprites
         drawDeck()
         drawRightFigure()
@@ -101,19 +104,33 @@ extension GameScene {
     
     func getTimer(level: Int) -> Int {
         if (level >= 1 && level <=  15) {
-            timer = 25
-        } else if (level >= 16 && level <=  35) {
-            timer = 20
-        } else if (level >= 36 && level <=  45) {
-            timer = 17
-        } else if (level >= 46 && level <=  65) {
             timer = 15
-        } else if (level >= 66 && level <=  85) {
+            self.minNumberOfFigures = 2
+            self.maxNumberOfFigures = 4
+        } else if (level >= 16 && level <=  35) {
             timer = 12
-        } else if (level >= 86 && level <=  105) {
+            self.minNumberOfFigures = 3
+            self.maxNumberOfFigures = 5
+        } else if (level >= 36 && level <=  45) {
             timer = 10
-        } else if (level >= 106 && level <=  120) {
+            self.minNumberOfFigures = 4
+            self.maxNumberOfFigures = 7
+        } else if (level >= 46 && level <=  65) {
+            timer = 8
+            self.minNumberOfFigures = 6
+            self.maxNumberOfFigures = 9
+        } else if (level >= 66 && level <=  85) {
             timer = 7
+            self.minNumberOfFigures = 10
+            self.maxNumberOfFigures = 14
+        } else if (level >= 86 && level <=  105) {
+            timer = 6
+            self.minNumberOfFigures = 12
+            self.maxNumberOfFigures = 16
+        } else if (level >= 106 && level <=  120) {
+            timer = 5
+            self.minNumberOfFigures = 12
+            self.maxNumberOfFigures = 20
         }
         
         return timer
@@ -218,6 +235,24 @@ extension GameScene {
             displayScore()
         }
     }
+    func getNumOfStars(highscore: Int, currentscore: Int) -> Int {
+        if currentscore == 0 {
+            return 1;
+        }
+        
+        if currentscore >= highscore {
+            return 3
+        }
+        
+        let percent = ((highscore - currentscore)/highscore)*100;
+        if  percent >= 66 {
+            return 3;
+        }else if percent >= 33 {
+            return 2;
+        }else {
+            return 1;
+        }
+    }
     
     func displayScore() {
         let lastHighscore = self.defaults.integer(forKey: "highscore")
@@ -232,8 +267,11 @@ extension GameScene {
         if let vc = HighscoreVC.newInstance(levels: self.level, highscore: self.highscore, currentscore: currentscore) as? HighscoreVC {
             vc.delegate = self
             vc.modalPresentationStyle = .custom
-            currentscore = 0
-            self.view?.window?.rootViewController?.present(vc, animated:true, completion: nil)
+            self.view?.window?.rootViewController?.present(vc, animated:true, completion: {
+                vc.setStars(stars: self.getNumOfStars(highscore: self.highscore, currentscore: currentscore))
+                currentscore = 0
+            })
+            
         }
     }
     func gameOver() {
@@ -241,6 +279,7 @@ extension GameScene {
         self.run(action)
         
         displayScore()
+        self.removeAllActions()
 //        let overMsg = SKLabelNode(fontNamed: "Chalkduster")
 //        overMsg.text = "You Lose 😭"
 //        overMsg.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: overMsg.frame.width * 1.25 , height: overMsg.frame.height * 2.5))
@@ -339,6 +378,7 @@ extension GameScene: ResetButtonDelegate {
             guard let scene1 = GameScene(fileNamed:scene) else {return}
             scene1.scaleMode = SKSceneScaleMode.aspectFill
             scene1.level = level
+            scene1.lives = 3
             self.scene?.view?.presentScene(scene1, transition: transition)
         }else{
             guard let scene1 = FirstScene(fileNamed: scene) else {return}
